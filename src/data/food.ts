@@ -1,73 +1,87 @@
-import { Food } from '@/types/Food';
+import { FoodProps } from '@/types';
 
-export const foods: Food[] = [
+export const foods: FoodProps[] = [
 	{
 		key: 'hamburguesa clasica',
-		name: 'Hamburguesa Clásica',
+		dish_food: 'Hamburguesa Clásica',
+		price: 10,
 	},
 
 	{
 		key: 'la sabrosa',
-		name: 'La sabrosa',
+		dish_food: 'La sabrosa',
+		price: 10,
 	},
 
 	{
 		key: 'la chiken',
-		name: 'La chiken',
+		dish_food: 'La chiken',
+		price: 11,
 	},
 
 	{
 		key: 'la fiu fiu royal',
-		name: 'La fiu fiu royal',
+		dish_food: 'La fiu fiu royal',
+		price: 14,
 	},
 
 	{
 		key: 'la caprichosa',
-		name: 'La caprichosa',
+		dish_food: 'La caprichosa',
+		price: 16,
 	},
 
 	{
 		key: 'la tentadora',
-		name: 'La tentadora',
+		dish_food: 'La tentadora',
+		price: 14,
 	},
 
 	{
 		key: 'ala crispy',
-		name: 'Ala crispy',
+		dish_food: 'Ala crispy',
+		price: 11,
 	},
 
 	{
 		key: 'pecho crispy',
-		name: 'Pecho crispy',
+		dish_food: 'Pecho crispy',
+		price: 13,
 	},
 
 	{
 		key: 'encuentro crispy',
-		name: 'Encuentro crispy',
+		dish_food: 'Encuentro crispy',
+		price: 12,
 	},
 
 	{
 		key: 'pierna crispy',
-		name: 'Pierna crispy',
+		dish_food: 'Pierna crispy',
+		price: 12,
 	},
 
 	{
 		key: '6 bbq',
-		name: '6 BBQ',
+		dish_food: '6 BBQ',
+		price: 16,
 	},
 
 	{
 		key: '12 bbq',
-		name: '12 BBQ',
+		dish_food: '12 BBQ',
+		price: 26,
 	},
 
 	{
 		key: '6 acevichada',
-		name: '6 Acevichada',
+		dish_food: '6 Acevichada',
+		price: 16,
 	},
 
 	{
 		key: '12 acevichada',
-		name: '12 Acevichada',
+		dish_food: '12 Acevichada',
+		price: 26,
 	},
 ];

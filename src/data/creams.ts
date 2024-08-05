@@ -1,6 +1,6 @@
-import { Cream } from '@/types/Cream';
+import { CreamProps } from '@/types';
 
-export const creams: Cream[] = [
+export const creams: CreamProps[] = [
 	{
 		key: 'mayonesa',
 		name: 'Mayonesa',
