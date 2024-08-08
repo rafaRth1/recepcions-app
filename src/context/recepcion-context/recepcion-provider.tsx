@@ -9,7 +9,6 @@ interface Props {
 
 export const RecepcionProvider = (props: Props): JSX.Element => {
 	const { children } = props;
-	const [activeResultSearch, setActiveResultSearch] = useState(false);
 	const [selected, setSelected] = useState(['mayonesa', 'ketchup', 'mostaza']);
 	const [resultDishes, setResulDishes] = useState<FoodProps[]>(foods);
 	const [dish, setDish] = useState<DishProps>({
@@ -25,15 +24,11 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 		name_ticket: '',
 		dishes: [],
 		creams: [],
+		drinks: [],
+		totalPrice: 0,
+		exception: '',
 	});
 	const [tickets, setTickets] = useState<TicketProps[]>([]);
-
-	const handleAddDishToTicket = () => {
-		setTicket({
-			...ticket,
-			dishes: [...ticket.dishes, { ...dish, key: crypto.randomUUID() }],
-		});
-	};
 
 	const handleAddTicket = () => {
 		if (ticket.name_ticket.length === 0) {
@@ -57,6 +52,9 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			name_ticket: '',
 			dishes: [],
 			creams: [],
+			drinks: [],
+			totalPrice: 0,
+			exception: '',
 		});
 	};
 
@@ -66,8 +64,6 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 
 	const contextValue = useMemo(
 		() => ({
-			activeResultSearch,
-			setActiveResultSearch,
 			selected,
 			setSelected,
 			resultDishes,
@@ -78,11 +74,10 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			dish,
 			setDish,
 			setTickets,
-			handleAddDishToTicket,
 			handleAddTicket,
 			handleFinishTicket,
 		}),
-		[activeResultSearch, selected, resultDishes, dish, ticket, tickets]
+		[selected, resultDishes, dish, ticket, tickets]
 	);
 
 	return <RecepcionContext.Provider value={contextValue}>{children}</RecepcionContext.Provider>;

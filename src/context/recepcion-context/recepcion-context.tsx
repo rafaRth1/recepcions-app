@@ -2,8 +2,6 @@ import { DishProps, FoodProps, TicketProps } from '@/types';
 import { createContext } from 'react';
 
 export interface RecepcionContextProps {
-	activeResultSearch: boolean;
-	setActiveResultSearch: React.Dispatch<React.SetStateAction<boolean>>;
 	selected: string[];
 	setSelected: React.Dispatch<React.SetStateAction<string[]>>;
 	resultDishes: FoodProps[];
@@ -14,7 +12,6 @@ export interface RecepcionContextProps {
 	setTicket: React.Dispatch<React.SetStateAction<TicketProps>>;
 	tickets: TicketProps[];
 	setTickets: React.Dispatch<React.SetStateAction<TicketProps[]>>;
-	handleAddDishToTicket: () => void;
 	handleAddTicket: () => void;
 	handleFinishTicket: () => void;
 }

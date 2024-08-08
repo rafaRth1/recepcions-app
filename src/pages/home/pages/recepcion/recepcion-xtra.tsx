@@ -16,32 +16,52 @@ import { useRecepcion } from '@/hooks';
 import { drinks } from '@/data/drinks';
 import { IoCloseOutline } from 'react-icons/io5';
 import { DrinkProps } from '@/types';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDF } from '@/components/pdf/pdf';
 
 export const RecepcionXtra = () => {
-	const { dish, setDish, handleAddTicket, handleFinishTicket } = useRecepcion();
-	const [inputDrink, setInputSearch] = useState('');
-	const [resultDrinks, setResultDrins] = useState<DrinkProps[]>(drinks);
+	const { dish, setDish, handleAddTicket, handleFinishTicket, setTicket, ticket } = useRecepcion();
+	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [active, setActive] = useState(false);
+	const [drink, setDrink] = useState<DrinkProps>({
+		key: '',
+		name: '',
+		price: 0,
+	});
 
-	const handleSetQuery = (e: string) => {
-		setInputSearch(e);
+	const handleOnChange = (e: string) => {
+		setDrink({ ...drink, name: e });
 		handleSearch(e);
 	};
 
 	const handleSearch = (e: string) => {
 		const results = drinks.filter((drink) => drink && drink.key && drink.key.includes(e));
-		setResultDrins(results);
+		setResultDrinks(results);
+	};
+
+	const handleAddDrink = () => {
+		setTicket({
+			...ticket,
+			drinks: [...ticket.drinks!, { id: crypto.randomUUID(), ...drink }],
+			totalPrice: ticket.totalPrice + drink.price,
+		});
+
+		setDrink({
+			key: '',
+			name: '',
+			price: 0,
+		});
 	};
 
 	return (
 		<div>
-			<div className='flex gap-2 mb-4'>
+			<div className='flex gap-2 mb-3'>
 				<Input
 					type='text'
 					label='Nombre bebida'
 					onFocus={() => setActive(true)}
-					value={inputDrink}
-					onChange={(e) => handleSetQuery(e.target.value)}
+					value={drink.name}
+					onChange={(e) => handleOnChange(e.target.value.toLowerCase())}
 				/>
 
 				<Button
@@ -67,10 +87,7 @@ export const RecepcionXtra = () => {
 						{resultDrinks.map((drink) => (
 							<TableRow
 								key={drink.key}
-								// onClick={() => {
-								// 	setSearch(dishItem.name), setDish({ ...dish, dish_food: dishItem.name });
-								// }}
-							>
+								onClick={() => setDrink(drink)}>
 								<TableCell>{drink.name}</TableCell>
 							</TableRow>
 						))}
@@ -79,14 +96,16 @@ export const RecepcionXtra = () => {
 			)}
 
 			<Button
-				className='bg-indigo-700 mb-5 w-full'
-				onClick={() => console.log('agregar bebida')}>
+				className='bg-indigo-700 mb-3 w-full'
+				onClick={() => handleAddDrink()}>
 				Agregar bebida
 			</Button>
 
 			<Textarea
 				label='Excepción del pedido'
-				className='mb-5'
+				className='mb-3'
+				value={ticket.exception}
+				onValueChange={(e) => setTicket({ ...ticket, exception: e })}
 			/>
 
 			<RadioGroup
@@ -107,12 +126,27 @@ export const RecepcionXtra = () => {
 				Agregar Ticket
 			</Button>
 
-			<Button
-				className='w-full'
-				color='danger'
-				onClick={() => handleFinishTicket()}>
-				Mandar a cocina tickets
-			</Button>
+			<PDFDownloadLink
+				document={<PDF />}
+				fileName='test.pdf'>
+				{({ loading }) =>
+					loading ? (
+						<Button
+							className='w-full'
+							color='danger'
+							onClick={() => handleFinishTicket()}>
+							Cargando....
+						</Button>
+					) : (
+						<Button
+							className='w-full'
+							color='danger'
+							onClick={() => handleFinishTicket()}>
+							Mandar a cocina tickets
+						</Button>
+					)
+				}
+			</PDFDownloadLink>
 		</div>
 	);
 };

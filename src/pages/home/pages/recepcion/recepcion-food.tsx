@@ -5,19 +5,10 @@ import { IoCloseOutline } from 'react-icons/io5';
 import { foods } from '@/data/food';
 
 export const RecepcionFood = () => {
-	const {
-		ticket,
-		setTicket,
-		setActiveResultSearch,
-		activeResultSearch,
-		resultDishes,
-		dish,
-		setDish,
-		handleAddDishToTicket,
-		setResulDishes,
-	} = useRecepcion();
+	const { ticket, setTicket, resultDishes, dish, setDish, setResulDishes } = useRecepcion();
 
 	const [inputSearch, setInputSearch] = useState('');
+	const [active, setActive] = useState(false);
 
 	const handleSetQuery = (e: string) => {
 		setInputSearch(e);
@@ -27,6 +18,16 @@ export const RecepcionFood = () => {
 	const handleSearch = (e: string) => {
 		const results = foods.filter((food) => food && food.key && food.key.includes(e));
 		setResulDishes(results);
+	};
+
+	const handleAddDishToTicket = () => {
+		setTicket({
+			...ticket,
+			dishes: [...ticket.dishes, { ...dish, key: crypto.randomUUID() }],
+			totalPrice: ticket.totalPrice + dish.price,
+		});
+
+		setInputSearch('');
 	};
 
 	return (
@@ -54,19 +55,19 @@ export const RecepcionFood = () => {
 							input: '',
 						}}
 						value={inputSearch}
-						onFocus={() => setActiveResultSearch(true)}
+						onFocus={() => setActive(true)}
 						onChange={(e) => handleSetQuery(e.target.value)}
 					/>
 
 					<Button
 						className='h-auto'
 						variant='light'
-						onPress={() => setActiveResultSearch(false)}>
+						onPress={() => setActive(false)}>
 						<IoCloseOutline size={30} />
 					</Button>
 				</div>
 
-				{activeResultSearch && (
+				{active && (
 					<Table
 						hideHeader
 						aria-label='Tabla de platos'
@@ -81,11 +82,10 @@ export const RecepcionFood = () => {
 							{resultDishes.map((dishItem) => (
 								<TableRow
 									key={dishItem.key}
-									// onClick={() => {
-									// 	setSearch(dishItem.dish_food),
-									// 		setDish({ ...dish, dish_food: dishItem.dish_food, price: dishItem.price });
-									// }}
-								>
+									onClick={() => {
+										setInputSearch(dishItem.dish_food),
+											setDish({ ...dish, dish_food: dishItem.dish_food, price: dishItem.price });
+									}}>
 									<TableCell>{dishItem.dish_food}</TableCell>
 								</TableRow>
 							))}

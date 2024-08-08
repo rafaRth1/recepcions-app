@@ -28,7 +28,7 @@ export const RecepcionCream = () => {
 			</CheckboxGroup>
 
 			<Button
-				className='bg-indigo-700 mb-5 w-full'
+				className='bg-indigo-700 mb-3 w-full'
 				onClick={() => handleAddCreams()}>
 				Agregar cremas
 			</Button>
