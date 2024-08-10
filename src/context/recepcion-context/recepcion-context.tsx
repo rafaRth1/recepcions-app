@@ -12,7 +12,7 @@ export interface RecepcionContextProps {
 	setTicket: React.Dispatch<React.SetStateAction<TicketProps>>;
 	tickets: TicketProps[];
 	setTickets: React.Dispatch<React.SetStateAction<TicketProps[]>>;
-	handleAddTicket: () => void;
+	handleSubmitTicket: () => void;
 	handleFinishTicket: () => void;
 }
 

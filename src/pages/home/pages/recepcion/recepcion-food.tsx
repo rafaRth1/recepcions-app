@@ -37,7 +37,7 @@ export const RecepcionFood = () => {
 			<Input
 				type='text'
 				label='Ingresar nombre o mesa'
-				className='mb-5'
+				className='mb-4'
 				classNames={{
 					input: 'uppercase',
 				}}
@@ -45,7 +45,7 @@ export const RecepcionFood = () => {
 				onValueChange={(e) => setTicket({ ...ticket, name_ticket: e })}
 			/>
 
-			<div className='relative'>
+			<div className='relative mb-4'>
 				<div className='flex gap-2'>
 					<Input
 						type='text'
@@ -71,7 +71,7 @@ export const RecepcionFood = () => {
 					<Table
 						hideHeader
 						aria-label='Tabla de platos'
-						className='mt-5'
+						className='mt-4'
 						classNames={{
 							wrapper: 'max-h-[200px]',
 						}}>
@@ -94,10 +94,10 @@ export const RecepcionFood = () => {
 				)}
 			</div>
 
-			<div className='flex flex-col mb-5'>
-				<div className='mt-4'>
+			<div className='flex flex-col mb-4'>
+				<div className='mb-4'>
 					<div className='flex flex-col'>
-						<p className='text-neutral-400 mb-3'>Con arroz:</p>
+						<p className='text-neutral-400 mb-4'>Con arroz:</p>
 
 						<div>
 							<Checkbox
@@ -116,9 +116,9 @@ export const RecepcionFood = () => {
 					</div>
 				</div>
 
-				<div className='mt-4'>
+				<div className='mb-4'>
 					<div className='flex flex-col'>
-						<p className='text-neutral-400 mb-3'>Con ensalada:</p>
+						<p className='text-neutral-400 mb-4'>Con ensalada:</p>
 
 						<div>
 							<Checkbox
@@ -139,7 +139,7 @@ export const RecepcionFood = () => {
 			</div>
 
 			<Button
-				className='bg-indigo-700 mb-5 w-full'
+				className='bg-indigo-700 mb-4 w-full'
 				onClick={() => handleAddDishToTicket()}>
 				Agregar plato
 			</Button>

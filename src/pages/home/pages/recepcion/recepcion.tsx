@@ -4,14 +4,16 @@ import { RecepcionProvider } from '@/context/recepcion-context/recepcion-provide
 export const Recepcion = () => {
 	return (
 		<>
-			<main className='p-4'>
-				<RecepcionProvider>
-					<RecepcionFood />
-					<RecepcionCream />
-					<RecepcionXtra />
-					<Ticket />
-					<Tickets />
-				</RecepcionProvider>
+			<main className='p-4 flex justify-center'>
+				<div className='max-w-[820px] w-full'>
+					<RecepcionProvider>
+						<RecepcionFood />
+						<RecepcionCream />
+						<RecepcionXtra />
+						<Ticket />
+						<Tickets />
+					</RecepcionProvider>
+				</div>
 			</main>
 		</>
 	);

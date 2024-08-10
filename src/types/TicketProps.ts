@@ -10,6 +10,7 @@ export interface TicketProps {
 	drinks?: Drinks[];
 	totalPrice: number;
 	exception: string;
+	time: string;
 }
 
 interface Drinks extends DrinkProps {

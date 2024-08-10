@@ -20,7 +20,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDF } from '@/components/pdf/pdf';
 
 export const RecepcionXtra = () => {
-	const { dish, setDish, handleAddTicket, handleFinishTicket, setTicket, ticket } = useRecepcion();
+	const { dish, setDish, handleSubmitTicket, handleFinishTicket, setTicket, ticket, tickets } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [active, setActive] = useState(false);
 	const [drink, setDrink] = useState<DrinkProps>({
@@ -55,7 +55,7 @@ export const RecepcionXtra = () => {
 
 	return (
 		<div>
-			<div className='flex gap-2 mb-3'>
+			<div className='flex gap-2 mb-4'>
 				<Input
 					type='text'
 					label='Nombre bebida'
@@ -96,20 +96,20 @@ export const RecepcionXtra = () => {
 			)}
 
 			<Button
-				className='bg-indigo-700 mb-3 w-full'
+				className='bg-indigo-700 mb-4 w-full'
 				onClick={() => handleAddDrink()}>
 				Agregar bebida
 			</Button>
 
 			<Textarea
 				label='Excepción del pedido'
-				className='mb-3'
+				className='mb-4'
 				value={ticket.exception}
 				onValueChange={(e) => setTicket({ ...ticket, exception: e })}
 			/>
 
 			<RadioGroup
-				className='mb-5'
+				className='mb-4'
 				label='Tipo de pedido'
 				orientation='horizontal'
 				value={dish.type}
@@ -120,21 +120,21 @@ export const RecepcionXtra = () => {
 			</RadioGroup>
 
 			<Button
-				className='mb-5 w-full'
-				color='warning'
-				onClick={() => handleAddTicket()}>
-				Agregar Ticket
+				className='mb-4 w-full'
+				color='success'
+				onClick={() => handleSubmitTicket()}>
+				{ticket.key ? 'Editar ticket' : 'Agregar ticket'}
 			</Button>
 
 			<PDFDownloadLink
-				document={<PDF />}
-				fileName='test.pdf'>
+				document={<PDF ticket={tickets[1]} />}
+				fileName='boleta.pdf'>
 				{({ loading }) =>
 					loading ? (
 						<Button
 							className='w-full'
 							color='danger'
-							onClick={() => handleFinishTicket()}>
+							disabled>
 							Cargando....
 						</Button>
 					) : (

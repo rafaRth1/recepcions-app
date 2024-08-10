@@ -1,6 +1,5 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
-import { TbSticker } from 'react-icons/tb';
 
 const columns = [
 	{
@@ -45,7 +44,7 @@ const columnDrink = [
 ];
 
 export const Tickets = () => {
-	const { tickets } = useRecepcion();
+	const { tickets, setTicket } = useRecepcion();
 
 	return (
 		<div>
@@ -55,7 +54,16 @@ export const Tickets = () => {
 				<div
 					key={ticket.key}
 					className='mb-3'>
-					<h3 className='mb-3 capitalize'>{ticket.name_ticket}</h3>
+					<div className='flex items-center mb-3 '>
+						<h3 className='mr-5 capitalize'>{ticket.name_ticket}</h3>
+						<p>{ticket.time}</p>
+						<div className='flex-1' />
+						<Button
+							color='warning'
+							onClick={() => setTicket(ticket)}>
+							Editar
+						</Button>
+					</div>
 
 					<Table
 						aria-label='Tabla ticket'
@@ -75,8 +83,6 @@ export const Tickets = () => {
 							)}
 						</TableBody>
 					</Table>
-
-					{TbSticker.length > 0 && <p className='font-medium text-warning'>excepción: {ticket.exception}</p>}
 
 					<Table
 						aria-label='Tabla tickets'
@@ -110,6 +116,8 @@ export const Tickets = () => {
 					</Table>
 
 					<p className='text-right'>Total: S/{`${ticket.totalPrice.toFixed(2)}`}</p>
+
+					{tickets.length > 0 && <p className='font-medium text-warning'>Excepción: {ticket.exception}</p>}
 				</div>
 			))}
 		</div>

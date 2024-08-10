@@ -15,7 +15,7 @@ export const RecepcionCream = () => {
 				label='Elegir cremas'
 				color='warning'
 				orientation='horizontal'
-				className='mb-5'
+				className='mb-4'
 				value={selected}
 				onValueChange={setSelected}>
 				{creams.map((cream) => (
@@ -28,7 +28,7 @@ export const RecepcionCream = () => {
 			</CheckboxGroup>
 
 			<Button
-				className='bg-indigo-700 mb-3 w-full'
+				className='bg-indigo-700 mb-4 w-full'
 				onClick={() => handleAddCreams()}>
 				Agregar cremas
 			</Button>
