@@ -17,6 +17,21 @@ export const HomeRouter = () => {
 					path='orders'
 					element={<Orders />}
 				/>
+
+				<Route
+					path='delivery'
+					element={<>Construyendo...</>}
+				/>
+
+				<Route
+					path='statistics'
+					element={<>Construyendo...</>}
+				/>
+
+				<Route
+					path='settings'
+					element={<>Construyendo...</>}
+				/>
 			</Route>
 		</Routes>
 	);

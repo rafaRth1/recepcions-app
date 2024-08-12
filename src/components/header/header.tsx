@@ -21,8 +21,13 @@ const links = [
 	},
 	{
 		id: 4,
-		route: '/stadistics',
+		route: '/statistics',
 		name: 'Estadísticas',
+	},
+	{
+		id: 5,
+		route: '/settings',
+		name: 'Configuración',
 	},
 ];
 

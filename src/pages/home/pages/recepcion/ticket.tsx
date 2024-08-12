@@ -1,53 +1,31 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
+import { CreamsProps, DishProps, Drinks } from '@/types';
+import { columnCream, columnDrink, columns } from '@/data/columns';
+import { IoTrash } from 'react-icons/io5';
 
-interface Props {}
+export const Ticket = () => {
+	const { ticket, setTicket } = useRecepcion();
 
-const columns = [
-	{
-		key: 'dish_food',
-		label: 'NOMBRE',
-	},
-	{
-		key: 'rice',
-		label: 'ARROZ',
-	},
-	{
-		key: 'salad',
-		label: 'ENSALADA',
-	},
-	{
-		key: 'type',
-		label: 'TIPO',
-	},
-	{
-		key: 'price',
-		label: 'PRICE',
-	},
-];
+	const handleDeleteDish = (item: DishProps) => {
+		const [selectRemoveItem] = ticket.dishes.filter((dish) => dish.key === item.key);
+		const updateDishes = ticket.dishes.filter((dish) => dish.key !== item.key);
 
-const columnCream = [
-	{
-		key: 'creams',
-		label: 'CREMAS',
-	},
-];
+		setTicket({ ...ticket, dishes: updateDishes, totalPrice: ticket.totalPrice - selectRemoveItem.price });
+	};
 
-const columnDrink = [
-	{
-		key: 'name',
-		label: 'BEBIDA',
-	},
+	const handleDeleteCream = (item: CreamsProps) => {
+		const updateCreams = ticket.creams.filter((cream) => cream.key !== item.key);
 
-	{
-		key: 'price',
-		label: 'PRECIO',
-	},
-];
+		setTicket({ ...ticket, creams: updateCreams });
+	};
 
-export const Ticket = (props: Props) => {
-	const {} = props;
-	const { ticket } = useRecepcion();
+	const handleDeleteDrink = (item: Drinks) => {
+		const [selectRemoveItem] = ticket.drinks!.filter((drink) => drink.id === item.id);
+		const updateCreams = ticket.drinks!.filter((drink) => drink.key !== item.key);
+
+		setTicket({ ...ticket, drinks: updateCreams, totalPrice: ticket.totalPrice - selectRemoveItem.price });
+	};
 
 	return (
 		<div>
@@ -56,7 +34,9 @@ export const Ticket = (props: Props) => {
 			<Table
 				aria-label='Tabla ticket'
 				className='mb-3'>
-				<TableHeader columns={columns}>{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}</TableHeader>
+				<TableHeader columns={[...columns, { key: 'action', label: 'ACTIÓN' }]}>
+					{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
+				</TableHeader>
 				<TableBody items={ticket.dishes}>
 					{(item) => (
 						<TableRow key={item.key}>
@@ -65,6 +45,16 @@ export const Ticket = (props: Props) => {
 							<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
 							<TableCell className='capitalize'>{item.type}</TableCell>
 							<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
+							<TableCell>
+								<Button
+									className='bg-transparent'
+									onPress={() => handleDeleteDish(item)}>
+									<IoTrash
+										className='text-rose-700'
+										size={20}
+									/>
+								</Button>
+							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>
@@ -73,13 +63,23 @@ export const Ticket = (props: Props) => {
 			<Table
 				aria-label='Tabla tickets'
 				className='mb-3'>
-				<TableHeader columns={columnCream}>
+				<TableHeader columns={[...columnCream, { key: 'action', label: 'ACTIÓN' }]}>
 					{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 				</TableHeader>
 				<TableBody items={ticket.creams}>
 					{(item) => (
 						<TableRow key={item.key}>
 							<TableCell className='capitalize'>{Array.from(item.creams).join(', ')}</TableCell>
+							<TableCell>
+								<Button
+									className='bg-transparent'
+									onPress={() => handleDeleteCream(item)}>
+									<IoTrash
+										className='text-rose-700'
+										size={20}
+									/>
+								</Button>
+							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>
@@ -88,7 +88,7 @@ export const Ticket = (props: Props) => {
 			<Table
 				aria-label='Table drink'
 				className='mb-3'>
-				<TableHeader columns={columnDrink}>
+				<TableHeader columns={[...columnDrink, { key: 'action', label: 'ACTIÓN' }]}>
 					{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 				</TableHeader>
 				<TableBody items={ticket.drinks}>
@@ -96,6 +96,16 @@ export const Ticket = (props: Props) => {
 						<TableRow key={item.id}>
 							<TableCell className='capitalize'>{item.name}</TableCell>
 							<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
+							<TableCell>
+								<Button
+									className='bg-transparent'
+									onPress={() => handleDeleteDrink(item)}>
+									<IoTrash
+										className='text-rose-700'
+										size={20}
+									/>
+								</Button>
+							</TableCell>
 						</TableRow>
 					)}
 				</TableBody>

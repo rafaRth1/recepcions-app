@@ -1,11 +1,9 @@
-import { DishProps, FoodProps, TicketProps } from '@/types';
+import { DishProps, TicketProps } from '@/types';
 import { createContext } from 'react';
 
 export interface RecepcionContextProps {
 	selected: string[];
 	setSelected: React.Dispatch<React.SetStateAction<string[]>>;
-	resultDishes: FoodProps[];
-	setResulDishes: React.Dispatch<React.SetStateAction<FoodProps[]>>;
 	dish: DishProps;
 	setDish: React.Dispatch<React.SetStateAction<DishProps>>;
 	ticket: TicketProps;

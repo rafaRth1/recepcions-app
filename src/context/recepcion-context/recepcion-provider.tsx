@@ -1,8 +1,9 @@
 import { useMemo, useState } from 'react';
 import { RecepcionContext } from './recepcion-context';
-import { foods } from '@/data/food';
-import { DishProps, FoodProps, TicketProps } from '@/types';
+import { DishProps, TicketProps } from '@/types';
 import { useDate } from '@/hooks';
+
+// const socket = io('http://localhost:3000');
 
 interface Props {
 	children: JSX.Element | JSX.Element[];
@@ -12,7 +13,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 	const { children } = props;
 	const { date, hours } = useDate();
 	const [selected, setSelected] = useState(['mayonesa', 'ketchup', 'mostaza']);
-	const [resultDishes, setResulDishes] = useState<FoodProps[]>(foods);
+
 	const [dish, setDish] = useState<DishProps>({
 		key: '',
 		price: 0,
@@ -30,6 +31,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 		totalPrice: 0,
 		exception: '',
 		time: '',
+		typePayment: '',
 	});
 	const [tickets, setTickets] = useState<TicketProps[]>([
 		{
@@ -46,8 +48,8 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 				},
 				{
 					key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-					price: 26,
-					dish_food: '12 Acevichada',
+					price: 10,
+					dish_food: '1 Clasica',
 					rice: true,
 					salad: true,
 					type: 'mesa',
@@ -67,9 +69,10 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 					price: 3,
 				},
 			],
-			totalPrice: 29,
+			totalPrice: 39,
 			exception: 'No colocarle sal a los platos',
 			time: '10/8/24 12:40 AM',
+			typePayment: 'yape',
 		},
 		{
 			key: '6ce9d1da-5afd-4325-a502-56f3337c77a8',
@@ -101,6 +104,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			totalPrice: 16,
 			exception: '',
 			time: '10/8/24 12:40 AM',
+			typePayment: 'paga con yape',
 		},
 	]);
 
@@ -139,6 +143,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			totalPrice: 0,
 			exception: '',
 			time: '',
+			typePayment: '',
 		});
 	};
 
@@ -171,10 +176,12 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			totalPrice: 0,
 			exception: '',
 			time: '',
+			typePayment: '',
 		});
 	};
 
 	const handleFinishTicket = () => {
+		// socket.emit('handleFinishticket', tickets);
 		console.log(tickets);
 	};
 
@@ -182,8 +189,6 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 		() => ({
 			selected,
 			setSelected,
-			resultDishes,
-			setResulDishes,
 			ticket,
 			setTicket,
 			tickets,
@@ -193,7 +198,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			handleSubmitTicket,
 			handleFinishTicket,
 		}),
-		[selected, resultDishes, dish, ticket, tickets]
+		[selected, dish, ticket, tickets]
 	);
 
 	return <RecepcionContext.Provider value={contextValue}>{children}</RecepcionContext.Provider>;

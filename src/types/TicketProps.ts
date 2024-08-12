@@ -11,8 +11,9 @@ export interface TicketProps {
 	totalPrice: number;
 	exception: string;
 	time: string;
+	typePayment: string;
 }
 
-interface Drinks extends DrinkProps {
+export interface Drinks extends DrinkProps {
 	id: string;
 }

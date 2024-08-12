@@ -1,47 +1,6 @@
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
-
-const columns = [
-	{
-		key: 'dish_food',
-		label: 'NOMBRE',
-	},
-	{
-		key: 'rice',
-		label: 'ARROZ',
-	},
-	{
-		key: 'salad',
-		label: 'ENSALADA',
-	},
-	{
-		key: 'type',
-		label: 'TIPO',
-	},
-	{
-		key: 'price',
-		label: 'PRICE',
-	},
-];
-
-const columnCream = [
-	{
-		key: 'creams',
-		label: 'CREMAS',
-	},
-];
-
-const columnDrink = [
-	{
-		key: 'name',
-		label: 'BEBIDA',
-	},
-
-	{
-		key: 'price',
-		label: 'PRECIO',
-	},
-];
+import { columns, columnCream, columnDrink } from '@/data/columns';
 
 export const Tickets = () => {
 	const { tickets, setTicket } = useRecepcion();
@@ -117,7 +76,7 @@ export const Tickets = () => {
 
 					<p className='text-right'>Total: S/{`${ticket.totalPrice.toFixed(2)}`}</p>
 
-					{tickets.length > 0 && <p className='font-medium text-warning'>Excepción: {ticket.exception}</p>}
+					{ticket.exception.length > 0 && <p className='font-medium text-warning'>Excepción: {ticket.exception}</p>}
 				</div>
 			))}
 		</div>

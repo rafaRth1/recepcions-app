@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import {
 	Button,
 	Input,
@@ -14,15 +14,14 @@ import {
 } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
 import { drinks } from '@/data/drinks';
-import { IoCloseOutline } from 'react-icons/io5';
 import { DrinkProps } from '@/types';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDF } from '@/components/pdf/pdf';
+import { InputSearch } from '@/components/input-search/input-search';
 
-export const RecepcionXtra = () => {
+export const RecepcionXtra = memo(() => {
 	const { dish, setDish, handleSubmitTicket, handleFinishTicket, setTicket, ticket, tickets } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
-	const [active, setActive] = useState(false);
 	const [drink, setDrink] = useState<DrinkProps>({
 		key: '',
 		name: '',
@@ -55,28 +54,13 @@ export const RecepcionXtra = () => {
 
 	return (
 		<div>
-			<div className='flex gap-2 mb-4'>
-				<Input
-					type='text'
-					label='Nombre bebida'
-					onFocus={() => setActive(true)}
-					value={drink.name}
-					onChange={(e) => handleOnChange(e.target.value.toLowerCase())}
-				/>
-
-				<Button
-					className='h-auto'
-					variant='light'
-					onPress={() => setActive(false)}>
-					<IoCloseOutline size={30} />
-				</Button>
-			</div>
-
-			{active && (
+			<InputSearch
+				value={drink.name}
+				handleOnchange={handleOnChange}>
 				<Table
 					hideHeader
 					aria-label='Tabla de platos'
-					className='mb-4'
+					className='mt-4'
 					classNames={{
 						wrapper: 'max-h-[200px]',
 					}}>
@@ -93,7 +77,7 @@ export const RecepcionXtra = () => {
 						))}
 					</TableBody>
 				</Table>
-			)}
+			</InputSearch>
 
 			<Button
 				className='bg-indigo-700 mb-4 w-full'
@@ -118,6 +102,14 @@ export const RecepcionXtra = () => {
 				<Radio value='delivery'>Delivery</Radio>
 				<Radio value='recojo'>Recojo</Radio>
 			</RadioGroup>
+
+			<Input
+				type='text'
+				label='Tipo de pago'
+				className='mb-4'
+				value={ticket.typePayment}
+				onValueChange={(e) => setTicket({ ...ticket, typePayment: e })}
+			/>
 
 			<Button
 				className='mb-4 w-full'
@@ -149,4 +141,4 @@ export const RecepcionXtra = () => {
 			</PDFDownloadLink>
 		</div>
 	);
-};
+});
