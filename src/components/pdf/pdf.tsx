@@ -52,10 +52,6 @@ const columns: ColumnProps[] = [
 		label: 'ENSALADA',
 	},
 	{
-		key: 'type',
-		label: 'TIPO',
-	},
-	{
 		key: 'price',
 		label: 'PRICE',
 	},
@@ -178,7 +174,6 @@ export const PDF = (props: Props) => {
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
-						<Text style={{ width: `${100 / columns.length}%` }}>{dish.type}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>S/{dish.price.toFixed(2)}</Text>
 					</View>
 				))}
@@ -222,7 +217,6 @@ export const PDF = (props: Props) => {
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
-						<Text style={{ width: `${100 / columns.length}%` }}>{dish.type}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>S/{dish.price.toFixed(2)}</Text>
 					</View>
 				))}

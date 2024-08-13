@@ -12,10 +12,6 @@ export const columns = [
 		label: 'ENSALADA',
 	},
 	{
-		key: 'type',
-		label: 'TIPO',
-	},
-	{
 		key: 'price',
 		label: 'PRICE',
 	},

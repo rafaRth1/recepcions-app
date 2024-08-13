@@ -20,7 +20,7 @@ import { PDF } from '@/components/pdf/pdf';
 import { InputSearch } from '@/components/input-search/input-search';
 
 export const RecepcionXtra = memo(() => {
-	const { dish, setDish, handleSubmitTicket, handleFinishTicket, setTicket, ticket, tickets } = useRecepcion();
+	const { handleSubmitTicket, handleFinishTicket, setTicket, ticket, tickets } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [drink, setDrink] = useState<DrinkProps>({
 		key: '',
@@ -36,6 +36,12 @@ export const RecepcionXtra = memo(() => {
 	const handleSearch = (e: string) => {
 		const results = drinks.filter((drink) => drink && drink.key && drink.key.includes(e));
 		setResultDrinks(results);
+	};
+
+	const handleOnChangeType = (e: string) => {
+		if (e === 'table' || e === 'pickup' || e === 'delivery') {
+			setTicket({ ...ticket, type: e });
+		}
 	};
 
 	const handleAddDrink = () => {
@@ -96,11 +102,11 @@ export const RecepcionXtra = memo(() => {
 				className='mb-4'
 				label='Tipo de pedido'
 				orientation='horizontal'
-				value={dish.type}
-				onValueChange={(e) => setDish({ ...dish, type: e })}>
-				<Radio value='mesa'>Mesa</Radio>
+				value={ticket.type}
+				onValueChange={(e) => handleOnChangeType(e)}>
+				<Radio value='table'>Mesa</Radio>
 				<Radio value='delivery'>Delivery</Radio>
-				<Radio value='recojo'>Recojo</Radio>
+				<Radio value='pickup'>Recojo</Radio>
 			</RadioGroup>
 
 			<Input

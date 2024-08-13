@@ -15,6 +15,11 @@ export const Tickets = () => {
 					className='mb-3'>
 					<div className='flex items-center mb-3 '>
 						<h3 className='mr-5 capitalize'>{ticket.name_ticket}</h3>
+						<h3 className='mr-5 capitalize'>
+							{(ticket.type === 'table' && 'Para mesa') ||
+								(ticket.type === 'delivery' && 'Para delivery') ||
+								(ticket.type === 'pickup' && 'Llevar')}
+						</h3>
 						<p>{ticket.time}</p>
 						<div className='flex-1' />
 						<Button
@@ -36,7 +41,6 @@ export const Tickets = () => {
 									<TableCell className='capitalize'>{item.dish_food}</TableCell>
 									<TableCell className='capitalize'>{item.rice ? 'Si' : 'No'}</TableCell>
 									<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
-									<TableCell className='capitalize'>{item.type}</TableCell>
 									<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 								</TableRow>
 							)}

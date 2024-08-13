@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 
 // const socket = io('http://localhost:3000');
 
@@ -313,6 +313,8 @@ export const Orders = () => {
 										)}
 									</TableBody>
 								</Table>
+
+								<Button color='danger'>Terminar pedido</Button>
 								{order.exception.length > 0 && <p className='font-medium text-warning'>Excepción: {order.exception}</p>}
 							</div>
 						))}

@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 import Home from '@/pages/home/home';
-import { Orders, Recepcion } from '@/pages/home/pages';
+import { Delivery, Orders, Recepcion } from '@/pages/home/pages';
 
 export const HomeRouter = () => {
 	return (
@@ -20,7 +20,7 @@ export const HomeRouter = () => {
 
 				<Route
 					path='delivery'
-					element={<>Construyendo...</>}
+					element={<Delivery />}
 				/>
 
 				<Route

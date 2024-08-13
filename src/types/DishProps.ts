@@ -4,5 +4,5 @@ export interface DishProps extends FoodProps {
 	key: string;
 	rice: boolean;
 	salad: boolean;
-	type: string;
+	// type: string;
 }

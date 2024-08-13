@@ -43,7 +43,6 @@ export const Ticket = () => {
 							<TableCell className='capitalize'>{item.dish_food}</TableCell>
 							<TableCell className='capitalize'>{item.rice ? 'Si' : 'No'}</TableCell>
 							<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
-							<TableCell className='capitalize'>{item.type}</TableCell>
 							<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 							<TableCell>
 								<Button

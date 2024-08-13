@@ -12,6 +12,8 @@ export interface TicketProps {
 	exception: string;
 	time: string;
 	typePayment: string;
+	status: 'completed' | 'process';
+	type: 'table' | 'delivery' | 'pickup';
 }
 
 export interface Drinks extends DrinkProps {
