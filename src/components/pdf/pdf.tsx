@@ -129,55 +129,61 @@ export const PDF = (props: Props) => {
 
 	return (
 		<Document>
-			<Page style={style.body}>
-				<View style={{ marginBottom: '5px' }}>
-					<Text
-						style={{
-							height: '4px',
-							width: '100%',
-							borderTop: '1px',
-							borderStyle: 'dashed',
-						}}></Text>
-
-					<Text style={{ textAlign: 'center', fontWeight: 'black', fontSize: '13px', margin: '3px 0 3px 0' }}>Cocina</Text>
-
-					<Text
-						style={{
-							height: '4px',
-							width: '100%',
-							borderTop: '1px',
-							borderStyle: 'dashed',
-						}}></Text>
-					<Text>Nombre: {`${ticket.name_ticket}`}</Text>
-					<Text>Mozo: Rafael</Text>
-					<Text>Fecha: {`${ticket.time}`}</Text>
-				</View>
-
-				<View style={style.colViewCream}>
-					{columns.map((column) => (
-						<Text
-							key={column.key}
-							style={{
-								textTransform: 'capitalize',
-								fontSize: '9px',
-								width: `${100 / columns.length}%`,
-							}}>
-							{column.label}
-						</Text>
-					))}
-				</View>
-
-				{ticket.dishes.map((dish) => (
+			<Page style={{ ...style.body, height: '100px' }}>
+				<View>
 					<View
-						style={style.rowViewDish}
-						key={ticket.key}>
-						<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
-						<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
-						<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
-						<Text style={{ width: `${100 / columns.length}%` }}>S/{dish.price.toFixed(2)}</Text>
+						style={{ marginBottom: '5px' }}
+						break>
+						<Text
+							style={{
+								height: '4px',
+								width: '100%',
+								borderTop: '1px',
+								borderStyle: 'dashed',
+							}}></Text>
+
+						<Text style={{ textAlign: 'center', fontWeight: 'black', fontSize: '13px', margin: '3px 0 3px 0' }}>
+							Cocina
+						</Text>
+
+						<Text
+							style={{
+								height: '4px',
+								width: '100%',
+								borderTop: '1px',
+								borderStyle: 'dashed',
+							}}></Text>
+						<Text>Nombre: {`${ticket.name_ticket}`}</Text>
+						<Text>Mozo: Rafael</Text>
+						<Text>Fecha: {`${ticket.time}`}</Text>
 					</View>
-				))}
-				<Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Excepción: {ticket.exception}</Text>
+
+					<View style={style.colViewCream}>
+						{columns.map((column) => (
+							<Text
+								key={column.key}
+								style={{
+									textTransform: 'capitalize',
+									fontSize: '9px',
+									width: `${100 / columns.length}%`,
+								}}>
+								{column.label}
+							</Text>
+						))}
+					</View>
+
+					{ticket.dishes.map((dish) => (
+						<View
+							style={style.rowViewDish}
+							key={dish._id}>
+							<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
+							<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
+							<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
+							<Text style={{ width: `${100 / columns.length}%` }}>S/{dish.price.toFixed(2)}</Text>
+						</View>
+					))}
+					<Text style={{ fontStyle: 'italic', fontWeight: 'bold' }}>Excepción: {ticket.exception}</Text>
+				</View>
 			</Page>
 
 			<Page style={style.body}>
@@ -213,7 +219,7 @@ export const PDF = (props: Props) => {
 				{ticket.dishes.map((dish) => (
 					<View
 						style={style.rowViewDish}
-						key={ticket.key}>
+						key={dish._id}>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
@@ -223,7 +229,7 @@ export const PDF = (props: Props) => {
 
 				{ticket.drinks!.map((drink) => (
 					<View
-						key={drink.id}
+						key={drink._id}
 						style={{ ...style.rowViewDrink, marginBottom: '5px' }}>
 						<Text style={{ width: `${100 / columns.length}%` }}>{drink.name}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{}</Text>
@@ -251,54 +257,14 @@ export const PDF = (props: Props) => {
 
 				{ticket.creams.map((cream) => (
 					<View
-						key={cream.key}
+						key={cream._id}
 						style={style.rowViewCream}>
 						<Text>{Array.from(cream.creams).join(', ')}</Text>
 					</View>
 				))}
 
-				<Text style={{ textAlign: 'right', fontWeight: 'bold' }}>Total S/{`${ticket.totalPrice}`}</Text>
+				<Text style={{ textAlign: 'right', fontWeight: 'bold' }}>Total S/{`${ticket.total_price}`}</Text>
 			</Page>
 		</Document>
 	);
 };
-
-// const ticket: TicketProps = {
-// 	key: '6ce9d1da-5afd-4325-a502-56f3337c77a9',
-// 	name_ticket: 'Mesa 1',
-// 	dishes: [
-// 		{
-// 			key: '4f5a1256-bc17-46e4-81f7-564450e7f28a',
-// 			price: 26,
-// 			dish_food: '12 BBQ',
-// 			rice: true,
-// 			salad: true,
-// 			type: 'mesa',
-// 		},
-// 		{
-// 			key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-// 			price: 26,
-// 			dish_food: '12 Acevichada',
-// 			rice: false,
-// 			salad: true,
-// 			type: 'mesa',
-// 		},
-// 	],
-// 	creams: [
-// 		{
-// 			key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bf',
-// 			creams: ['mayonesa', 'ketchup', 'mostaza'],
-// 		},
-// 	],
-// 	drinks: [
-// 		{
-// 			id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2d',
-// 			key: 'chicha 1/2',
-// 			name: 'Chicha 1/2',
-// 			price: 3,
-// 		},
-// 	],
-// 	totalPrice: 85,
-// 	exception: 'No colocarle sal a los platos',
-// 	time: '',
-// };

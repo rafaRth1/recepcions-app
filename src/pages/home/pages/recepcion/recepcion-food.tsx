@@ -3,17 +3,26 @@ import { Button, Checkbox, Input, Table, TableBody, TableCell, TableColumn, Tabl
 import { useRecepcion } from '@/hooks';
 import { InputSearch } from '@/components/input-search/input-search';
 import { foods } from '@/data/food';
-import { FoodProps } from '@/types';
+import { DishProps, FoodProps } from '@/types';
+
+const initialValueDish: DishProps = {
+	key: '',
+	price: 0,
+	dish_food: '',
+	rice: false,
+	salad: true,
+};
 
 export const RecepcionFood = () => {
 	const { ticket, setTicket, dish, setDish } = useRecepcion();
-
 	const [inputSearch, setInputSearch] = useState('');
 	const [resultDishes, setResulDishes] = useState<FoodProps[]>(foods);
 
-	const handleSetQuery = (e: string) => {
-		setInputSearch(e);
-		handleSearch(e);
+	const handleSetQuery = (value: string) => {
+		if (value.length === 0) setDish(initialValueDish);
+
+		setInputSearch(value);
+		handleSearch(value);
 	};
 
 	const handleSearch = (e: string) => {
@@ -22,10 +31,12 @@ export const RecepcionFood = () => {
 	};
 
 	const handleAddDishToTicket = () => {
+		if (inputSearch.length === 0) return;
+
 		setTicket({
 			...ticket,
 			dishes: [...ticket.dishes, { ...dish, key: crypto.randomUUID() }],
-			totalPrice: ticket.totalPrice + dish.price,
+			total_price: ticket.total_price + dish.price,
 		});
 
 		setInputSearch('');
@@ -33,8 +44,6 @@ export const RecepcionFood = () => {
 
 	return (
 		<div>
-			<h1 className='text-neutral-100 text-xl font-semibold mb-5'>Sección de recepciones</h1>
-
 			<Input
 				type='text'
 				label='Ingresar nombre o mesa'
@@ -49,7 +58,8 @@ export const RecepcionFood = () => {
 			<div className='relative mb-4'>
 				<InputSearch
 					value={inputSearch}
-					handleOnchange={handleSetQuery}>
+					handleOnchange={handleSetQuery}
+					label='Elegir comida'>
 					<Table
 						hideHeader
 						aria-label='Tabla de platos'

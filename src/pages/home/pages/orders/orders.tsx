@@ -1,326 +1,131 @@
-import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { useState, useEffect, useCallback } from 'react';
+import { io } from 'socket.io-client';
+import { useDisclosure } from '@nextui-org/react';
+import { ModalDetailsOrder } from './modal-details-order';
+import { ContentOrder } from './content-order';
+import { TicketProps } from '@/types';
+import clientAxios from '@/utils/client-axios';
+// import clientAxios from '@/utils/client-axios';
 
-// const socket = io('http://localhost:3000');
+const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
 
-const columns = [
-	{
-		key: 'dish_food',
-		label: 'NOMBRE',
-	},
-	{
-		key: 'rice',
-		label: 'ARROZ',
-	},
-	{
-		key: 'salad',
-		label: 'ENSALADA',
-	},
-	{
-		key: 'type',
-		label: 'TIPO',
-	},
-	{
-		key: 'price',
-		label: 'PRICE',
-	},
-];
-
-const listOrders = [
-	{
-		id: 1,
-		type: 'Mesa',
-		orders: [
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a9',
-				name_ticket: 'Mesa 1',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28a',
-						price: 26,
-						dish_food: '12 BBQ',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 26,
-						dish_food: '12 Acevichada',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bf',
-						creams: ['mayonesa', 'ketchup', 'mostaza'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2d',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 29,
-				exception: 'No colocarle sal a los platos',
-				time: '10/8/24 12:40 AM',
-			},
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a8',
-				name_ticket: 'Mesa 2',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 13,
-						dish_food: 'Encuentro Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28c',
-						price: 13,
-						dish_food: 'Pecho Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bz',
-						creams: ['mayonesa', 'ketchup', 'mostaza', 'golf'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2e',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 16,
-				exception: '',
-				time: '10/8/24 12:40 AM',
-			},
-		],
-	},
-	{
-		id: 2,
-		type: 'Llevar',
-		orders: [
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a9',
-				name_ticket: 'Mesa 1',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28a',
-						price: 26,
-						dish_food: '12 BBQ',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 26,
-						dish_food: '12 Acevichada',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bf',
-						creams: ['mayonesa', 'ketchup', 'mostaza'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2d',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 29,
-				exception: 'No colocarle sal a los platos',
-				time: '10/8/24 12:40 AM',
-			},
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a8',
-				name_ticket: 'Mesa 2',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 13,
-						dish_food: 'Encuentro Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28c',
-						price: 13,
-						dish_food: 'Pecho Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bz',
-						creams: ['mayonesa', 'ketchup', 'mostaza', 'golf'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2e',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 16,
-				exception: 'No colocarle sal a las papas.',
-				time: '10/8/24 12:40 AM',
-			},
-		],
-	},
-	{
-		id: 3,
-		type: 'Delivery',
-		orders: [
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a9',
-				name_ticket: 'Mesa 1',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28a',
-						price: 26,
-						dish_food: '12 BBQ',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 26,
-						dish_food: '12 Acevichada',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bf',
-						creams: ['mayonesa', 'ketchup', 'mostaza'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2d',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 29,
-				exception: 'No colocarle sal a los platos',
-				time: '10/8/24 12:40 AM',
-			},
-			{
-				key: '6ce9d1da-5afd-4325-a502-56f3337c77a8',
-				name_ticket: 'Mesa 2',
-				dishes: [
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28b',
-						price: 13,
-						dish_food: 'Encuentro Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-					{
-						key: '4f5a1256-bc17-46e4-81f7-564450e7f28c',
-						price: 13,
-						dish_food: 'Pecho Broaster',
-						rice: true,
-						salad: true,
-						type: 'mesa',
-					},
-				],
-				creams: [
-					{
-						key: 'a67111c8-d7ce-401d-bfe9-9d8cda3d98bz',
-						creams: ['mayonesa', 'ketchup', 'mostaza', 'golf'],
-					},
-				],
-				drinks: [
-					{
-						id: 'b9deac6e-3a0c-4eb4-8957-bbc2ef0f7a2e',
-						key: 'chicha 1/2',
-						name: 'Chicha 1/2',
-						price: 3,
-					},
-				],
-				totalPrice: 16,
-				exception: '',
-				time: '10/8/24 12:40 AM',
-			},
-		],
-	},
-];
+const initialValueTicket: TicketProps = {
+	key: '',
+	name_ticket: '',
+	dishes: [],
+	creams: [],
+	drinks: [],
+	total_price: 0,
+	exception: '',
+	time: '',
+	type_payment: '',
+	status: 'process',
+	type: 'table',
+	user: '',
+};
 
 export const Orders = () => {
+	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const [selectTicket, setSelectTicket] = useState<TicketProps>(initialValueTicket);
+	const [lists, setLists] = useState([
+		{
+			id: 1,
+			key: 'table',
+			name: 'Mesa',
+			orders: [] as TicketProps[],
+		},
+		{
+			id: 2,
+			key: 'delivery',
+			name: 'Delivery',
+			orders: [] as TicketProps[],
+		},
+		{
+			id: 3,
+			key: 'pickup',
+			name: 'Recojo',
+			orders: [] as TicketProps[],
+		},
+	]);
+
+	const handleFinishTicket = useCallback(async (id: string) => {
+		try {
+			const { data } = await clientAxios.put(`/recepcion/${id}`);
+
+			console.log(data);
+
+			const updateList = lists.map((list) => {
+				const updateTicket = list.orders.filter((ticket) => ticket._id !== id);
+
+				return {
+					...list,
+					orders: updateTicket,
+				};
+			});
+
+			setLists(updateList);
+		} catch (error) {
+			console.log(error);
+		}
+	}, []);
+
+	const handleOnOpenModal = useCallback((ticket: TicketProps) => {
+		setSelectTicket(ticket);
+		onOpen();
+	}, []);
+
+	const handleRecieveData = (tickets: TicketProps[]) => {
+		const updatedLists = lists.map((list) => {
+			const matchingTicket = tickets.filter((ticket) => ticket.type === list.key);
+
+			return {
+				...list,
+				orders: [...list.orders, ...matchingTicket],
+			};
+		});
+
+		setLists(updatedLists);
+	};
+
+	useEffect(() => {
+		socket.on('responseFinishTicket', handleRecieveData);
+	}, [lists]);
+
+	useEffect(() => {
+		const getLists = async () => {
+			const { data: tickets } = await clientAxios<TicketProps[]>('/recepcion');
+
+			const updatedLists = lists.map((list) => {
+				const matchingTicket = tickets.filter((ticket) => ticket.type === list.key && ticket.status === 'process');
+
+				return {
+					...list,
+					orders: [...list.orders, ...matchingTicket],
+				};
+			});
+
+			setLists(updatedLists);
+		};
+
+		getLists();
+	}, []);
+
 	return (
-		<main className='p-4 h-[100dvh]'>
-			<h1 className='text-xl mb-5'>Sección de pedidos</h1>
+		<main className='flex flex-col h-[calc(100dvh-65px)]'>
+			<h1 className='text-xl mb-5 p-4 font-semibold'>Sección Cocina</h1>
 
-			<section className='flex justify-between'>
-				{listOrders.map((list) => (
-					<div
-						key={list.id}
-						className='flex flex-col'>
-						<h2 className='text-lg px-1 py-2 mb-2 text-center rounded-md bg-neutral-900'>{list.type}</h2>
+			<ContentOrder
+				lists={lists}
+				onOpen={onOpen}
+				handleFinishTicket={handleFinishTicket}
+				handleOnOpenModal={handleOnOpenModal}
+			/>
 
-						{list.orders.map((order) => (
-							<div key={order.key}>
-								<p className='mb-2'>{order.name_ticket}</p>
-								<Table
-									aria-label='Tabla ticket'
-									className='mb-3'>
-									<TableHeader columns={columns}>
-										{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
-									</TableHeader>
-									<TableBody items={order.dishes}>
-										{(item) => (
-											<TableRow key={item.key}>
-												<TableCell className='capitalize'>{item.dish_food}</TableCell>
-												<TableCell className='capitalize'>{item.rice ? 'Si' : 'No'}</TableCell>
-												<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
-												<TableCell className='capitalize'>{item.type}</TableCell>
-												<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
-											</TableRow>
-										)}
-									</TableBody>
-								</Table>
-
-								<Button color='danger'>Terminar pedido</Button>
-								{order.exception.length > 0 && <p className='font-medium text-warning'>Excepción: {order.exception}</p>}
-							</div>
-						))}
-					</div>
-				))}
-			</section>
+			<ModalDetailsOrder
+				isOpen={isOpen}
+				onOpenChange={onOpenChange}
+				selectTicket={selectTicket}
+			/>
 		</main>
 	);
 };

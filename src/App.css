@@ -1,3 +1,13 @@
 body {
 	font-family: 'Nunito Sans';
 }
+
+.orders-content::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+.orders-content::-webkit-scrollbar-thumb {
+	background-color: #404040;
+	border-radius: 5rem;
+}

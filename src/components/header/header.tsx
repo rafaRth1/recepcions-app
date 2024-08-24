@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../logo/logo';
 import { IoMenuOutline } from 'react-icons/io5';
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { useAuthProvider } from '@/hooks';
 
 const links = [
 	{
@@ -16,8 +18,8 @@ const links = [
 	},
 	{
 		id: 3,
-		route: '/delivery',
-		name: 'Delivery',
+		route: '/store',
+		name: 'Almacén',
 	},
 	{
 		id: 4,
@@ -31,8 +33,19 @@ const links = [
 	},
 ];
 
-const Header = () => {
+export const Header = () => {
 	const [active, setActive] = useState(false);
+	const { auth, setAuth } = useAuthProvider();
+
+	const handleLogout = () => {
+		setAuth({
+			_id: '',
+			nick_name: '',
+			email: '',
+		});
+
+		localStorage.setItem('token', '');
+	};
 
 	return (
 		<header className='flex p-4'>
@@ -47,10 +60,36 @@ const Header = () => {
 				<Logo />
 			</div>
 
-			<div className='flex items-center'>
+			{/* <div className='flex items-center'>
 				<span className='text-neutral-100'>Rafael</span>
-				{/* <figure className='w-[30px] h-[30px] rounded-full bg-neutral-700 ml-3'></figure> */}
-			</div>
+				<figure className='w-[30px] h-[30px] rounded-full bg-neutral-700 ml-3'></figure>
+			</div> */}
+
+			<Dropdown
+				placement='bottom-end'
+				className='bg-[#0d0d0d]'>
+				<DropdownTrigger>
+					<Avatar
+						name={auth.nick_name}
+						className='cursor-pointer bg-[#0d0d0d]'
+					/>
+				</DropdownTrigger>
+				<DropdownMenu
+					aria-label='Profile Actions'
+					variant='flat'>
+					<DropdownItem
+						key='settings'
+						href='/settings'>
+						Configuración
+					</DropdownItem>
+					<DropdownItem
+						key='logout'
+						color='danger'
+						onClick={handleLogout}>
+						Cerrar Sesión
+					</DropdownItem>
+				</DropdownMenu>
+			</Dropdown>
 
 			<div
 				className={`fixed inset-0 z-40 transition-all duration-200 w-full h-full ${
@@ -85,5 +124,3 @@ const Header = () => {
 		</header>
 	);
 };
-
-export default Header;

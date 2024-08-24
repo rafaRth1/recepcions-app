@@ -4,11 +4,12 @@ import { Input } from '@nextui-org/react';
 interface Props {
 	children: JSX.Element;
 	value: string;
+	label?: string;
 	handleOnchange: (e: string) => void;
 }
 
 export const InputSearch = (props: Props) => {
-	const { children, handleOnchange, value } = props;
+	const { children, handleOnchange, value, label } = props;
 	const wrapperElement = useRef<HTMLDivElement>(null);
 	const [active, setActive] = useState(false);
 
@@ -31,7 +32,7 @@ export const InputSearch = (props: Props) => {
 				<div className='flex gap-2'>
 					<Input
 						type='text'
-						label='Elegir Comida'
+						label={label}
 						className=''
 						classNames={{
 							input: '',

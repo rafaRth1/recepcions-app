@@ -15,12 +15,10 @@ import {
 import { useRecepcion } from '@/hooks';
 import { drinks } from '@/data/drinks';
 import { DrinkProps } from '@/types';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PDF } from '@/components/pdf/pdf';
 import { InputSearch } from '@/components/input-search/input-search';
 
 export const RecepcionXtra = memo(() => {
-	const { handleSubmitTicket, handleFinishTicket, setTicket, ticket, tickets } = useRecepcion();
+	const { handleSubmitTicket, handleFinishTicket, setTicket, ticket } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [drink, setDrink] = useState<DrinkProps>({
 		key: '',
@@ -48,7 +46,7 @@ export const RecepcionXtra = memo(() => {
 		setTicket({
 			...ticket,
 			drinks: [...ticket.drinks!, { id: crypto.randomUUID(), ...drink }],
-			totalPrice: ticket.totalPrice + drink.price,
+			total_price: ticket.total_price + drink.price,
 		});
 
 		setDrink({
@@ -62,7 +60,8 @@ export const RecepcionXtra = memo(() => {
 		<div>
 			<InputSearch
 				value={drink.name}
-				handleOnchange={handleOnChange}>
+				handleOnchange={handleOnChange}
+				label='Elegir bebida'>
 				<Table
 					hideHeader
 					aria-label='Tabla de platos'
@@ -113,8 +112,8 @@ export const RecepcionXtra = memo(() => {
 				type='text'
 				label='Tipo de pago'
 				className='mb-4'
-				value={ticket.typePayment}
-				onValueChange={(e) => setTicket({ ...ticket, typePayment: e })}
+				value={ticket.type_payment}
+				onValueChange={(e) => setTicket({ ...ticket, type_payment: e })}
 			/>
 
 			<Button
@@ -124,27 +123,12 @@ export const RecepcionXtra = memo(() => {
 				{ticket.key ? 'Editar ticket' : 'Agregar ticket'}
 			</Button>
 
-			<PDFDownloadLink
-				document={<PDF ticket={tickets[1]} />}
-				fileName='boleta.pdf'>
-				{({ loading }) =>
-					loading ? (
-						<Button
-							className='w-full'
-							color='danger'
-							disabled>
-							Cargando....
-						</Button>
-					) : (
-						<Button
-							className='w-full'
-							color='danger'
-							onClick={() => handleFinishTicket()}>
-							Mandar a cocina tickets
-						</Button>
-					)
-				}
-			</PDFDownloadLink>
+			<Button
+				className='w-full'
+				color='danger'
+				onClick={() => handleFinishTicket()}>
+				Mandar a cocina tickets
+			</Button>
 		</div>
 	);
 });

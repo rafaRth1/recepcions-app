@@ -4,6 +4,7 @@ export interface CreamProps {
 }
 
 export interface CreamsProps {
+	_id?: string;
 	key: string;
 	creams: string[];
 }

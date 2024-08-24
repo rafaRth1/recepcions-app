@@ -11,7 +11,7 @@ export const Ticket = () => {
 		const [selectRemoveItem] = ticket.dishes.filter((dish) => dish.key === item.key);
 		const updateDishes = ticket.dishes.filter((dish) => dish.key !== item.key);
 
-		setTicket({ ...ticket, dishes: updateDishes, totalPrice: ticket.totalPrice - selectRemoveItem.price });
+		setTicket({ ...ticket, dishes: updateDishes, total_price: ticket.total_price - selectRemoveItem.price });
 	};
 
 	const handleDeleteCream = (item: CreamsProps) => {
@@ -24,7 +24,7 @@ export const Ticket = () => {
 		const [selectRemoveItem] = ticket.drinks!.filter((drink) => drink.id === item.id);
 		const updateCreams = ticket.drinks!.filter((drink) => drink.key !== item.key);
 
-		setTicket({ ...ticket, drinks: updateCreams, totalPrice: ticket.totalPrice - selectRemoveItem.price });
+		setTicket({ ...ticket, drinks: updateCreams, total_price: ticket.total_price - selectRemoveItem.price });
 	};
 
 	return (
@@ -110,7 +110,7 @@ export const Ticket = () => {
 				</TableBody>
 			</Table>
 
-			<p className='text-right'>Total: S/{`${ticket.totalPrice.toFixed(2)}`}</p>
+			<p className='text-right'>Total: S/{`${ticket.total_price.toFixed(2)}`}</p>
 		</div>
 	);
 };

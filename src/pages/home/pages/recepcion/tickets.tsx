@@ -1,6 +1,8 @@
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
 import { columns, columnCream, columnDrink } from '@/data/columns';
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { PDF } from '@/components/pdf/pdf';
 
 export const Tickets = () => {
 	const { tickets, setTicket } = useRecepcion();
@@ -22,6 +24,23 @@ export const Tickets = () => {
 						</h3>
 						<p>{ticket.time}</p>
 						<div className='flex-1' />
+
+						<PDFDownloadLink
+							document={<PDF ticket={ticket} />}
+							fileName='boleta.pdf'>
+							{({ loading }) => {
+								return loading ? (
+									<Button
+										className='bg-indigo-700 mr-3'
+										disabled>
+										Cargando....
+									</Button>
+								) : (
+									<Button className='bg-indigo-700 mr-3'>Imprimir Ticket</Button>
+								);
+							}}
+						</PDFDownloadLink>
+
 						<Button
 							color='warning'
 							onClick={() => setTicket(ticket)}>
@@ -48,7 +67,7 @@ export const Tickets = () => {
 					</Table>
 
 					<Table
-						aria-label='Tabla tickets'
+						aria-label='Tabla creams'
 						className='mb-3'>
 						<TableHeader columns={columnCream}>
 							{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
@@ -78,7 +97,7 @@ export const Tickets = () => {
 						</TableBody>
 					</Table>
 
-					<p className='text-right'>Total: S/{`${ticket.totalPrice.toFixed(2)}`}</p>
+					<p className='text-right'>Total: S/{`${ticket.total_price.toFixed(2)}`}</p>
 
 					{ticket.exception.length > 0 && <p className='font-medium text-warning'>Excepción: {ticket.exception}</p>}
 				</div>
