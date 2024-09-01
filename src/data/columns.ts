@@ -1,4 +1,4 @@
-export const columns = [
+export const columnFood = [
 	{
 		key: 'dish_food',
 		label: 'NOMBRE',

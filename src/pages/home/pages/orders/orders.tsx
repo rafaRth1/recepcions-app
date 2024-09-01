@@ -1,28 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io } from 'socket.io-client';
 import { useDisclosure } from '@nextui-org/react';
-import { ModalDetailsOrder } from './modal-details-order';
-import { ContentOrder } from './content-order';
 import { TicketProps } from '@/types';
-import clientAxios from '@/utils/client-axios';
-// import clientAxios from '@/utils/client-axios';
+import { initialValueTicket } from '@/data';
+import { OrdersModal } from './orders-modal';
+import { OrdersItem } from './orders-item';
+import { clientAxios } from '@/utils';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
-
-const initialValueTicket: TicketProps = {
-	key: '',
-	name_ticket: '',
-	dishes: [],
-	creams: [],
-	drinks: [],
-	total_price: 0,
-	exception: '',
-	time: '',
-	type_payment: '',
-	status: 'process',
-	type: 'table',
-	user: '',
-};
 
 export const Orders = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -34,40 +19,47 @@ export const Orders = () => {
 			name: 'Mesa',
 			orders: [] as TicketProps[],
 		},
+
 		{
 			id: 2,
-			key: 'delivery',
-			name: 'Delivery',
-			orders: [] as TicketProps[],
-		},
-		{
-			id: 3,
 			key: 'pickup',
 			name: 'Recojo',
 			orders: [] as TicketProps[],
 		},
+
+		{
+			id: 3,
+			key: 'delivery',
+			name: 'Delivery',
+			orders: [] as TicketProps[],
+		},
 	]);
 
-	const handleFinishTicket = useCallback(async (id: string) => {
-		try {
-			const { data } = await clientAxios.put(`/recepcion/${id}`);
+	const handleFinishTicket = useCallback(
+		async (id: string) => {
+			try {
+				const { data } = await clientAxios.put(`/recepcion/store/${id}`, {
+					status: 'completed',
+				});
 
-			console.log(data);
+				console.log(data);
 
-			const updateList = lists.map((list) => {
-				const updateTicket = list.orders.filter((ticket) => ticket._id !== id);
+				const updateList = lists.map((list) => {
+					const updateTicket = list.orders.filter((ticket) => ticket._id !== id);
 
-				return {
-					...list,
-					orders: updateTicket,
-				};
-			});
+					return {
+						...list,
+						orders: [...updateTicket],
+					};
+				});
 
-			setLists(updateList);
-		} catch (error) {
-			console.log(error);
-		}
-	}, []);
+				setLists(updateList);
+			} catch (error) {
+				console.log(error);
+			}
+		},
+		[lists]
+	);
 
 	const handleOnOpenModal = useCallback((ticket: TicketProps) => {
 		setSelectTicket(ticket);
@@ -111,17 +103,23 @@ export const Orders = () => {
 	}, []);
 
 	return (
-		<main className='flex flex-col h-[calc(100dvh-65px)]'>
+		<main className='flex flex-col h-[calc(100dvh-72px)]'>
 			<h1 className='text-xl mb-5 p-4 font-semibold'>Sección Cocina</h1>
 
-			<ContentOrder
-				lists={lists}
-				onOpen={onOpen}
-				handleFinishTicket={handleFinishTicket}
-				handleOnOpenModal={handleOnOpenModal}
-			/>
+			<section className='overflow-hidden grow relative h-full'>
+				<div className='orders-content absolute overflow-x-auto p-4 inset-0 flex justify-between'>
+					{lists.map((list) => (
+						<OrdersItem
+							key={list.id}
+							list={list}
+							handleOnOpenModal={handleOnOpenModal}
+							handleFinishTicket={handleFinishTicket}
+						/>
+					))}
+				</div>
+			</section>
 
-			<ModalDetailsOrder
+			<OrdersModal
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
 				selectTicket={selectTicket}

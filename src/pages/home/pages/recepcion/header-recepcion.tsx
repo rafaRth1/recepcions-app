@@ -1,8 +1,4 @@
-import { PDF } from '@/components';
-import { columnCream, columnDrink, columns } from '@/data/columns';
-import { useAuthProvider } from '@/hooks';
-import { TicketProps } from '@/types';
-import clientAxios from '@/utils/client-axios';
+import { useEffect, useState } from 'react';
 import {
 	Modal,
 	ModalContent,
@@ -17,8 +13,15 @@ import {
 	TableRow,
 	TableCell,
 } from '@nextui-org/react';
+import { io } from 'socket.io-client';
+import { clientAxios } from '@/utils';
+import { PDF } from '@/components';
+import { useAuthProvider } from '@/hooks';
+import { columnCream, columnDrink, columnFood } from '@/data/columns';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { useEffect, useState } from 'react';
+import { TicketProps } from '@/types';
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
 
 export const HeaderRecepcion = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -31,7 +34,7 @@ export const HeaderRecepcion = () => {
 		if (!confirmUser) return;
 
 		try {
-			const { data } = await clientAxios.delete(`/recepcion/${id}`);
+			const { data } = await clientAxios.delete(`/recepcion/store/${id}`);
 
 			console.log(data);
 
@@ -43,9 +46,17 @@ export const HeaderRecepcion = () => {
 		}
 	};
 
+	const handleAddNewTicket = (ticket: TicketProps[]) => {
+		setTickestUser([...ticketsUser, ...ticket]);
+	};
+
+	useEffect(() => {
+		socket.on('responseFinishTicket', handleAddNewTicket);
+	}, [ticketsUser]);
+
 	useEffect(() => {
 		const getLists = async () => {
-			const { data } = await clientAxios<TicketProps[]>(`/recepcion/${auth._id}`);
+			const { data } = await clientAxios<TicketProps[]>(`/recepcion/store/${auth._id}`);
 			setTickestUser(data);
 		};
 
@@ -64,7 +75,27 @@ export const HeaderRecepcion = () => {
 			<Modal
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
-				scrollBehavior='outside'
+				scrollBehavior='inside'
+				motionProps={{
+					variants: {
+						enter: {
+							y: 0,
+							opacity: 1,
+							transition: {
+								duration: 0.3,
+								ease: 'easeOut',
+							},
+						},
+						exit: {
+							y: -20,
+							opacity: 0,
+							transition: {
+								duration: 0.2,
+								ease: 'easeIn',
+							},
+						},
+					},
+				}}
 				size='lg'>
 				<ModalContent>
 					{() => (
@@ -87,12 +118,6 @@ export const HeaderRecepcion = () => {
 												</h3>
 												<p>{ticket.time}</p>
 												<div className='flex-1' />
-
-												{/* <Button
-													color='warning'
-													onClick={() => setTicket(ticket)}>
-													Editar
-												</Button> */}
 											</div>
 
 											<div className='mb-3'>
@@ -122,7 +147,7 @@ export const HeaderRecepcion = () => {
 											<Table
 												aria-label='Tabla ticket'
 												className='mb-3'>
-												<TableHeader columns={columns}>
+												<TableHeader columns={columnFood}>
 													{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 												</TableHeader>
 												<TableBody items={ticket.dishes}>
@@ -160,7 +185,7 @@ export const HeaderRecepcion = () => {
 												</TableHeader>
 												<TableBody items={ticket.drinks}>
 													{(item) => (
-														<TableRow key={item.id}>
+														<TableRow key={item._id}>
 															<TableCell className='capitalize'>{item.name}</TableCell>
 															<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 														</TableRow>

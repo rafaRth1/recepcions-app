@@ -1,12 +1,7 @@
 import { useMemo, useState } from 'react';
 import { RecepcionContext } from './recepcion-context';
 import { DishProps, TicketProps } from '@/types';
-import { useAuthProvider, useDate } from '@/hooks';
-// import { datatTickes } from '@/data/data-tickets';
-// import clientAxios from '@/utils/client-axios';
-import { io } from 'socket.io-client';
-
-const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
+import { useAuthProvider, useDate, useLocalStorage } from '@/hooks';
 
 interface Props {
 	children: JSX.Element | JSX.Element[];
@@ -22,7 +17,9 @@ const initialValueTicket: TicketProps = {
 	exception: '',
 	time: '',
 	type_payment: '',
+	color: '',
 	status: 'process',
+	status_delivery: 'process',
 	type: 'table',
 	user: '',
 };
@@ -43,7 +40,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 
 	const [dish, setDish] = useState<DishProps>(initialValueDish);
 	const [ticket, setTicket] = useState<TicketProps>(initialValueTicket);
-	const [tickets, setTickets] = useState<TicketProps[]>([]);
+	const [tickets, setTickets] = useLocalStorage<TicketProps[]>('tickets', []);
 
 	const handleSubmitTicket = () => {
 		if (ticket.name_ticket.length === 0) {
@@ -79,12 +76,6 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 		setTicket(initialValueTicket);
 	};
 
-	const handleFinishTicket = async () => {
-		// const { data } = await clientAxios.post('/recepcion', tickets);
-		socket.emit('handleFinishticket', tickets);
-		setTickets([]);
-	};
-
 	const contextValue = useMemo(
 		() => ({
 			selected,
@@ -96,7 +87,6 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			setDish,
 			setTickets,
 			handleSubmitTicket,
-			handleFinishTicket,
 		}),
 		[selected, dish, ticket, tickets]
 	);

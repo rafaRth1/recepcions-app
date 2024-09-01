@@ -1,6 +1,6 @@
 import { Button, Checkbox, CheckboxGroup } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
-import { creams } from '@/data/creams';
+import { creams } from '@/data';
 
 export const RecepcionCream = () => {
 	const { selected, setSelected, ticket, setTicket } = useRecepcion();

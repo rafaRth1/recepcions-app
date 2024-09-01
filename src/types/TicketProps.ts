@@ -12,13 +12,15 @@ export interface TicketProps {
 	total_price: number;
 	exception: string;
 	time: string;
+	color: string;
 	type_payment: string;
 	status: 'completed' | 'process';
+	status_delivery: 'completed' | 'process';
 	type: 'table' | 'delivery' | 'pickup';
 	user: string;
 }
 
 export interface Drinks extends DrinkProps {
 	_id?: string;
-	id: string;
+	_id_temp?: string;
 }

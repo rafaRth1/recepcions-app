@@ -1,7 +1,7 @@
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
+import { columnCream, columnDrink, columnFood } from '@/data/columns';
 import { CreamsProps, DishProps, Drinks } from '@/types';
-import { columnCream, columnDrink, columns } from '@/data/columns';
 import { IoTrash } from 'react-icons/io5';
 
 export const Ticket = () => {
@@ -21,7 +21,7 @@ export const Ticket = () => {
 	};
 
 	const handleDeleteDrink = (item: Drinks) => {
-		const [selectRemoveItem] = ticket.drinks!.filter((drink) => drink.id === item.id);
+		const [selectRemoveItem] = ticket.drinks!.filter((drink) => drink._id === item._id);
 		const updateCreams = ticket.drinks!.filter((drink) => drink.key !== item.key);
 
 		setTicket({ ...ticket, drinks: updateCreams, total_price: ticket.total_price - selectRemoveItem.price });
@@ -34,7 +34,7 @@ export const Ticket = () => {
 			<Table
 				aria-label='Tabla ticket'
 				className='mb-3'>
-				<TableHeader columns={[...columns, { key: 'action', label: 'ACTIÓN' }]}>
+				<TableHeader columns={[...columnFood, { key: 'action', label: 'ACTIÓN' }]}>
 					{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 				</TableHeader>
 				<TableBody items={ticket.dishes}>
@@ -92,7 +92,7 @@ export const Ticket = () => {
 				</TableHeader>
 				<TableBody items={ticket.drinks}>
 					{(item) => (
-						<TableRow key={item.id}>
+						<TableRow key={item._id_temp}>
 							<TableCell className='capitalize'>{item.name}</TableCell>
 							<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 							<TableCell>

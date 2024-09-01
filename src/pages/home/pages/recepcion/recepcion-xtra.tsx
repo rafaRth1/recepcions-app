@@ -13,12 +13,12 @@ import {
 	Textarea,
 } from '@nextui-org/react';
 import { useRecepcion } from '@/hooks';
-import { drinks } from '@/data/drinks';
+import { drinks } from '@/data';
 import { DrinkProps } from '@/types';
-import { InputSearch } from '@/components/input-search/input-search';
+import { InputSearch } from '@/components';
 
 export const RecepcionXtra = memo(() => {
-	const { handleSubmitTicket, handleFinishTicket, setTicket, ticket } = useRecepcion();
+	const { handleSubmitTicket, setTicket, ticket } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [drink, setDrink] = useState<DrinkProps>({
 		key: '',
@@ -45,7 +45,7 @@ export const RecepcionXtra = memo(() => {
 	const handleAddDrink = () => {
 		setTicket({
 			...ticket,
-			drinks: [...ticket.drinks!, { id: crypto.randomUUID(), ...drink }],
+			drinks: [...ticket.drinks!, { _id_temp: crypto.randomUUID(), ...drink }],
 			total_price: ticket.total_price + drink.price,
 		});
 
@@ -121,13 +121,6 @@ export const RecepcionXtra = memo(() => {
 				color='success'
 				onClick={() => handleSubmitTicket()}>
 				{ticket.key ? 'Editar ticket' : 'Agregar ticket'}
-			</Button>
-
-			<Button
-				className='w-full'
-				color='danger'
-				onClick={() => handleFinishTicket()}>
-				Mandar a cocina tickets
 			</Button>
 		</div>
 	);

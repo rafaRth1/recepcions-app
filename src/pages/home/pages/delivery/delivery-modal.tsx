@@ -1,4 +1,4 @@
-import { columnCream, columnDrink, columns } from '@/data/columns';
+import { columnCream, columnDrink, columnFood } from '@/data/columns';
 import { TicketProps } from '@/types';
 import {
 	Modal,
@@ -19,7 +19,7 @@ interface Props {
 	selectTicket: TicketProps;
 }
 
-export const ModalDetailsOrder = ({ isOpen, onOpenChange, selectTicket }: Props) => {
+export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 	return (
 		<>
 			<Modal
@@ -35,7 +35,7 @@ export const ModalDetailsOrder = ({ isOpen, onOpenChange, selectTicket }: Props)
 								<Table
 									aria-label='Tabla ticket'
 									className='mb-3'>
-									<TableHeader columns={columns}>
+									<TableHeader columns={columnFood}>
 										{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 									</TableHeader>
 									<TableBody items={selectTicket.dishes}>
@@ -73,7 +73,7 @@ export const ModalDetailsOrder = ({ isOpen, onOpenChange, selectTicket }: Props)
 									</TableHeader>
 									<TableBody items={selectTicket.drinks}>
 										{(item) => (
-											<TableRow key={item.id}>
+											<TableRow key={item._id}>
 												<TableCell className='capitalize'>{item.name}</TableCell>
 												<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 											</TableRow>

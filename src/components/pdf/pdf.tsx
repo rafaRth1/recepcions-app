@@ -129,7 +129,9 @@ export const PDF = (props: Props) => {
 
 	return (
 		<Document>
-			<Page style={{ ...style.body, height: '100px' }}>
+			<Page
+				style={{ ...style.body, height: '100px' }}
+				key={1}>
 				<View>
 					<View
 						style={{ marginBottom: '5px' }}
@@ -175,7 +177,7 @@ export const PDF = (props: Props) => {
 					{ticket.dishes.map((dish) => (
 						<View
 							style={style.rowViewDish}
-							key={dish._id}>
+							key={dish._id ? dish._id : dish.key}>
 							<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
 							<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
 							<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
@@ -186,7 +188,9 @@ export const PDF = (props: Props) => {
 				</View>
 			</Page>
 
-			<Page style={style.body}>
+			<Page
+				style={style.body}
+				key={2}>
 				<View style={{ marginBottom: '5px' }}>
 					<Text
 						style={{
@@ -219,7 +223,7 @@ export const PDF = (props: Props) => {
 				{ticket.dishes.map((dish) => (
 					<View
 						style={style.rowViewDish}
-						key={dish._id}>
+						key={dish._id ? dish._id : dish.key}>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.dish_food}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.rice ? 'Si' : 'No'}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{dish.salad ? 'Si' : 'No'}</Text>
@@ -229,7 +233,7 @@ export const PDF = (props: Props) => {
 
 				{ticket.drinks!.map((drink) => (
 					<View
-						key={drink._id}
+						key={drink._id ? drink._id : drink.key}
 						style={{ ...style.rowViewDrink, marginBottom: '5px' }}>
 						<Text style={{ width: `${100 / columns.length}%` }}>{drink.name}</Text>
 						<Text style={{ width: `${100 / columns.length}%` }}>{}</Text>
@@ -257,7 +261,7 @@ export const PDF = (props: Props) => {
 
 				{ticket.creams.map((cream) => (
 					<View
-						key={cream._id}
+						key={cream._id ? cream._id : cream.key}
 						style={style.rowViewCream}>
 						<Text>{Array.from(cream.creams).join(', ')}</Text>
 					</View>

@@ -1,11 +1,27 @@
+import { io } from 'socket.io-client';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
-import { useRecepcion } from '@/hooks';
-import { columns, columnCream, columnDrink } from '@/data/columns';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { PDF } from '@/components/pdf/pdf';
+import { useRecepcion } from '@/hooks';
+import { PDF } from '@/components';
+import { columnFood, columnCream, columnDrink } from '@/data/columns';
+import { TicketProps } from '@/types';
+
+const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
 
 export const Tickets = () => {
-	const { tickets, setTicket } = useRecepcion();
+	const { tickets, setTickets, setTicket } = useRecepcion();
+
+	const handleFinishTicket = async (ticketSelected: TicketProps) => {
+		await socket.emit('handleFinishticket', ticketSelected);
+
+		const ticketsUpdate = tickets.filter((ticket) => ticket.key !== ticketSelected.key);
+		setTickets(ticketsUpdate);
+	};
+
+	const handleDeleteTicketTemporal = (ticket: TicketProps) => {
+		const updateTickets = tickets.filter((ticketItem) => ticketItem.key !== ticket.key);
+		setTickets(updateTickets);
+	};
 
 	return (
 		<div>
@@ -15,43 +31,61 @@ export const Tickets = () => {
 				<div
 					key={ticket.key}
 					className='mb-3'>
-					<div className='flex items-center mb-3 '>
-						<h3 className='mr-5 capitalize'>{ticket.name_ticket}</h3>
-						<h3 className='mr-5 capitalize'>
-							{(ticket.type === 'table' && 'Para mesa') ||
-								(ticket.type === 'delivery' && 'Para delivery') ||
-								(ticket.type === 'pickup' && 'Llevar')}
-						</h3>
-						<p>{ticket.time}</p>
-						<div className='flex-1' />
+					<div className='flex flex-col justify-center items-center mb-3 md:flex-row min-[663px]:gap-2 min-[663px]:justify-between'>
+						<div className='flex items-center mb-2 min-[663px]:mb-0'>
+							<h3 className='mr-5 capitalize'>{ticket.name_ticket}</h3>
+							<h3 className='mr-5 capitalize'>
+								{(ticket.type === 'table' && 'Para mesa') ||
+									(ticket.type === 'delivery' && 'Para delivery') ||
+									(ticket.type === 'pickup' && 'Llevar')}
+							</h3>
+							<p>{ticket.time}</p>
+							<div className='flex-1' />
+						</div>
 
-						<PDFDownloadLink
-							document={<PDF ticket={ticket} />}
-							fileName='boleta.pdf'>
-							{({ loading }) => {
-								return loading ? (
-									<Button
-										className='bg-indigo-700 mr-3'
-										disabled>
-										Cargando....
-									</Button>
-								) : (
-									<Button className='bg-indigo-700 mr-3'>Imprimir Ticket</Button>
-								);
-							}}
-						</PDFDownloadLink>
+						<div className='flex gap-2'>
+							<div className='flex flex-col md:flex-row  gap-2 md:flex-0'>
+								<Button
+									className='bg-indigo-700 '
+									disabled>
+									<PDFDownloadLink
+										className='bg-indigo-700 rounded-medium block'
+										document={<PDF ticket={ticket} />}
+										fileName='boleta.pdf'>
+										{({ loading }) => {
+											return loading ? <p>Cargando</p> : <p>Imprimir</p>;
+										}}
+									</PDFDownloadLink>
+								</Button>
 
-						<Button
-							color='warning'
-							onClick={() => setTicket(ticket)}>
-							Editar
-						</Button>
+								<Button
+									color='warning'
+									onClick={() => setTicket(ticket)}>
+									Editar
+								</Button>
+							</div>
+
+							<div className='flex flex-col md:flex-row gap-2 md:flex-0'>
+								<Button
+									className=''
+									color='danger'
+									onClick={() => handleFinishTicket(ticket)}>
+									Terminar
+								</Button>
+
+								<Button
+									className='bg-red-800'
+									onClick={() => handleDeleteTicketTemporal(ticket)}>
+									Eliminar
+								</Button>
+							</div>
+						</div>
 					</div>
 
 					<Table
 						aria-label='Tabla ticket'
 						className='mb-3'>
-						<TableHeader columns={columns}>
+						<TableHeader columns={columnFood}>
 							{(column) => <TableColumn key={column.key}>{column.label}</TableColumn>}
 						</TableHeader>
 						<TableBody items={ticket.dishes}>
@@ -89,7 +123,7 @@ export const Tickets = () => {
 						</TableHeader>
 						<TableBody items={ticket.drinks}>
 							{(item) => (
-								<TableRow key={item.id}>
+								<TableRow key={item._id_temp}>
 									<TableCell className='capitalize'>{item.name}</TableCell>
 									<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
 								</TableRow>

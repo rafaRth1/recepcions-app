@@ -11,7 +11,6 @@ export interface RecepcionContextProps {
 	tickets: TicketProps[];
 	setTickets: React.Dispatch<React.SetStateAction<TicketProps[]>>;
 	handleSubmitTicket: () => void;
-	handleFinishTicket: () => void;
 }
 
 export const RecepcionContext = createContext<RecepcionContextProps>({} as RecepcionContextProps);

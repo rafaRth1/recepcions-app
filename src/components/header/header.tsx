@@ -18,16 +18,21 @@ const links = [
 	},
 	{
 		id: 3,
+		route: '/delivery',
+		name: 'Delivery',
+	},
+	{
+		id: 4,
 		route: '/store',
 		name: 'Almacén',
 	},
 	{
-		id: 4,
+		id: 5,
 		route: '/statistics',
 		name: 'Estadísticas',
 	},
 	{
-		id: 5,
+		id: 6,
 		route: '/settings',
 		name: 'Configuración',
 	},

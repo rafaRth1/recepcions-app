@@ -117,7 +117,7 @@ export const foods: FoodProps[] = [
 
 	{
 		key: 'pechuga a la plancha',
-		dish_food: 'pechuga a la plancha',
+		dish_food: 'Pechuga a la plancha',
 		price: 13,
 	},
 
@@ -194,6 +194,12 @@ export const foods: FoodProps[] = [
 	},
 
 	{
+		key: '12 alitas',
+		dish_food: '12 Alitas',
+		price: 26,
+	},
+
+	{
 		key: 'jamon',
 		dish_food: 'Jamon',
 		price: 1,
@@ -213,7 +219,7 @@ export const foods: FoodProps[] = [
 
 	{
 		key: 'hotdog vienessa',
-		dish_food: 'hotdog vienessa',
+		dish_food: 'Hotdog vienessa',
 		price: 4,
 	},
 
@@ -237,7 +243,7 @@ export const foods: FoodProps[] = [
 
 	{
 		key: 'filete de pollo',
-		dish_food: 'Pilete de pollo',
+		dish_food: 'Filete de pollo',
 		price: 6,
 	},
 
