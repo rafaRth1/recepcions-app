@@ -132,7 +132,7 @@ export const HeaderRecepcion = () => {
 																Cargando....
 															</Button>
 														) : (
-															<Button className='bg-indigo-700 mr-3'>Imprimir Ticket</Button>
+															<Button className='bg-indigo-700 mr-3'>Imprimir</Button>
 														);
 													}}
 												</PDFDownloadLink>
@@ -140,7 +140,7 @@ export const HeaderRecepcion = () => {
 												<Button
 													color='danger'
 													onClick={() => handleDeleteTicket(ticket._id!)}>
-													Eliminar Ticket
+													Eliminar
 												</Button>
 											</div>
 

@@ -44,16 +44,14 @@ export const Tickets = () => {
 						</div>
 
 						<div className='flex gap-2'>
-							<div className='flex flex-col md:flex-row  gap-2 md:flex-0'>
-								<Button
-									className='bg-indigo-700 '
-									disabled>
+							<div className='flex flex-col md:flex-row gap-2 md:flex-0'>
+								<Button className='bg-indigo-700 p-0'>
 									<PDFDownloadLink
-										className='bg-indigo-700 rounded-medium block'
+										className='bg-indigo-700 rounded-medium text-center w-full h-10 flex items-center'
 										document={<PDF ticket={ticket} />}
 										fileName='boleta.pdf'>
 										{({ loading }) => {
-											return loading ? <p>Cargando</p> : <p>Imprimir</p>;
+											return loading ? <p className='flex-1'>Cargando</p> : <p className='flex-1'>Imprimir</p>;
 										}}
 									</PDFDownloadLink>
 								</Button>

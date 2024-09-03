@@ -88,7 +88,7 @@ export const Orders = () => {
 			const { data: tickets } = await clientAxios<TicketProps[]>('/recepcion');
 
 			const updatedLists = lists.map((list) => {
-				const matchingTicket = tickets.filter((ticket) => ticket.type === list.key && ticket.status === 'process');
+				const matchingTicket = tickets.filter((ticket) => ticket.type === list.key);
 
 				return {
 					...list,

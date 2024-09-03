@@ -2,27 +2,11 @@ import { useMemo, useState } from 'react';
 import { RecepcionContext } from './recepcion-context';
 import { DishProps, TicketProps } from '@/types';
 import { useAuthProvider, useDate, useLocalStorage } from '@/hooks';
+import { initialValueTicket } from '@/data';
 
 interface Props {
 	children: JSX.Element | JSX.Element[];
 }
-
-const initialValueTicket: TicketProps = {
-	key: '',
-	name_ticket: '',
-	dishes: [],
-	creams: [],
-	drinks: [],
-	total_price: 0,
-	exception: '',
-	time: '',
-	type_payment: '',
-	color: '',
-	status: 'process',
-	status_delivery: 'process',
-	type: 'table',
-	user: '',
-};
 
 const initialValueDish: DishProps = {
 	key: '',
@@ -37,7 +21,6 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 	const { date, hours } = useDate();
 	const { auth } = useAuthProvider();
 	const [selected, setSelected] = useState(['mayonesa', 'ketchup', 'mostaza']);
-
 	const [dish, setDish] = useState<DishProps>(initialValueDish);
 	const [ticket, setTicket] = useState<TicketProps>(initialValueTicket);
 	const [tickets, setTickets] = useLocalStorage<TicketProps[]>('tickets', []);
@@ -83,12 +66,12 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 			ticket,
 			setTicket,
 			tickets,
+			setTickets,
 			dish,
 			setDish,
-			setTickets,
 			handleSubmitTicket,
 		}),
-		[selected, dish, ticket, tickets]
+		[ticket, selected, dish, tickets]
 	);
 
 	return <RecepcionContext.Provider value={contextValue}>{children}</RecepcionContext.Provider>;

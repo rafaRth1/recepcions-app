@@ -21,21 +21,21 @@ const links = [
 		route: '/delivery',
 		name: 'Delivery',
 	},
-	{
-		id: 4,
-		route: '/store',
-		name: 'Almacén',
-	},
+	// {
+	// 	id: 4,
+	// 	route: '/store',
+	// 	name: 'Almacén',
+	// },
 	{
 		id: 5,
 		route: '/statistics',
 		name: 'Estadísticas',
 	},
-	{
-		id: 6,
-		route: '/settings',
-		name: 'Configuración',
-	},
+	// {
+	// 	id: 6,
+	// 	route: '/settings',
+	// 	name: 'Configuración',
+	// },
 ];
 
 export const Header = () => {

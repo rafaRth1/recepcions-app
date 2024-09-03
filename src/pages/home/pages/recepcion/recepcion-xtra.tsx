@@ -12,12 +12,13 @@ import {
 	TableRow,
 	Textarea,
 } from '@nextui-org/react';
-import { useRecepcion } from '@/hooks';
+import { useAuthProvider, useRecepcion } from '@/hooks';
 import { drinks } from '@/data';
 import { DrinkProps } from '@/types';
 import { InputSearch } from '@/components';
 
 export const RecepcionXtra = memo(() => {
+	const { auth } = useAuthProvider();
 	const { handleSubmitTicket, setTicket, ticket } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [drink, setDrink] = useState<DrinkProps>({
@@ -104,7 +105,7 @@ export const RecepcionXtra = memo(() => {
 				value={ticket.type}
 				onValueChange={(e) => handleOnChangeType(e)}>
 				<Radio value='table'>Mesa</Radio>
-				<Radio value='delivery'>Delivery</Radio>
+				{auth._id !== '66ca1a4629083aa6f3174bf5' && <Radio value='delivery'>Delivery</Radio>}
 				<Radio value='pickup'>Recojo</Radio>
 			</RadioGroup>
 
