@@ -1,8 +1,8 @@
 import { io } from 'socket.io-client';
 import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useRecepcion } from '@/hooks';
-import { PDF } from '@/components';
+// import { PDF } from '@/components';
 import { columnFood, columnCream, columnDrink } from '@/data/columns';
 import { TicketProps } from '@/types';
 
@@ -45,7 +45,7 @@ export const Tickets = () => {
 
 						<div className='flex gap-2'>
 							<div className='flex flex-col md:flex-row gap-2 md:flex-0'>
-								<Button className='bg-indigo-700 p-0'>
+								{/* <Button className='bg-indigo-700 p-0'>
 									<PDFDownloadLink
 										className='bg-indigo-700 rounded-medium text-center w-full h-10 flex items-center'
 										document={<PDF ticket={ticket} />}
@@ -54,7 +54,7 @@ export const Tickets = () => {
 											return loading ? <p className='flex-1'>Cargando</p> : <p className='flex-1'>Imprimir</p>;
 										}}
 									</PDFDownloadLink>
-								</Button>
+								</Button> */}
 
 								<Button
 									color='warning'

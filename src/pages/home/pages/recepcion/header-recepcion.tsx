@@ -15,10 +15,10 @@ import {
 } from '@nextui-org/react';
 import { io } from 'socket.io-client';
 import { clientAxios } from '@/utils';
-import { PDF } from '@/components';
+// import { PDF } from '@/components';
 import { useAuthProvider } from '@/hooks';
 import { columnCream, columnDrink, columnFood } from '@/data/columns';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+// import { PDFDownloadLink } from '@react-pdf/renderer';
 import { TicketProps } from '@/types';
 
 const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
@@ -121,7 +121,7 @@ export const HeaderRecepcion = () => {
 											</div>
 
 											<div className='mb-3'>
-												<PDFDownloadLink
+												{/* <PDFDownloadLink
 													document={<PDF ticket={ticket} />}
 													fileName='boleta.pdf'>
 													{({ loading }) => {
@@ -135,7 +135,7 @@ export const HeaderRecepcion = () => {
 															<Button className='bg-indigo-700 mr-3'>Imprimir</Button>
 														);
 													}}
-												</PDFDownloadLink>
+												</PDFDownloadLink> */}
 
 												<Button
 													color='danger'
