@@ -1,5 +1,5 @@
 import { io } from 'socket.io-client';
-import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 // import { PDFDownloadLink } from '@react-pdf/renderer';
 import { useRecepcion } from '@/hooks';
 // import { PDF } from '@/components';
@@ -48,7 +48,7 @@ export const Tickets = () => {
 								{/* <Button className='bg-indigo-700 p-0'>
 									<PDFDownloadLink
 										className='bg-indigo-700 rounded-medium text-center w-full h-10 flex items-center'
-										document={<PDF ticket={ticket} />}
+										docume++nt={<PDF ticket={ticket} />}
 										fileName='boleta.pdf'>
 										{({ loading }) => {
 											return loading ? <p className='flex-1'>Cargando</p> : <p className='flex-1'>Imprimir</p>;

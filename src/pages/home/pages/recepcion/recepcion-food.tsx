@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Checkbox, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Checkbox, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { useRecepcion } from '@/hooks';
 import { InputSearch } from '@/components/input-search/input-search';
 import { foods } from '@/data/food';
@@ -86,7 +86,7 @@ export const RecepcionFood = () => {
 				</InputSearch>
 			</div>
 
-			<div className='flex flex-col mb-4'>
+			<div className='flex flex-row mb-4 justify-between'>
 				<div className='mb-4'>
 					<div className='flex flex-col'>
 						<p className='text-neutral-400 mb-4'>Con arroz:</p>

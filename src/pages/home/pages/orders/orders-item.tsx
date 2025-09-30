@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@nextui-org/react';
+import { Button, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from "@heroui/react";
 import { columnFood } from '@/data';
 import { TicketProps } from '@/types';
 

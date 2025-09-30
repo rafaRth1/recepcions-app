@@ -10,7 +10,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { columnFood } from '@/data/columns';
 import { clientAxios, pickColor } from '@/utils';
 import { TicketProps } from '@/types';

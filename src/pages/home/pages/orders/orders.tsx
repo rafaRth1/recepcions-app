@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { io } from 'socket.io-client';
-import { useDisclosure } from '@nextui-org/react';
+import { useDisclosure } from "@heroui/react";
 import { TicketProps } from '@/types';
 import { initialValueTicket } from '@/data';
 import { OrdersModal } from './orders-modal';

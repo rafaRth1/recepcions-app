@@ -1,24 +1,11 @@
 import { memo, useState } from 'react';
-import {
-	Button,
-	Input,
-	Radio,
-	RadioGroup,
-	Table,
-	TableBody,
-	TableCell,
-	TableColumn,
-	TableHeader,
-	TableRow,
-	Textarea,
-} from '@nextui-org/react';
-import { useAuthProvider, useRecepcion } from '@/hooks';
+import { Button, Input, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Textarea } from '@heroui/react';
+import { useRecepcion } from '@/hooks';
 import { drinks } from '@/data';
 import { DrinkProps } from '@/types';
 import { InputSearch } from '@/components';
 
 export const RecepcionXtra = memo(() => {
-	const { auth } = useAuthProvider();
 	const { handleSubmitTicket, setTicket, ticket } = useRecepcion();
 	const [resultDrinks, setResultDrinks] = useState<DrinkProps[]>(drinks);
 	const [drink, setDrink] = useState<DrinkProps>({
@@ -35,12 +22,6 @@ export const RecepcionXtra = memo(() => {
 	const handleSearch = (e: string) => {
 		const results = drinks.filter((drink) => drink && drink.key && drink.key.includes(e));
 		setResultDrinks(results);
-	};
-
-	const handleOnChangeType = (e: string) => {
-		if (e === 'table' || e === 'pickup' || e === 'delivery') {
-			setTicket({ ...ticket, type: e });
-		}
 	};
 
 	const handleAddDrink = () => {
@@ -97,17 +78,6 @@ export const RecepcionXtra = memo(() => {
 				value={ticket.exception}
 				onValueChange={(e) => setTicket({ ...ticket, exception: e })}
 			/>
-
-			<RadioGroup
-				className='mb-4'
-				label='Tipo de pedido'
-				orientation='horizontal'
-				value={ticket.type}
-				onValueChange={(e) => handleOnChangeType(e)}>
-				<Radio value='table'>Mesa</Radio>
-				{auth._id !== '66ca1a4629083aa6f3174bf5' && <Radio value='delivery'>Delivery</Radio>}
-				<Radio value='pickup'>Recojo</Radio>
-			</RadioGroup>
 
 			<Input
 				type='text'

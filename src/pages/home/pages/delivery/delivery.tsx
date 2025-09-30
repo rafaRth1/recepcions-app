@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDisclosure } from '@nextui-org/react';
+import { useDisclosure } from "@heroui/react";
 import { clientAxios } from '@/utils';
 import { DeliveryItem } from './delivery-item';
 import { DeliveryModal } from './delivery-modal';

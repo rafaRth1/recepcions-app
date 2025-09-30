@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import Logo from '../logo/logo';
 import { IoMenuOutline } from 'react-icons/io5';
-import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react';
 import { useAuthProvider } from '@/hooks';
 
 const links = [
@@ -21,11 +21,11 @@ const links = [
 		route: '/delivery',
 		name: 'Delivery',
 	},
-	// {
-	// 	id: 4,
-	// 	route: '/store',
-	// 	name: 'Almacén',
-	// },
+	{
+		id: 4,
+		route: '/store',
+		name: 'Almacén',
+	},
 	{
 		id: 5,
 		route: '/statistics',
@@ -70,9 +70,7 @@ export const Header = () => {
 				<figure className='w-[30px] h-[30px] rounded-full bg-neutral-700 ml-3'></figure>
 			</div> */}
 
-			<Dropdown
-				placement='bottom-end'
-				className='bg-[#0d0d0d]'>
+			<Dropdown className='bg-[#0d0d0d]'>
 				<DropdownTrigger>
 					<Avatar
 						name={auth.nick_name}

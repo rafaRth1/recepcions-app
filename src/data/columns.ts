@@ -5,11 +5,11 @@ export const columnFood = [
 	},
 	{
 		key: 'rice',
-		label: 'ARROZ',
+		label: 'C/A',
 	},
 	{
 		key: 'salad',
-		label: 'ENSALADA',
+		label: 'C/E',
 	},
 	{
 		key: 'price',

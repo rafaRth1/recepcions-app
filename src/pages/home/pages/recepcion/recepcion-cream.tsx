@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup } from '@nextui-org/react';
+import { Button, Checkbox, CheckboxGroup } from "@heroui/react";
 import { useRecepcion } from '@/hooks';
 import { creams } from '@/data';
 

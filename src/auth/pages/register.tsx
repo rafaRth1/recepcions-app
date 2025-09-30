@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from '@nextui-org/react';
+import { Input } from "@heroui/react";
 import { Link, useNavigate } from 'react-router-dom';
 import clientAxios from '@/utils/client-axios';
 
@@ -41,8 +41,8 @@ export const Register = () => {
 	const { msg } = error;
 
 	return (
-		<section className='w-full flex flex-col items-center md:flex-row h-[100dvh]'>
-			<div className='flex justify-center flex-1 p-10'>
+        <section className='w-full flex flex-col items-center md:flex-row h-[100dvh]'>
+            <div className='flex justify-center flex-1 p-10'>
 				<form
 					className='flex flex-col justify-center md:justify-normal'
 					onSubmit={(e) => handleSubmit(e)}>
@@ -90,7 +90,7 @@ export const Register = () => {
 
 					{loading ? (
 						// <Spinner className="mt-5" />
-						<div>Cargando...</div>
+						(<div>Cargando...</div>)
 					) : (
 						<button
 							type='submit'
@@ -100,6 +100,6 @@ export const Register = () => {
 					)}
 				</form>
 			</div>
-		</section>
-	);
+        </section>
+    );
 };

@@ -1,6 +1,6 @@
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDF } from '../pdf/pdf';
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { TicketProps } from '@/types';
 
 interface Props {

@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Header } from '@/components/';
 import { useAuthProvider } from '@/hooks';
-import { Spinner } from '@nextui-org/react';
+import { Spinner } from "@heroui/react";
 
 const Home = () => {
 	const { auth, loading } = useAuthProvider();

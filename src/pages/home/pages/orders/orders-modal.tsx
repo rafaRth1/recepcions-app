@@ -10,7 +10,7 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from '@nextui-org/react';
+} from "@heroui/react";
 import { TicketProps } from '@/types';
 
 interface Props {

@@ -12,11 +12,13 @@ import {
 	TableBody,
 	TableRow,
 	TableCell,
-} from '@nextui-org/react';
+	RadioGroup,
+	Radio,
+} from '@heroui/react';
 import { io } from 'socket.io-client';
 import { clientAxios } from '@/utils';
 // import { PDF } from '@/components';
-import { useAuthProvider } from '@/hooks';
+import { useAuthProvider, useRecepcion } from '@/hooks';
 import { columnCream, columnDrink, columnFood } from '@/data/columns';
 // import { PDFDownloadLink } from '@react-pdf/renderer';
 import { TicketProps } from '@/types';
@@ -27,6 +29,7 @@ export const HeaderRecepcion = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const { auth } = useAuthProvider();
 	const [ticketsUser, setTickestUser] = useState<TicketProps[]>([]);
+	const { ticket, setTicket } = useRecepcion();
 
 	const handleDeleteTicket = async (id: string) => {
 		const confirmUser = confirm('Estas seguro de eliminar el ticket');
@@ -50,6 +53,12 @@ export const HeaderRecepcion = () => {
 		setTickestUser([...ticketsUser, ...ticket]);
 	};
 
+	const handleOnChangeType = (e: string) => {
+		if (e === 'table' || e === 'pickup' || e === 'delivery') {
+			setTicket({ ...ticket, type: e });
+		}
+	};
+
 	useEffect(() => {
 		socket.on('responseFinishTicket', handleAddNewTicket);
 	}, [ticketsUser]);
@@ -64,13 +73,27 @@ export const HeaderRecepcion = () => {
 	}, []);
 
 	return (
-		<div className='flex justify-between'>
+		<div className='flex flex-col justify-between mb-3'>
 			<h1 className='text-neutral-100 text-2xl font-semibold mb-5'>Sección de recepciones</h1>
-			<Button
-				className='bg-indigo-700'
-				onPress={onOpen}>
-				Total tickets
-			</Button>
+
+			<div className='mb-3'>
+				<Button
+					className='bg-indigo-700'
+					onPress={onOpen}>
+					Total tickets
+				</Button>
+			</div>
+
+			<RadioGroup
+				className='mb-4'
+				label='Tipo de pedido'
+				orientation='horizontal'
+				value={ticket.type}
+				onValueChange={(e) => handleOnChangeType(e)}>
+				<Radio value='table'>Mesa</Radio>
+				{auth._id !== '66ca1a4629083aa6f3174bf5' && <Radio value='delivery'>Delivery</Radio>}
+				<Radio value='pickup'>Recojo</Radio>
+			</RadioGroup>
 
 			<Modal
 				isOpen={isOpen}

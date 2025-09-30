@@ -1,4 +1,4 @@
-import { Button } from '@nextui-org/react';
+import { Button } from "@heroui/react";
 import { useRecepcion } from '@/hooks';
 import { columnCream, columnDrink, columnFood } from '@/data/columns';
 import { CreamsProps, Drinks } from '@/types';
@@ -33,7 +33,7 @@ export const Ticket = () => {
 			<table className='table-auto w-full'>
 				<thead className='w-full'>
 					<tr className=''>
-						{[...columnFood, { key: 'action', label: 'ACTIÓN' }].map((column) => (
+						{[...columnFood, { key: 'action', label: 'ACCION' }].map((column) => (
 							<th
 								key={column.key}
 								className='text-xs font-semibold text-foreground-500 text-start px-3 h-10 bg-default-100 first:rounded-l-lg last:rounded-r-lg '>
@@ -71,10 +71,12 @@ export const Ticket = () => {
 			<table className='table-auto w-full mt-5'>
 				<thead className='w-full'>
 					<tr className=''>
-						{[...columnCream, { key: 'action', label: 'ACTIÓN' }].map((column) => (
+						{[...columnCream, { key: 'action', label: 'ACCION' }].map((column) => (
 							<th
 								key={column.key}
-								className='text-xs font-semibold text-foreground-500 text-start px-3 h-10 bg-default-100 first:rounded-l-lg last:rounded-r-lg '>
+								className={`text-xs font-semibold  text-foreground-500 text-start px-3 h-10 bg-default-100 first:rounded-l-lg last:rounded-r-lg ${
+									column.key === 'creams' && 'w-full'
+								}`}>
 								{column.label}
 							</th>
 						))}
@@ -107,7 +109,7 @@ export const Ticket = () => {
 			<table className='table-auto w-full mt-5'>
 				<thead className='w-full'>
 					<tr>
-						{[...columnDrink, { key: 'action', label: 'ACTIÓN' }].map((column) => (
+						{[...columnDrink, { key: 'action', label: 'ACCION' }].map((column) => (
 							<th
 								key={column.key}
 								className='text-xs font-semibold text-foreground-500 text-start px-3 h-10 bg-default-100 first:rounded-l-lg last:rounded-r-lg '>
@@ -140,7 +142,7 @@ export const Ticket = () => {
 				</tbody>
 			</table>
 
-			<p className='text-right'>Total: S/{`${ticket.total_price.toFixed(2)}`}</p>
+			<p className='text-right mt-3'>Total: S/{`${ticket.total_price.toFixed(2)}`}</p>
 		</div>
 	);
 };
