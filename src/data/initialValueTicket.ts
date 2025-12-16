@@ -1,18 +1,19 @@
-import { TicketProps } from '@/types';
+import { PaymentType } from '@/core/shared/interfaces';
+import { Ticket } from '@/core/ticket/interfaces';
 
-export const initialValueTicket: TicketProps = {
+export const initialValueTicket: Ticket = {
 	key: '',
-	name_ticket: '',
+	nameTicket: '',
 	dishes: [],
 	creams: [],
 	drinks: [],
-	total_price: 0,
+	totalPrice: 0,
 	exception: '',
 	time: '',
-	type_payment: '',
+	paymentType: '' as PaymentType,
 	color: '',
-	status: 'process',
-	status_delivery: 'process',
-	type: 'table',
+	status: 'PROCESS',
+	deliveryStatus: 'PROCESS',
+	type: 'TABLE',
 	user: '',
 };

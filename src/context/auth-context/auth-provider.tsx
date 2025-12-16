@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AuthContext, AuthInterface } from './auth-context';
 import axios from 'axios';
-import clientAxios from '@/utils/client-axios';
+import { clientAxios } from '@/lib/http-client';
 // import { useNavigate } from 'react-router-dom';
 
 interface Props {
@@ -38,9 +38,10 @@ export const AuthProvider = ({ children }: Props) => {
 			};
 
 			try {
-				const { data } = await clientAxios('/user/perfil', config);
+				const { data } = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/user/perfil`, config);
 
 				setAuth(data);
+				clientAxios.setToken(token);
 				// navigate('/');
 			} catch (error) {
 				setAuth(initialValuesAuth);

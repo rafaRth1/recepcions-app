@@ -1,7 +1,8 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { Header } from '@/components/';
 import { useAuthProvider } from '@/hooks';
-import { Spinner } from "@heroui/react";
+import { Spinner } from '@heroui/react';
+import { Tabs } from '@/components/tabs';
 
 const Home = () => {
 	const { auth, loading } = useAuthProvider();
@@ -19,6 +20,7 @@ const Home = () => {
 				<>
 					<Header />
 					<Outlet />
+					<Tabs />
 				</>
 			) : (
 				<Navigate to='/auth/login' />

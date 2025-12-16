@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Input } from "@heroui/react";
+import { Input } from '@heroui/react';
 
 interface Props {
 	children: JSX.Element;
@@ -14,10 +14,9 @@ export const InputSearch = (props: Props) => {
 	const [active, setActive] = useState(false);
 
 	useEffect(() => {
-		function handleClickOutside(event: any) {
-			if (wrapperElement.current && !wrapperElement.current.contains(event.target)) {
+		function handleClickOutside(event: MouseEvent) {
+			if (wrapperElement.current && !wrapperElement.current.contains(event.target as Node)) {
 				setActive(false);
-			} else {
 			}
 		}
 		document.addEventListener('mousedown', handleClickOutside);
@@ -43,7 +42,11 @@ export const InputSearch = (props: Props) => {
 					/>
 				</div>
 
-				{active && children}
+				{active && (
+					<div className='absolute top-full left-0 right-0 z-50'>
+						<div onClick={() => setActive(false)}>{children}</div>
+					</div>
+				)}
 			</div>
 		</div>
 	);

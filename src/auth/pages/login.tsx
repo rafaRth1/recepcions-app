@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import clientAxios from '@/utils/client-axios';
-import { Input } from "@heroui/react";
+import { Input } from '@heroui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthProvider } from '@/hooks';
+import axios from 'axios';
+import { clientAxios } from '@/lib/http-client';
 
 export const Login = () => {
 	const [loading, setLoading] = useState(false);
@@ -12,6 +13,7 @@ export const Login = () => {
 		email: 'rafarth1@outlook.com',
 		password: '123456',
 	});
+
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -19,14 +21,16 @@ export const Login = () => {
 
 		try {
 			setLoading(true);
+			console.log('`${import.meta.env.VITE_BACKEND_URL}/user/login`', `${import.meta.env.VITE_BACKEND_URL}/user/login`);
 
-			const { data } = await clientAxios.post('/user/login', dataForm);
+			const { data } = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user/login`, dataForm);
 
 			localStorage.setItem('token', data.token);
+			clientAxios.setToken(data.token);
 
 			setAuth(data);
 			navigate('/');
-		} catch (error: any) {
+		} catch (error) {
 			setError({
 				type: true,
 				msg: error.response.data.msg,
@@ -39,8 +43,8 @@ export const Login = () => {
 	const { msg } = error;
 
 	return (
-        <section className='w-full flex flex-col items-center md:flex-row h-[100dvh]'>
-            <div className='flex justify-center flex-1 p-10'>
+		<section className='w-full flex flex-col items-center md:flex-row h-[100dvh]'>
+			<div className='flex justify-center flex-1 p-10'>
 				<form
 					className='flex flex-col justify-center md:justify-normal'
 					onSubmit={(e) => handleSubmit(e)}>
@@ -80,7 +84,7 @@ export const Login = () => {
 
 					{loading ? (
 						// <Spinner className="mt-5" />
-						(<div>Cargando...</div>)
+						<div>Cargando...</div>
 					) : (
 						<button
 							type='submit'
@@ -90,6 +94,6 @@ export const Login = () => {
 					)}
 				</form>
 			</div>
-        </section>
-    );
+		</section>
+	);
 };

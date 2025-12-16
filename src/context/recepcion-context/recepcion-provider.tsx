@@ -1,17 +1,19 @@
 import { useMemo, useState } from 'react';
+import { v4 } from 'uuid';
 import { RecepcionContext } from './recepcion-context';
-import { DishProps, TicketProps } from '@/types';
 import { useAuthProvider, useDate, useLocalStorage } from '@/hooks';
 import { initialValueTicket } from '@/data';
+import { Dish, Ticket } from '@/core/ticket/interfaces';
+import { addToast } from '@heroui/react';
 
 interface Props {
 	children: JSX.Element | JSX.Element[];
 }
 
-const initialValueDish: DishProps = {
+const initialValueDish: Dish = {
 	key: '',
 	price: 0,
-	dish_food: '',
+	dishFood: '',
 	rice: false,
 	salad: true,
 };
@@ -21,13 +23,16 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 	const { date, hours } = useDate();
 	const { auth } = useAuthProvider();
 	const [selected, setSelected] = useState(['mayonesa', 'ketchup', 'mostaza']);
-	const [dish, setDish] = useState<DishProps>(initialValueDish);
-	const [ticket, setTicket] = useState<TicketProps>(initialValueTicket);
-	const [tickets, setTickets] = useLocalStorage<TicketProps[]>('tickets', []);
+	const [dish, setDish] = useState<Dish>(initialValueDish);
+	const [ticket, setTicket] = useState<Ticket>(initialValueTicket);
+	const [tickets, setTickets] = useLocalStorage<Ticket[]>('tickets', []);
 
 	const handleSubmitTicket = () => {
-		if (ticket.name_ticket.length === 0) {
-			console.log('Ingresar nombre de ticket');
+		if (ticket.nameTicket.length === 0) {
+			addToast({
+				description: 'El ticket debe tener un nombre',
+				color: 'danger',
+			});
 			return;
 		}
 
@@ -40,7 +45,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 	};
 
 	const handleAddTicket = () => {
-		setTickets([...tickets, { ...ticket, key: crypto.randomUUID(), time: `${date} ${hours}`, user: auth._id }]);
+		setTickets([...tickets, { ...ticket, key: v4(), time: `${date} ${hours}`, user: auth._id }]);
 		setDish(initialValueDish);
 		setTicket(initialValueTicket);
 	};

@@ -1,297 +1,297 @@
-import { FoodProps } from '@/types';
+import { Food } from '@/core/ticket/interfaces';
 
-export const foods: FoodProps[] = [
+export const foods: Food[] = [
 	{
 		key: 'hamburguesa clasica',
-		dish_food: 'Hamburguesa Clásica',
+		dishFood: 'Hamburguesa Clásica',
 		price: 10,
 	},
 
 	{
 		key: 'la sabrosa',
-		dish_food: 'La sabrosa',
+		dishFood: 'La sabrosa',
 		price: 10,
 	},
 
 	{
 		key: 'la chiken',
-		dish_food: 'La chiken',
+		dishFood: 'La chiken',
 		price: 11,
 	},
 
 	{
 		key: 'la crispy burguer acevichada',
-		dish_food: 'La crispy burguer acevichada',
+		dishFood: 'La crispy burguer acevichada',
 		price: 13,
 	},
 
 	{
 		key: 'la fiu fiu royal',
-		dish_food: 'La fiu fiu royal',
+		dishFood: 'La fiu fiu royal',
 		price: 14,
 	},
 
 	{
 		key: 'la tentadora',
-		dish_food: 'La tentadora',
+		dishFood: 'La tentadora',
 		price: 14,
 	},
 
 	{
 		key: 'la cubana',
-		dish_food: 'La cubana',
+		dishFood: 'La cubana',
 		price: 14,
 	},
 
 	{
 		key: 'la caprichosa',
-		dish_food: 'La caprichosa',
+		dishFood: 'La caprichosa',
 		price: 16,
 	},
 
 	{
 		key: 'la chesse golden',
-		dish_food: 'La chesse golden',
+		dishFood: 'La chesse golden',
 		price: 20,
 	},
 
 	{
 		key: 'la xtrema',
-		dish_food: 'La xtrema',
+		dishFood: 'La xtrema',
 		price: 20,
 	},
 
 	{
 		key: 'la bbq burguer achorada',
-		dish_food: 'La bbq burguer achorada',
+		dishFood: 'La bbq burguer achorada',
 		price: 20,
 	},
 
 	{
 		key: 'la suprema',
-		dish_food: 'La suprema',
+		dishFood: 'La suprema',
 		price: 26,
 	},
 
 	{
 		key: 'salchipapa clasica',
-		dish_food: 'Salchipapa Clásica',
+		dishFood: 'Salchipapa Clásica',
 		price: 10,
 	},
 
 	{
 		key: 'salchichorizo pobre',
-		dish_food: 'Salchichorizo pobre',
+		dishFood: 'Salchichorizo pobre',
 		price: 12,
 	},
 
 	{
 		key: 'salchipollo',
-		dish_food: 'Salchipollo',
+		dishFood: 'Salchipollo',
 		price: 15,
 	},
 
 	{
 		key: 'salchibroaster',
-		dish_food: 'Salchibroaster',
+		dishFood: 'Salchibroaster',
 		price: 17,
 	},
 
 	{
 		key: 'salchimix 5 sab',
-		dish_food: 'Salchimix 5 sab',
+		dishFood: 'Salchimix 5 sab',
 		price: 16,
 	},
 
 	{
 		key: 'salchimix + filete',
-		dish_food: 'Salchimix + filete',
+		dishFood: 'Salchimix + filete',
 		price: 23,
 	},
 
 	{
 		key: 'pechuga broaster',
-		dish_food: 'Pechuga broaster',
+		dishFood: 'Pechuga broaster',
 		price: 13,
 	},
 
 	{
 		key: 'pechuga a la plancha',
-		dish_food: 'Pechuga a la plancha',
+		dishFood: 'Pechuga a la plancha',
 		price: 13,
 	},
 
 	{
 		key: 'ala crispy',
-		dish_food: 'Ala crispy',
+		dishFood: 'Ala crispy',
 		price: 11,
 	},
 
 	{
 		key: 'pierna crispy',
-		dish_food: 'Pierna crispy',
+		dishFood: 'Pierna crispy',
 		price: 12,
 	},
 
 	{
 		key: 'encuentro crispy',
-		dish_food: 'Encuentro crispy',
+		dishFood: 'Encuentro crispy',
 		price: 12,
 	},
 
 	{
 		key: 'pecho crispy',
-		dish_food: 'Pecho crispy',
+		dishFood: 'Pecho crispy',
 		price: 13,
 	},
 
 	{
 		key: '6 crunch',
-		dish_food: '6 Crunch',
+		dishFood: '6 Crunch',
 		price: 16,
 	},
 
 	{
 		key: '12 crunch',
-		dish_food: '12 Crunch',
+		dishFood: '12 Crunch',
 		price: 26,
 	},
 
 	{
 		key: '6 bbq',
-		dish_food: '6 BBQ',
+		dishFood: '6 BBQ',
 		price: 16,
 	},
 
 	{
 		key: '12 bbq',
-		dish_food: '12 BBQ',
+		dishFood: '12 BBQ',
 		price: 26,
 	},
 
 	{
 		key: '6 acevichada',
-		dish_food: '6 Acevichada',
+		dishFood: '6 Acevichada',
 		price: 16,
 	},
 
 	{
 		key: '12 acevichada',
-		dish_food: '12 Acevichada',
+		dishFood: '12 Acevichada',
 		price: 26,
 	},
 
 	{
 		key: '6 bufalo',
-		dish_food: '6 Bufalo',
+		dishFood: '6 Bufalo',
 		price: 16,
 	},
 
 	{
 		key: '12 bufalo',
-		dish_food: '12 Bufalo',
+		dishFood: '12 Bufalo',
 		price: 26,
 	},
 
 	{
 		key: '12 alitas',
-		dish_food: '12 Alitas',
+		dishFood: '12 Alitas',
 		price: 26,
 	},
 
 	{
 		key: 'jamon',
-		dish_food: 'Jamon',
+		dishFood: 'Jamon',
 		price: 1,
 	},
 
 	{
 		key: 'huevo',
-		dish_food: 'Huevo',
+		dishFood: 'Huevo',
 		price: 1,
 	},
 
 	{
 		key: 'tocino ahumado',
-		dish_food: 'Tocino ahumado',
+		dishFood: 'Tocino ahumado',
 		price: 3,
 	},
 
 	{
 		key: 'hotdog vienessa',
-		dish_food: 'Hotdog vienessa',
+		dishFood: 'Hotdog vienessa',
 		price: 4,
 	},
 
 	{
 		key: 'queso',
-		dish_food: 'Queso',
+		dishFood: 'Queso',
 		price: 2,
 	},
 
 	{
 		key: 'chorizo',
-		dish_food: 'Chorizo',
+		dishFood: 'Chorizo',
 		price: 5,
 	},
 
 	{
 		key: 'carne artesanal',
-		dish_food: 'Carne artesanal',
+		dishFood: 'Carne artesanal',
 		price: 5,
 	},
 
 	{
 		key: 'filete de pollo',
-		dish_food: 'Filete de pollo',
+		dishFood: 'Filete de pollo',
 		price: 6,
 	},
 
 	{
 		key: 'twister clasico',
-		dish_food: 'Twister clasico',
+		dishFood: 'Twister clasico',
 		price: 13,
 	},
 
 	{
 		key: 'twister americano',
-		dish_food: 'Twister americano',
+		dishFood: 'Twister americano',
 		price: 18,
 	},
 
 	{
 		key: 'twister apechugado',
-		dish_food: 'Twister apechugado',
+		dishFood: 'Twister apechugado',
 		price: 16,
 	},
 
 	{
 		key: 'twister achorada',
-		dish_food: 'Twister achorada',
+		dishFood: 'Twister achorada',
 		price: 17,
 	},
 
 	{
 		key: 'twister burguer',
-		dish_food: 'Twister burguer',
+		dishFood: 'Twister burguer',
 		price: 12,
 	},
 
 	{
 		key: 'twister caprichosa',
-		dish_food: 'Twister caprichosa',
+		dishFood: 'Twister caprichosa',
 		price: 18,
 	},
 
 	{
 		key: 'twister salchipollo',
-		dish_food: 'Twister salchipollo',
+		dishFood: 'Twister salchipollo',
 		price: 18,
 	},
 
 	{
 		key: 'descartable',
-		dish_food: 'Descartable',
+		dishFood: 'Descartable',
 		price: 1,
 	},
 ];

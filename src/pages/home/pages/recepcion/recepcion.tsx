@@ -6,7 +6,7 @@ import { RecepcionProvider } from '@/context/recepcion-context/recepcion-provide
 export const Recepcion = () => {
 	return (
 		<>
-			<main className='p-4 flex justify-center'>
+			<main className='p-4 flex justify-center pb-20'>
 				<div className='max-w-[820px] w-full'>
 					<RecepcionProvider>
 						<HeaderRecepcion />
