@@ -6,6 +6,7 @@ import { initialValueTicket } from '@/data';
 import { IoAdd, IoCheckmarkCircle, IoCreate } from 'react-icons/io5';
 import { Product } from '@/core/product/interfaces';
 import { ProductSelectorModal } from '@/components/product-select-modal';
+import { formatMomentaryTime } from '@/utils/format-momentary-time';
 
 export const RecepcionXtra = memo(() => {
 	const { handleSubmitTicket, setTicket, ticket } = useRecepcion();
@@ -34,6 +35,7 @@ export const RecepcionXtra = memo(() => {
 				},
 			],
 			totalPrice: ticket.totalPrice + selectedDrink.price,
+			momentaryTime: formatMomentaryTime(),
 		});
 
 		setSelectedDrink(null);

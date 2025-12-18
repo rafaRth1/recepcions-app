@@ -16,6 +16,7 @@ export interface Ticket {
 	deliveryStatus: DeliveryStatus;
 	type: TicketType;
 	user: string;
+	momentaryTime: string;
 	createdAt: string;
 	updatedAt: string;
 }

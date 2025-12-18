@@ -14,6 +14,7 @@ export const initialValueTicket: Ticket = {
 	color: '',
 	status: 'PROCESS',
 	deliveryStatus: 'PROCESS',
+	momentaryTime: '',
 	type: 'TABLE',
 	user: '',
 };

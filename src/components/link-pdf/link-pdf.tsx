@@ -1,10 +1,10 @@
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDF } from '../pdf/pdf';
-import { Button } from "@heroui/react";
-import { TicketProps } from '@/types';
+import { Button } from '@heroui/react';
+import { Ticket } from '@/core/ticket/interfaces';
 
 interface Props {
-	ticket: TicketProps;
+	ticket: Ticket;
 }
 
 const LinkPdf = ({ ticket }: Props) => {
