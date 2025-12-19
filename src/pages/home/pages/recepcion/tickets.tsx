@@ -6,6 +6,7 @@ import { useGeneratePrintTicket } from '@/modules/printer/hooks/useGeneratePrint
 import { CreateTicketRequest, Ticket } from '@/core/ticket/interfaces';
 import { useCreateTicket } from '@/modules/ticket/hooks/useCreateTicket';
 import { useQueryClient } from '@tanstack/react-query';
+import { formatMomentaryTime } from '@/utils/format-momentary-time';
 
 // const socket = io(import.meta.env.VITE_BACKEND_URL, { transports: ['websocket', 'polling', 'flashsocket'] });
 
@@ -69,21 +70,24 @@ export const Tickets = () => {
 	};
 
 	const handlePrinterTicket = (ticket: Ticket) => {
-		generateTicket.mutate(ticket, {
-			onSuccess: () => {
-				addToast({
-					description: 'Ticket generado',
-					color: 'success',
-				});
-			},
-			onError: (error) => {
-				console.error('Error al imprimir el ticket:', error);
-				addToast({
-					description: 'Error al enviar el ticket a la impresora',
-					color: 'danger',
-				});
-			},
-		});
+		generateTicket.mutate(
+			{ ...ticket, momentaryTime: formatMomentaryTime() },
+			{
+				onSuccess: () => {
+					addToast({
+						description: 'Ticket generado',
+						color: 'success',
+					});
+				},
+				onError: (error) => {
+					console.error('Error al imprimir el ticket:', error);
+					addToast({
+						description: 'Error al enviar el ticket a la impresora',
+						color: 'danger',
+					});
+				},
+			}
+		);
 	};
 
 	if (tickets.length === 0) {
