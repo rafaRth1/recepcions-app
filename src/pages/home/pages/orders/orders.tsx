@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useDisclosure, Input, Tabs, Tab } from '@heroui/react';
+import { useDisclosure, Input, Tabs, Tab, addToast } from '@heroui/react';
 import { initialValueTicket } from '@/data';
 import { OrdersModal } from './orders-modal';
 import { OrdersItem } from './orders-item';
@@ -8,6 +8,7 @@ import { IoSearch } from 'react-icons/io5';
 import { useGetTickets } from '@/modules/ticket/hooks/useGetTickets';
 import { formatTime } from '@/utils/format-time';
 import { formatDate } from '@/utils/format-date';
+import { useGeneratePrintCustomerReceipt } from '@/modules/printer/hooks/useGeneratePrintCustomerReceipt';
 
 export const Orders = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
@@ -15,6 +16,8 @@ export const Orders = () => {
 	const { data: tickets = [], isLoading } = useGetTickets();
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedTab, setSelectedTab] = useState('all');
+
+	const { generateReceipt } = useGeneratePrintCustomerReceipt();
 
 	const lists = useMemo(() => {
 		const tableTickets = tickets.filter((ticket) => ticket.type === 'TABLE' && ticket.status === 'PROCESS');
@@ -45,7 +48,28 @@ export const Orders = () => {
 
 	const handleFinishTicket = useCallback(async (id: string) => {
 		// Implementar lógica de completar ticket
+		console.log('Terminar ticket con ID:', id);
 	}, []);
+
+	const handlePrintReceipt = useCallback(
+		async (ticket: Ticket) => {
+			generateReceipt.mutate(ticket, {
+				onSuccess: (response) => {
+					addToast({
+						description: response.message,
+						color: 'success',
+					});
+				},
+				onError: (error) => {
+					addToast({
+						description: error.message,
+						color: 'danger',
+					});
+				},
+			});
+		},
+		[generateReceipt]
+	);
 
 	const handleOnOpenModal = useCallback(
 		(ticket: Ticket) => {
@@ -225,7 +249,13 @@ export const Orders = () => {
 														<button
 															onClick={() => handleOnOpenModal(ticket)}
 															className='flex-1 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-medium transition-colors'>
-															Ver detalle
+															Detalle
+														</button>
+														<button
+															onClick={() => handlePrintReceipt(ticket)}
+															className='flex-1 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm font-medium transition-colors'
+															disabled={generateReceipt.isPending}>
+															{generateReceipt.isPending ? '...' : 'Boleta'}
 														</button>
 														<button
 															onClick={() => handleFinishTicket(ticket._id!)}
