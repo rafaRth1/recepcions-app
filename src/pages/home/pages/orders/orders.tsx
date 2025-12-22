@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useDisclosure, Input, Tabs, Tab, addToast } from '@heroui/react';
+import { useDisclosure, Input, Tabs, Tab, addToast, Button } from '@heroui/react';
 import { initialValueTicket } from '@/data';
 import { OrdersModal } from './orders-modal';
 import { OrdersItem } from './orders-item';
@@ -246,22 +246,20 @@ export const Orders = () => {
 
 													{/* Botones */}
 													<div className='flex gap-2'>
-														<button
-															onClick={() => handleOnOpenModal(ticket)}
-															className='flex-1 py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-medium transition-colors'>
+														<Button
+															color='primary'
+															onPress={() => handleOnOpenModal(ticket)}
+															className='flex-1'>
 															Detalle
-														</button>
-														<button
-															onClick={() => handlePrintReceipt(ticket)}
-															className='flex-1 py-2 bg-blue-700 hover:bg-blue-600 rounded-lg text-sm font-medium transition-colors'
+														</Button>
+														<Button
+															onPress={() => handlePrintReceipt(ticket)}
+															color='primary'
+															className='flex-1'
+															variant='flat'
 															disabled={generateReceipt.isPending}>
 															{generateReceipt.isPending ? '...' : 'Boleta'}
-														</button>
-														<button
-															onClick={() => handleFinishTicket(ticket._id!)}
-															className='flex-1 py-2 bg-green-700 hover:bg-green-600 rounded-lg text-sm font-medium transition-colors'>
-															Terminar
-														</button>
+														</Button>
 													</div>
 												</div>
 											))

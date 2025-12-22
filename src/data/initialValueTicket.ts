@@ -2,6 +2,7 @@ import { PaymentType } from '@/core/shared/interfaces';
 import { Ticket } from '@/core/ticket/interfaces';
 
 export const initialValueTicket: Ticket = {
+	_id: '',
 	key: '',
 	nameTicket: '',
 	dishes: [],
@@ -17,4 +18,6 @@ export const initialValueTicket: Ticket = {
 	momentaryTime: '',
 	type: 'TABLE',
 	user: '',
+	createdAt: '',
+	updatedAt: '',
 };

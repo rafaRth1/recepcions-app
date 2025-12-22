@@ -33,6 +33,10 @@ export interface CreateTicketRequest {
 	paymentType?: PaymentType;
 }
 
+export interface UpdateTicketRequest extends CreateTicketRequest {
+	_id: string;
+}
+
 export interface Drinks extends Drink {
 	_id?: string;
 	_id_temp?: string;

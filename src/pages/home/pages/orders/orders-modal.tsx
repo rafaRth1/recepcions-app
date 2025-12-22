@@ -1,16 +1,19 @@
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { Ticket } from '@/core/ticket/interfaces';
+import { useUpdateTicket } from '@/modules/ticket/hooks/useUpdateTicket';
 import { formatDateTime } from '@/utils/format-date-time';
-import { Modal, ModalBody, ModalContent, ModalHeader, ModalFooter, Button, Chip } from '@heroui/react';
+import { Modal, ModalBody, ModalContent, ModalHeader, ModalFooter, Button, Chip, addToast } from '@heroui/react';
 import {
 	IoCloseCircle,
 	IoCreateOutline,
 	IoReceiptOutline,
-	IoCheckmarkDoneOutline,
 	IoAlertCircleOutline,
 	IoTimerOutline,
 	IoCalendarOutline,
 	IoCashOutline,
 } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	isOpen: boolean;
@@ -19,9 +22,43 @@ interface Props {
 }
 
 export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
+	const navigate = useNavigate();
+	const { updateTicket } = useUpdateTicket();
 	const totalItems = selectTicket.dishes.length + (selectTicket.drinks?.length || 0);
-	const subtotalSinIGV = selectTicket.totalPrice / 1.18;
-	const igv = selectTicket.totalPrice - subtotalSinIGV;
+	const queryClient = useQueryClient();
+
+	// Estado para confirmación de cancelación
+	const [showConfirmCancel, setShowConfirmCancel] = useState(false);
+
+	const handleEditTicket = (ticket: Ticket) => {
+		navigate('/', { state: { editingTicket: ticket } });
+	};
+
+	const handleCancelOrder = () => {
+		updateTicket.mutate(
+			{
+				_id: selectTicket._id!,
+				status: 'CANCELLED',
+			},
+			{
+				onSuccess: () => {
+					queryClient.invalidateQueries({ queryKey: ['tickets'] });
+					setShowConfirmCancel(false);
+					onOpenChange();
+					addToast({
+						description: 'Pedido cancelado correctamente',
+						color: 'success',
+					});
+				},
+				onError: (error) => {
+					addToast({
+						description: error.message || 'Error al cancelar el pedido',
+						color: 'danger',
+					});
+				},
+			}
+		);
+	};
 
 	return (
 		<Modal
@@ -34,18 +71,12 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 				backdrop: 'bg-black/50',
 			}}>
 			<ModalContent>
-				{(onClose) => (
+				{() => (
 					<>
 						{/* Header */}
 						<ModalHeader className='border-b border-neutral-200 dark:border-neutral-800 px-4 py-3'>
 							<div className='flex items-center justify-between w-full'>
 								<h2 className='text-lg font-semibold'>Orden #{selectTicket._id?.slice(-4)}</h2>
-								<Button
-									size='sm'
-									className='bg-orange-600 hover:bg-orange-500 text-white font-medium'
-									startContent={<IoCreateOutline size={16} />}>
-									Editar
-								</Button>
 							</div>
 						</ModalHeader>
 
@@ -89,10 +120,6 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 										<p className='font-medium capitalize'>{selectTicket.nameTicket}</p>
 										<p className='text-xs text-neutral-500'>Mesa 1</p>
 									</div>
-									{/* <div className='text-right text-xs text-neutral-500'>
-										<p>Capacidad</p>
-										<p className='font-semibold text-neutral-900 dark:text-neutral-100'>4 personas</p>
-									</div> */}
 								</div>
 							</div>
 
@@ -152,16 +179,7 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 										<span className='text-neutral-500'>Items ({totalItems})</span>
 										<span className='font-medium'>S/ {selectTicket.totalPrice.toFixed(2)}</span>
 									</div>
-									{/* <div className='flex items-center justify-between'>
-										<span className='text-neutral-500'>Subtotal (sin IGV)</span>
-										<span className='font-medium'>S/ {subtotalSinIGV.toFixed(2)}</span>
-									</div> */}
-									{/* <div className='flex items-center justify-between'>
-										<span className='text-neutral-500'>IGV (18%)</span>
-										<span className='font-medium'>S/ {igv.toFixed(2)}</span>
-									</div> */}
 								</div>
-								{/* <p className='text-xs text-neutral-400 text-center mt-2'>*Los precios incluyen IGV</p> */}
 							</div>
 
 							{/* Cremas */}
@@ -218,29 +236,52 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 
 						{/* Footer */}
 						<ModalFooter className='border-t border-neutral-200 dark:border-neutral-800 px-4 py-3 flex-col gap-2'>
-							<div className='grid grid-cols-2 gap-2 w-full'>
+							<div className='grid gap-2 w-full'>
 								<Button
 									size='lg'
-									className='bg-orange-600 hover:bg-orange-500 text-white font-semibold'>
-									<IoCheckmarkDoneOutline size={18} />
-									Confirmar orden
-								</Button>
-								<Button
-									size='lg'
-									className='bg-green-600 hover:bg-green-500 text-white font-semibold'>
-									Pago
+									onPress={() => handleEditTicket(selectTicket)}
+									color='primary'
+									startContent={<IoCreateOutline size={16} />}>
+									Editar
 								</Button>
 							</div>
 							<Button
-								size='md'
+								size='lg'
 								variant='light'
 								color='danger'
 								className='w-full'
 								startContent={<IoCloseCircle size={18} />}
-								onPress={onClose}>
+								onPress={() => setShowConfirmCancel(true)}>
 								Cancelar orden
 							</Button>
 						</ModalFooter>
+
+						{/* Modal de confirmación */}
+						{showConfirmCancel && (
+							<div className='absolute inset-0 bg-black/50 flex items-center justify-center p-4 z-50'>
+								<div className='bg-white dark:bg-neutral-900 rounded-xl p-6 max-w-sm w-full'>
+									<h3 className='text-lg font-bold mb-2'>¿Cancelar orden?</h3>
+									<p className='text-sm text-neutral-500 dark:text-neutral-400 mb-4'>
+										Esta acción no se puede deshacer. La orden #{selectTicket._id?.slice(-4)} será cancelada.
+									</p>
+									<div className='flex gap-2'>
+										<Button
+											variant='flat'
+											className='flex-1'
+											onPress={() => setShowConfirmCancel(false)}>
+											No, volver
+										</Button>
+										<Button
+											color='danger'
+											className='flex-1'
+											isLoading={updateTicket.isPending}
+											onPress={handleCancelOrder}>
+											Sí, cancelar
+										</Button>
+									</div>
+								</div>
+							</div>
+						)}
 					</>
 				)}
 			</ModalContent>
