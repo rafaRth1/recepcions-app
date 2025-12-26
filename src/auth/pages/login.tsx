@@ -33,7 +33,7 @@ export const Login = () => {
 		} catch (error) {
 			setError({
 				type: true,
-				msg: error.response.data.msg,
+				msg: 'Ocurrio un error al iniciar sesión',
 			});
 		} finally {
 			setLoading(false);

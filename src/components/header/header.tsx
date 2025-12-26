@@ -95,7 +95,7 @@ export const Header = () => {
 			</Dropdown>
 
 			<div
-				className={`fixed inset-0 z-40 transition-all duration-200 w-full h-full ${
+				className={`fixed inset-0  z-50 transition-all duration-200 w-full h-full ${
 					active
 						? 'translate-x-0 opacity-1 visible pointer-events-auto'
 						: '-translate-x-5 opacity-0 invisible pointer-events-none'

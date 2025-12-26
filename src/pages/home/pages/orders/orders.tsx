@@ -82,11 +82,17 @@ export const Orders = () => {
 	const stats = useMemo(() => {
 		const processTickets = tickets.filter((t) => t.status === 'PROCESS');
 		const completedTickets = tickets.filter((t) => t.status === 'COMPLETED');
+		const tableTickets = processTickets.filter((t) => t.type === 'TABLE');
+		const deliveryTickets = processTickets.filter((t) => t.type === 'DELIVERY');
+		const pickupTickets = processTickets.filter((t) => t.type === 'PICKUP');
 
 		return {
 			total: processTickets.length,
 			completed: completedTickets.length,
 			pending: processTickets.length,
+			table: tableTickets.length,
+			delivery: deliveryTickets.length,
+			pickup: pickupTickets.length,
 		};
 	}, [tickets]);
 
@@ -112,6 +118,7 @@ export const Orders = () => {
 		if (selectedTab === 'completed') {
 			return [];
 		}
+		// Filtrar por tipo específico (TABLE, DELIVERY, PICKUP)
 		return lists.filter((list) => list.key === selectedTab);
 	}, [selectedTab, lists]);
 
@@ -151,12 +158,16 @@ export const Orders = () => {
 						title={`Todas (${stats.total})`}
 					/>
 					<Tab
-						key='pending'
-						title={`Pendiente (${stats.pending})`}
+						key='TABLE'
+						title={`Mesa (${stats.table})`}
 					/>
 					<Tab
-						key='completed'
-						title={`Completado (${stats.completed})`}
+						key='DELIVERY'
+						title={`Delivery (${stats.delivery})`}
+					/>
+					<Tab
+						key='PICKUP'
+						title={`Recojo (${stats.pickup})`}
 					/>
 				</Tabs>
 
@@ -199,7 +210,9 @@ export const Orders = () => {
 								<div
 									key={list.id}
 									className='mb-6'>
-									<h2 className='text-lg font-semibold px-4 mb-3 text-neutral-300'>{list.name}</h2>
+									{selectedTab === 'all' && (
+										<h2 className='text-lg font-semibold px-4 mb-3 text-neutral-300'>{list.name}</h2>
+									)}
 									<div className='space-y-3 px-4'>
 										{filterOrders(list.orders).length === 0 ? (
 											<p className='text-center text-neutral-500 py-8'>No hay pedidos</p>
@@ -215,7 +228,11 @@ export const Orders = () => {
 																#{ticket._id?.slice(-4)}
 															</span>
 															<span className='text-xs px-2 py-0.5 bg-blue-500/20 text-blue-400 rounded-full'>
-																Mesa
+																{ticket.type === 'TABLE'
+																	? 'Mesa'
+																	: ticket.type === 'DELIVERY'
+																	? 'Delivery'
+																	: 'Recojo'}
 															</span>
 														</div>
 														<span className='text-xs px-2 py-1 bg-orange-500/20 text-orange-400 rounded-full font-medium'>
@@ -231,7 +248,9 @@ export const Orders = () => {
 
 													{/* Mesa e Items */}
 													<div className='flex items-center justify-between mb-1 text-sm text-neutral-400'>
-														<span>Mesa: {ticket.nameTicket}</span>
+														<span>
+															{ticket.type === 'TABLE' ? `Mesa: ${ticket.nameTicket}` : ticket.nameTicket}
+														</span>
 														<span>{formatDate(ticket.createdAt)}</span>
 													</div>
 

@@ -1,5 +1,5 @@
+import { Ticket } from '@/core/ticket/interfaces';
 import { columnCream, columnDrink, columnFood } from '@/data/columns';
-import { TicketProps } from '@/types';
 import {
 	Modal,
 	ModalBody,
@@ -11,12 +11,12 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from '@heroui/react';
 
 interface Props {
 	isOpen: boolean;
 	onOpenChange: () => void;
-	selectTicket: TicketProps;
+	selectTicket: Ticket;
 }
 
 export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
@@ -26,11 +26,12 @@ export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => 
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
 				isDismissable={false}
+				disableAnimation
 				isKeyboardDismissDisabled={true}>
 				<ModalContent>
 					{() => (
 						<>
-							<ModalHeader className='flex flex-col gap-1'>{`Detalles pedido "${selectTicket.name_ticket}"`}</ModalHeader>
+							<ModalHeader className='flex flex-col gap-1'>{`Detalles pedido "${selectTicket.nameTicket}"`}</ModalHeader>
 							<ModalBody>
 								<Table
 									aria-label='Tabla ticket'
@@ -41,7 +42,7 @@ export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => 
 									<TableBody items={selectTicket.dishes}>
 										{(item) => (
 											<TableRow key={item._id}>
-												<TableCell className='capitalize'>{item.dish_food}</TableCell>
+												<TableCell className='capitalize'>{item.dishFood}</TableCell>
 												<TableCell className='capitalize'>{item.rice ? 'Si' : 'No'}</TableCell>
 												<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
 												<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>
@@ -81,7 +82,7 @@ export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => 
 									</TableBody>
 								</Table>
 
-								<p className='text-right'>Total: S/{`${selectTicket.total_price.toFixed(2)}`}</p>
+								<p className='text-right'>Total: S/{`${selectTicket.totalPrice.toFixed(2)}`}</p>
 
 								{selectTicket.exception.length > 0 && (
 									<p className='font-medium text-warning text-lg first-letter:uppercase'>
@@ -89,9 +90,9 @@ export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => 
 									</p>
 								)}
 
-								{selectTicket.type_payment.length > 0 && (
+								{selectTicket.paymentType.length > 0 && (
 									<p className='font-medium text-success text-lg first-letter:uppercase'>
-										Tipo de pago: {selectTicket.type_payment}
+										Tipo de pago: {selectTicket.paymentType}
 									</p>
 								)}
 							</ModalBody>

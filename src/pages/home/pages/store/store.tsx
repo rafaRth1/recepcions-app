@@ -15,6 +15,7 @@ import {
 	Pagination,
 	addToast,
 } from '@heroui/react';
+import { Formik, Form, FormikHelpers } from 'formik';
 import {
 	IoAdd,
 	IoSearch,
@@ -23,13 +24,16 @@ import {
 	IoFastFood,
 	IoFilter,
 	IoClose,
-	// IoImage,
 	IoBeer,
 	IoRestaurant,
 	IoCheckmarkCircle,
 	IoCloseCircle,
+	IoNutrition, // Para hamburguesas
+	IoSnow, // Para frozen
+	IoWater, // Para jugos
+	IoIceCream, // Para cremosos
 } from 'react-icons/io5';
-import { Formik, Form, FormikHelpers } from 'formik';
+import { GiChickenLeg, GiChicken, GiFrenchFries, GiSodaCan } from 'react-icons/gi';
 
 import { CategoryProduct, Status } from '@/core/shared/interfaces';
 import { CreateProductRequest, Product, ProductFilters } from '@/core/product/interfaces';
@@ -43,8 +47,20 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { useChangeInactiveProduct } from '@/modules/product/hooks/useChangeInactiveProduct';
 
 const CATEGORIES: { value: CategoryProduct; label: string; icon: IconType }[] = [
-	{ value: 'COMIDA', label: 'Comida', icon: IoRestaurant },
-	{ value: 'BEBIDA', label: 'Bebida', icon: IoBeer },
+	{ value: 'HAMBURGUESAS', label: 'Hamburguesas', icon: IoNutrition },
+	{ value: 'SALCHIPAPAS', label: 'Salchipapas', icon: GiFrenchFries },
+	{ value: 'POLLO_BROASTER', label: 'Pollo Broaster', icon: GiChicken },
+	{ value: 'ALITAS', label: 'Alitas', icon: GiChickenLeg },
+	{ value: 'TWISTER', label: 'Twister', icon: IoFastFood },
+	{ value: 'COMBO', label: 'Combo', icon: IoRestaurant },
+	{ value: 'REFRESCOS', label: 'Refrescos', icon: IoWater },
+	{ value: 'FROZEN', label: 'Frozen', icon: IoSnow },
+	{ value: 'CREMOSOS', label: 'Cremosos', icon: IoIceCream },
+	{ value: 'BATIDOS', label: 'Batidos', icon: IoBeer },
+	{ value: 'JUGOS', label: 'Jugos', icon: IoWater },
+	{ value: 'CLASICOS', label: 'Clásicos', icon: IoRestaurant },
+	{ value: 'GASEOSAS', label: 'Gaseosas', icon: GiSodaCan },
+	{ value: 'PIDELO_CON_CHAUFA', label: 'Pídelo con Chaufa', icon: IoFastFood },
 ];
 
 const STATUS_OPTIONS: { value: Status; label: string }[] = [
@@ -56,7 +72,7 @@ const STATUS_OPTIONS: { value: Status; label: string }[] = [
 const initialValues: CreateProductRequest = {
 	name: '',
 	price: 0,
-	category: 'COMIDA',
+	category: 'HAMBURGUESAS',
 	description: '',
 	ingredients: [],
 	tags: [],
@@ -363,18 +379,16 @@ export const Store = () => {
 											isFetching ? 'opacity-50' : ''
 										}`}>
 										{/* Imagen */}
-										{product.image ? (
+										{/* {product.image ? (
 											<div className='h-48 bg-neutral-800 overflow-hidden relative flex-shrink-0'>
 												<img
 													src={product.image}
 													alt={product.name}
 													className='w-full h-full object-cover'
 												/>
-												{/* Overlay con precio */}
 												<div className='absolute top-3 right-3 bg-indigo-600/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-lg'>
 													<p className='text-lg font-bold text-white'>S/{product.price.toFixed(2)}</p>
 												</div>
-												{/* Badge de descuento */}
 												{product.discount && product.discount > 0 && (
 													<div className='absolute top-3 left-3 bg-green-500/95 backdrop-blur-sm px-2 py-1 rounded-lg'>
 														<p className='text-xs font-bold text-white'>-{product.discount}%</p>
@@ -387,18 +401,16 @@ export const Store = () => {
 													size={72}
 													className='text-neutral-600 group-hover:text-neutral-500 transition-colors'
 												/>
-												{/* Overlay con precio */}
 												<div className='absolute top-3 right-3 bg-indigo-600/95 backdrop-blur-sm px-3 py-1.5 rounded-lg shadow-lg'>
 													<p className='text-lg font-bold text-white'>S/{product.price.toFixed(2)}</p>
 												</div>
-												{/* Badge de descuento */}
 												{product.discount && product.discount > 0 ? (
 													<div className='absolute top-3 left-3 bg-green-500/95 backdrop-blur-sm px-2 py-1 rounded-lg'>
 														<p className='text-xs font-bold text-white'>-{product.discount}%</p>
 													</div>
 												) : null}
 											</div>
-										)}
+										)} */}
 
 										{/* Contenido */}
 										<div className='p-4 flex flex-col flex-grow'>
@@ -487,6 +499,7 @@ export const Store = () => {
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}
 				size='2xl'
+				disableAnimation
 				scrollBehavior='inside'>
 				<ModalContent>
 					{(onClose) => (

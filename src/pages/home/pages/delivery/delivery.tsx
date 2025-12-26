@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDisclosure } from "@heroui/react";
+import { useDisclosure } from '@heroui/react';
 import { clientAxios } from '@/utils';
 import { DeliveryItem } from './delivery-item';
 import { DeliveryModal } from './delivery-modal';
-import { TicketProps } from '@/types';
 import { initialValueTicket } from '@/data';
+import { Ticket } from '@/core/ticket/interfaces';
 
 export const Delivery = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const [ticketsUser, setTickestUser] = useState<TicketProps[]>([]);
-	const [selectTicket, setSelectTicket] = useState<TicketProps>(initialValueTicket);
+	const [ticketsUser, setTickestUser] = useState<Ticket[]>([]);
+	const [selectTicket, setSelectTicket] = useState<Ticket>(initialValueTicket);
 
 	const handleFinishDeliveryTicket = useCallback(
 		async (id: string) => {
@@ -29,14 +29,14 @@ export const Delivery = () => {
 		[ticketsUser]
 	);
 
-	const handleOnOpenModal = useCallback((ticket: TicketProps) => {
+	const handleOnOpenModal = useCallback((ticket: Ticket) => {
 		setSelectTicket(ticket);
 		onOpen();
 	}, []);
 
 	useEffect(() => {
 		const getTickets = async () => {
-			const { data } = await clientAxios.get<TicketProps[]>('/recepcion/delivery');
+			const { data } = await clientAxios.get<Ticket[]>('/recepcion/delivery');
 			setTickestUser(data);
 		};
 

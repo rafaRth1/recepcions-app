@@ -10,15 +10,15 @@ import {
 	TableColumn,
 	TableHeader,
 	TableRow,
-} from "@heroui/react";
+} from '@heroui/react';
 import { columnFood } from '@/data/columns';
 import { clientAxios, pickColor } from '@/utils';
-import { TicketProps } from '@/types';
+import { Ticket } from '@/core/ticket/interfaces';
 
 interface Props {
-	ticket: TicketProps;
+	ticket: Ticket;
 	handleFinishDeliveryTicket: (id: string) => Promise<void>;
-	handleOnOpenModal: (ticket: TicketProps) => void;
+	handleOnOpenModal: (ticket: Ticket) => void;
 }
 
 export const DeliveryItem = memo(({ ticket, handleFinishDeliveryTicket, handleOnOpenModal }: Props) => {
@@ -41,7 +41,7 @@ export const DeliveryItem = memo(({ ticket, handleFinishDeliveryTicket, handleOn
 	return (
 		<div className='min-w-[420.53px] mb-5 h-fit'>
 			<div className='flex items-center mb-2'>
-				<h3 className='mr-5 capitalize font-bold text-lg'>{ticket.name_ticket}</h3>
+				<h3 className='mr-5 capitalize font-bold text-lg'>{ticket.nameTicket}</h3>
 				<p className='text-neutral-400 mr-3'>{ticket.time}</p>
 				<div className='flex-1' />
 				<Popover
@@ -78,7 +78,7 @@ export const DeliveryItem = memo(({ ticket, handleFinishDeliveryTicket, handleOn
 				<TableBody items={ticket.dishes}>
 					{(item) => (
 						<TableRow key={item._id}>
-							<TableCell className='capitalize'>{item.dish_food}</TableCell>
+							<TableCell className='capitalize'>{item.dishFood}</TableCell>
 							<TableCell className='capitalize'>{item.rice ? 'Si' : 'No'}</TableCell>
 							<TableCell className='capitalize'>{item.salad ? 'Si' : 'No'}</TableCell>
 							<TableCell className='capitalize'>S/{item.price.toFixed(2)}</TableCell>

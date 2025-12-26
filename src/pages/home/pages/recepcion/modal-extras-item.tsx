@@ -93,6 +93,7 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 			onClose={handleCancel}
 			size='md'
 			scrollBehavior='inside'
+			disableAnimation
 			classNames={{
 				base: 'bg-neutral-900',
 				header: 'border-b border-neutral-800',

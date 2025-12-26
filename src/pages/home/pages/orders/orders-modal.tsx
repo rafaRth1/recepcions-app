@@ -66,6 +66,7 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 			onOpenChange={onOpenChange}
 			size='xl'
 			scrollBehavior='inside'
+			disableAnimation
 			classNames={{
 				base: 'bg-white dark:bg-neutral-900',
 				backdrop: 'bg-black/50',

@@ -20,9 +20,18 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 	const { updateTicket } = useUpdateTicket();
 	const queryClient = useQueryClient();
 
-	const handleDeleteDish = (itemKey: string) => {
-		const [selectRemoveItem] = ticket.dishes.filter((dish) => dish.key === itemKey);
-		const updateDishes = ticket.dishes.filter((dish) => dish.key !== itemKey);
+	const handleDeleteDish = (dish: Dish) => {
+		if (dish.key) {
+			const [selectRemoveItem] = ticket.dishes.filter((item) => item.key === dish.key);
+			const updateDishes = ticket.dishes.filter((item) => item.key !== dish.key);
+
+			setTicket({ ...ticket, dishes: updateDishes, totalPrice: ticket.totalPrice - selectRemoveItem.price });
+			return;
+		}
+
+		const [selectRemoveItem] = ticket.dishes.filter((item) => item._id === dish._id);
+		const updateDishes = ticket.dishes.filter((item) => item._id !== dish._id);
+
 		setTicket({ ...ticket, dishes: updateDishes, totalPrice: ticket.totalPrice - selectRemoveItem.price });
 	};
 
@@ -87,6 +96,7 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 			onClose={onClose}
 			size='2xl'
 			scrollBehavior='inside'
+			disableAnimation
 			classNames={{
 				base: 'bg-neutral-900',
 				header: 'border-b border-neutral-800',
@@ -137,7 +147,7 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 											isIconOnly
 											size='sm'
 											className='bg-red-900/50 hover:bg-red-900'
-											onPress={() => handleDeleteDish(dish.key)}>
+											onPress={() => handleDeleteDish(dish)}>
 											<IoTrash
 												size={16}
 												className='text-red-400'

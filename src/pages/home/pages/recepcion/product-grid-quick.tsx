@@ -8,11 +8,35 @@ import { v4 } from 'uuid';
 import { formatMomentaryTime } from '@/utils/format-momentary-time';
 import { CategoryProduct } from '@/core/shared/interfaces';
 
-// Categorías disponibles
+// Categorías disponibles con emojis
 const categories = [
 	{ key: 'all', label: 'Todos', emoji: '🍽️' },
-	{ key: 'COMIDA', label: 'Comidas', emoji: '🍔' },
-	{ key: 'BEBIDA', label: 'Bebidas', emoji: '🥤' },
+	{ key: 'HAMBURGUESAS', label: 'Hamburguesas', emoji: '🍔' },
+	{ key: 'SALCHIPAPAS', label: 'Salchipapas', emoji: '🍟' },
+	{ key: 'POLLO_BROASTER', label: 'Pollo Broaster', emoji: '🍗' },
+	{ key: 'ALITAS', label: 'Alitas', emoji: '🔥' },
+	{ key: 'TWISTER', label: 'Twister', emoji: '🌯' },
+	{ key: 'COMBO', label: 'Combos', emoji: '🎁' },
+	{ key: 'PIDELO_CON_CHAUFA', label: 'Con Chaufa', emoji: '🍚' },
+	{ key: 'REFRESCOS', label: 'Refrescos', emoji: '🧃' },
+	{ key: 'FROZEN', label: 'Frozen', emoji: '🧊' },
+	{ key: 'CREMOSOS', label: 'Cremosos', emoji: '🥤' },
+	{ key: 'BATIDOS', label: 'Batidos', emoji: '🍹' },
+	{ key: 'CLASICOS', label: 'Jugos Clásicos', emoji: '🍊' },
+	{ key: 'GASEOSAS', label: 'Gaseosas', emoji: '🥤' },
+];
+
+// Categorías que son bebidas
+const DRINK_CATEGORIES: CategoryProduct[] = ['REFRESCOS', 'FROZEN', 'CREMOSOS', 'BATIDOS', 'CLASICOS', 'GASEOSAS'];
+
+// Categorías que son comida (con arroz/ensalada)
+const FOOD_CATEGORIES: CategoryProduct[] = [
+	'HAMBURGUESAS',
+	'SALCHIPAPAS',
+	'POLLO_BROASTER',
+	'ALITAS',
+	'TWISTER',
+	'PIDELO_CON_CHAUFA',
 ];
 
 export const ProductGridQuick = () => {
@@ -38,7 +62,7 @@ export const ProductGridQuick = () => {
 
 	const handleClickProduct = (product: Product) => {
 		// Si es comida, agregar DIRECTO con valores por defecto
-		if (product.category === 'COMIDA') {
+		if (FOOD_CATEGORIES.includes(product.category)) {
 			setTicket({
 				...ticket,
 				dishes: [
@@ -53,7 +77,7 @@ export const ProductGridQuick = () => {
 				],
 				totalPrice: ticket.totalPrice + product.price,
 			});
-		} else if (product.category === 'BEBIDA') {
+		} else if (DRINK_CATEGORIES.includes(product.category)) {
 			// Si es bebida, agregar directo al ticket
 			setTicket({
 				...ticket,
@@ -68,6 +92,22 @@ export const ProductGridQuick = () => {
 				],
 				totalPrice: ticket.totalPrice + product.price,
 				momentaryTime: formatMomentaryTime(),
+			});
+		} else if (product.category === 'COMBO') {
+			// Si es combo/agregado, agregar como comida sin arroz/ensalada
+			setTicket({
+				...ticket,
+				dishes: [
+					...ticket.dishes,
+					{
+						key: v4(),
+						dishFood: product.name,
+						price: product.price,
+						rice: false,
+						salad: false,
+					},
+				],
+				totalPrice: ticket.totalPrice + product.price,
 			});
 		}
 	};
@@ -86,7 +126,7 @@ export const ProductGridQuick = () => {
 				}}
 			/>
 
-			{/* Categorías - Tabs horizontales */}
+			{/* Categorías - Tabs horizontales con scroll */}
 			<div className='flex gap-2 overflow-x-auto pb-2 scrollbar-hide'>
 				{categories.map((cat) => (
 					<button
