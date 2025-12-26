@@ -29,12 +29,15 @@ export const generatePrintCustomerReceiptAction = async (ticket: Ticket) => {
 			customerName: ticket.nameTicket,
 			table: ticket.nameTicket,
 			employee: ticket.user,
+			type: ticket.type,
 			items: ticket.dishes.map((dish) => ({
 				quantity: 1,
 				description: dish.dishFood,
 				price: dish.price,
 				total: dish.price,
 			})),
+			// Agregar todas las cremas juntas
+			creams: ticket.creams.flatMap((cream) => cream.creams),
 			total: ticket.totalPrice,
 		};
 

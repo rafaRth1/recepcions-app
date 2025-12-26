@@ -61,21 +61,39 @@ export const ProductGridQuick = () => {
 	const products = data?.products || [];
 
 	const handleClickProduct = (product: Product) => {
+		const CATEGORIES_WITH_SURCHARGE: CategoryProduct[] = ['POLLO_BROASTER', 'SALCHIPAPAS', 'ALITAS', 'PIDELO_CON_CHAUFA'];
+
+		const needsSurcharge =
+			(ticket.type === 'DELIVERY' || ticket.type === 'PICKUP') && CATEGORIES_WITH_SURCHARGE.includes(product.category);
+
 		// Si es comida, agregar DIRECTO con valores por defecto
 		if (FOOD_CATEGORIES.includes(product.category)) {
+			const newDishes = [
+				...ticket.dishes,
+				{
+					key: v4(),
+					dishFood: product.name,
+					price: product.price,
+					rice: false,
+					salad: true,
+				},
+			];
+
+			// Si necesita recargo, agregar el plato descartable
+			if (needsSurcharge) {
+				newDishes.push({
+					key: v4(),
+					dishFood: 'Plato Descartable',
+					price: 1,
+					rice: false,
+					salad: false,
+				});
+			}
+
 			setTicket({
 				...ticket,
-				dishes: [
-					...ticket.dishes,
-					{
-						key: v4(),
-						dishFood: product.name,
-						price: product.price,
-						rice: false, // Por defecto sin arroz
-						salad: true, // Por defecto con ensalada
-					},
-				],
-				totalPrice: ticket.totalPrice + product.price,
+				dishes: newDishes,
+				totalPrice: ticket.totalPrice + product.price + (needsSurcharge ? 1 : 0),
 			});
 		} else if (DRINK_CATEGORIES.includes(product.category)) {
 			// Si es bebida, agregar directo al ticket
