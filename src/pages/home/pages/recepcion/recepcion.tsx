@@ -123,7 +123,7 @@ const RecepcionContent = () => {
 					) : (
 						<div className='px-4'>
 							{/* Vista de Tickets Pendientes */}
-							<Tickets />
+							<Tickets setActiveTab={setActiveTab} />
 						</div>
 					)}
 				</div>

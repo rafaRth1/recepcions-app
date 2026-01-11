@@ -16,7 +16,11 @@ const paymentTypeSylesMap: Record<string, string> = {
 	EFECTIVO: 'bg-yellow-600',
 };
 
-export const Tickets = () => {
+export interface Props {
+	setActiveTab: React.Dispatch<React.SetStateAction<"nuevo" | "pendientes">>
+}
+
+export const Tickets = ({ setActiveTab }: Props) => {
 	const { tickets, setTickets, setTicket } = useRecepcion();
 	const { generateTicket } = useGeneratePrintTicket();
 	const { createTicket } = useCreateTicket();
@@ -89,6 +93,11 @@ export const Tickets = () => {
 			}
 		);
 	};
+
+	const handleEditTicket = (ticket: Ticket) => {
+		setTicket(ticket);
+		setActiveTab('nuevo');
+	}
 
 	if (tickets.length === 0) {
 		return null;
@@ -216,7 +225,7 @@ export const Tickets = () => {
 								className='w-full'
 								color='warning'
 								isDisabled={createTicket.isPending || generateTicket.isPending}
-								onPress={() => setTicket(ticket)}
+								onPress={() =>handleEditTicket(ticket)}
 								startContent={<IoCreate size={18} />}>
 								Editar
 							</Button>
