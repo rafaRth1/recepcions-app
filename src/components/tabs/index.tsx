@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { IoReceiptOutline, IoBagCheckOutline, IoBicycleOutline, IoEllipsisHorizontal } from 'react-icons/io5';
+import { IoReceiptOutline, IoBagCheckOutline, IoEllipsisHorizontal } from 'react-icons/io5';
+import { Button } from '@heroui/react';
 
 const mainLinks = [
 	{
@@ -15,25 +16,25 @@ const mainLinks = [
 		name: 'Pedidos',
 		icon: IoBagCheckOutline,
 	},
-	{
-		id: 3,
-		route: '/delivery',
-		name: 'Delivery',
-		icon: IoBicycleOutline,
-	},
+	// {
+	// 	id: 3,
+	// 	route: '/delivery',
+	// 	name: 'Delivery',
+	// 	icon: IoBicycleOutline,
+	// },
 ];
 
 const moreLinks = [
 	{
 		id: 4,
-		route: '/store',
-		name: 'Almacén',
+		route: '/products',
+		name: 'Productos',
 	},
-	{
-		id: 5,
-		route: '/statistics',
-		name: 'Estadísticas',
-	},
+	// {
+	// 	id: 5,
+	// 	route: '/statistics',
+	// 	name: 'Estadísticas',
+	// },
 ];
 
 export const Tabs = () => {
@@ -48,7 +49,7 @@ export const Tabs = () => {
 		<>
 			{/* Bottom Navigation Tabs */}
 			<nav className='fixed bottom-0 left-0 right-0 bg-neutral-900 border-t border-neutral-800 z-50 safe-area-inset-bottom'>
-				<div className='grid grid-cols-4 h-16'>
+				<div className='grid grid-cols-3 h-16'>
 					{/* Tabs principales */}
 					{mainLinks.map((link) => {
 						const Icon = link.icon;
@@ -99,25 +100,26 @@ export const Tabs = () => {
 
 						<h3 className='text-lg font-semibold text-neutral-100 mb-4'>Más opciones</h3>
 
-						<div className='grid grid-cols-2 gap-3'>
+						<div className='grid grid-cols-1 gap-3'>
 							{moreLinks.map((link) => (
-								<button
+								<Button
 									key={link.id}
-									onClick={() => {
+									onPress={() => {
 										navigate(link.route);
 										setActiveMore(false);
-									}}
-									className='bg-neutral-800 hover:bg-neutral-700 rounded-xl p-4 text-center transition-colors'>
+									}}>
 									<p className='text-neutral-100 font-medium'>{link.name}</p>
-								</button>
+								</Button>
 							))}
 						</div>
 
-						<button
-							onClick={() => setActiveMore(false)}
-							className='w-full mt-4 py-3 bg-neutral-800 hover:bg-neutral-700 rounded-xl text-neutral-300 font-medium transition-colors'>
+						<Button
+							color='danger'
+							className='mt-3'
+							fullWidth
+							onPress={() => setActiveMore(false)}>
 							Cerrar
-						</button>
+						</Button>
 					</div>
 				</div>
 			</div>

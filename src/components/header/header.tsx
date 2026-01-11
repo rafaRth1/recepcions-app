@@ -16,21 +16,21 @@ const links = [
 		route: '/orders',
 		name: 'Pedidos',
 	},
-	{
-		id: 3,
-		route: '/delivery',
-		name: 'Delivery',
-	},
+	// {
+	// 	id: 3,
+	// 	route: '/delivery',
+	// 	name: 'Delivery',
+	// },
 	{
 		id: 4,
-		route: '/store',
-		name: 'Almacén',
+		route: '/products',
+		name: 'Productos',
 	},
-	{
-		id: 5,
-		route: '/statistics',
-		name: 'Estadísticas',
-	},
+	// {
+	// 	id: 5,
+	// 	route: '/statistics',
+	// 	name: 'Estadísticas',
+	// },
 	// {
 	// 	id: 6,
 	// 	route: '/settings',

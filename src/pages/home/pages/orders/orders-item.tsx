@@ -1,5 +1,6 @@
 import { memo } from 'react';
 import { Ticket } from '@/core/ticket/interfaces';
+import { Button } from '@heroui/react';
 
 interface Props {
 	list: {
@@ -109,16 +110,17 @@ export const OrdersItem = memo(({ list, handleFinishTicket, handleOnOpenModal }:
 
 								{/* Botones de acción */}
 								<div className='grid grid-cols-2 gap-2'>
-									<button
-										onClick={() => handleOnOpenModal(ticket)}
-										className='py-2 bg-indigo-700 hover:bg-indigo-600 rounded-lg text-sm font-medium transition-colors'>
+									<Button
+										color='primary'
+										onPress={() => handleOnOpenModal(ticket)}>
 										Ver detalle
-									</button>
-									<button
-										onClick={() => handleFinishTicket(ticket._id!)}
-										className='py-2 bg-green-700 hover:bg-green-600 rounded-lg text-sm font-medium transition-colors'>
-										Terminar
-									</button>
+									</Button>
+									<Button
+										color='success'
+										variant='flat'
+										onPress={() => handleFinishTicket(ticket._id!)}>
+										Finalizar
+									</Button>
 								</div>
 							</div>
 						))

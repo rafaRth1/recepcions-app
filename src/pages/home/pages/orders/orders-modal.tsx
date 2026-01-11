@@ -239,7 +239,6 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 						<ModalFooter className='border-t border-neutral-200 dark:border-neutral-800 px-4 py-3 flex-col gap-2'>
 							<div className='grid gap-2 w-full'>
 								<Button
-									size='lg'
 									onPress={() => handleEditTicket(selectTicket)}
 									color='primary'
 									startContent={<IoCreateOutline size={16} />}>
@@ -247,7 +246,6 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 								</Button>
 							</div>
 							<Button
-								size='lg'
 								variant='light'
 								color='danger'
 								className='w-full'
