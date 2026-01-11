@@ -9,15 +9,21 @@ import { useGetTickets } from '@/modules/ticket/hooks/useGetTickets';
 import { formatTime } from '@/utils/format-time';
 import { formatDate } from '@/utils/format-date';
 import { useGeneratePrintCustomerReceipt } from '@/modules/printer/hooks/useGeneratePrintCustomerReceipt';
+import { useCompleteTicket } from '@/modules/ticket/hooks/useCompleteTicket';
+import { useQueryClient } from '@tanstack/react-query';
 
 export const Orders = () => {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectTicket, setSelectTicket] = useState<Ticket>(initialValueTicket);
-	const { data: tickets = [], isLoading } = useGetTickets();
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedTab, setSelectedTab] = useState('all');
 
+	const { data: tickets = [], isLoading } = useGetTickets();
+
 	const { generateReceipt } = useGeneratePrintCustomerReceipt();
+	const { completeTicket } = useCompleteTicket();
+
+	const queryClient = useQueryClient();
 
 	const lists = useMemo(() => {
 		const tableTickets = tickets.filter((ticket) => ticket.type === 'TABLE' && ticket.status === 'PROCESS');
@@ -47,8 +53,22 @@ export const Orders = () => {
 	}, [tickets]);
 
 	const handleFinishTicket = useCallback(async (id: string) => {
-		// Implementar lógica de completar ticket
-		console.log('Terminar ticket con ID:', id);
+		completeTicket.mutate(id, {
+			onSuccess: (response) => {
+				addToast({
+					description: response.message,
+					color: 'success',
+				});
+
+				queryClient.invalidateQueries({ queryKey: ['tickets'] });
+			},
+			onError: (error) => {
+				addToast({
+					description: error.message,
+					color: 'danger',
+				});
+			},
+		});
 	}, []);
 
 	const handlePrintReceipt = useCallback(

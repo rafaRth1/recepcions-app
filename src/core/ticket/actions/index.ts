@@ -78,3 +78,22 @@ export const updateTicketAction = async (values: Partial<UpdateTicketRequest>): 
 		throw new Error('Error al actualizar el ticket');
 	}
 };
+
+/**
+ * @description
+ * Completar o finalizar ticket
+ */
+export const completeTicketAction = async (ticketId: string): Promise<ApiSuccessResponse<Ticket>> => {
+	try {
+		const { data } = await clientAxios.patch<ApiSuccessResponse<Ticket>>(`/ticket/${ticketId}/complete`);
+		return data;
+	} catch (error) {
+		if (error instanceof AxiosError && error.response) {
+			const errorData = error.response.data as ApiResponse<Ticket[]>;
+			if (!errorData.ok) {
+				throw new Error(errorData.message);
+			}
+		}
+		throw new Error('Error al finalizar el ticket');
+	}
+};
