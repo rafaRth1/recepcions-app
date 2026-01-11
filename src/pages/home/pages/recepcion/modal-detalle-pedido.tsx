@@ -304,12 +304,11 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 					{/* Botón Generar Ticket */}
 					<Button
 						className='w-full'
-						color={ticket._id ? 'secondary' : 'success'}
-						size='lg'
+						color={'primary'}
 						isDisabled={!hasItems}
 						isLoading={updateTicket.isPending}
-						onPress={handleGenerarTicket}>
-						<IoCheckmarkCircle size={20} />
+						onPress={handleGenerarTicket}
+						startContent={<IoCheckmarkCircle size={20} />}>
 						{ticket._id ? 'Actualizar Pedido' : 'Generar Pedido'}
 					</Button>
 
@@ -317,7 +316,6 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 						<Button
 							className='bg-orange-600 hover:bg-orange-500 font-semibold'
 							fullWidth
-							size='lg'
 							onPress={() => {
 								setTicket(initialValueTicket);
 								navigate(location.pathname, { replace: true });

@@ -45,6 +45,10 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 		}
 	};
 
+	const handleSelectAllCreams = () => {
+		setSelectedCreams(CREMAS_DISPONIBLES.map((crema) => crema.key));
+	};
+
 	const handleSaveExtras = () => {
 		if (!dish) return;
 
@@ -189,6 +193,26 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 									</button>
 								))}
 							</div>
+
+							<div className='grid grid-cols-2 gap-2'>
+								<Button
+									fullWidth
+									variant='flat'
+									color='primary'
+									className='mt-3'
+									onPress={handleSelectAllCreams}>
+									Todas las cremas
+								</Button>
+
+								<Button
+									fullWidth
+									variant='flat'
+									color='primary'
+									className='mt-3'
+									onPress={() => setSelectedCreams([])}>
+									Remover cremas
+								</Button>
+							</div>
 						</div>
 					</div>
 				</ModalBody>
@@ -202,7 +226,8 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 					</Button>
 
 					<Button
-						className='flex-1 bg-green-600'
+						className='flex-1'
+						color='primary'
 						onPress={handleSaveExtras}>
 						Guardar
 					</Button>
