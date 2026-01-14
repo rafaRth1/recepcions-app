@@ -42,7 +42,8 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 
 	const handleDeleteDrink = (item: Drinks) => {
 		const [selectRemoveItem] = ticket.drinks!.filter((drink) => drink._id === item._id);
-		const updateDrinks = ticket.drinks!.filter((drink) => drink._id_temp !== item._id_temp);
+		const updateDrinks = ticket.drinks!.filter((drink) => drink._id !== item._id);
+	
 		setTicket({ ...ticket, drinks: updateDrinks, totalPrice: ticket.totalPrice - selectRemoveItem.price });
 	};
 

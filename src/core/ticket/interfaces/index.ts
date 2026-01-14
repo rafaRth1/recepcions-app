@@ -39,7 +39,6 @@ export interface UpdateTicketRequest extends CreateTicketRequest {
 
 export interface Drinks extends Drink {
 	_id?: string;
-	_id_temp?: string;
 }
 
 export interface CreamProps {

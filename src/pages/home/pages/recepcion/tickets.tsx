@@ -26,6 +26,8 @@ export const Tickets = ({ setActiveTab }: Props) => {
 	const { createTicket } = useCreateTicket();
 	const queryClient = useQueryClient();
 
+	console.log("tickets en Tickets:", tickets);
+
 	const handleFinishTicket = async (ticketSelected: Ticket) => {
 		// await socket.emit('handleFinishticket', ticketSelected);
 
@@ -191,7 +193,7 @@ export const Tickets = ({ setActiveTab }: Props) => {
 								ticket.drinks.length > 0 &&
 								ticket.drinks.map((item) => (
 									<div
-										key={item._id_temp}
+										key={item._id}
 										className='bg-neutral-800 rounded-lg p-3'>
 										<div className='flex items-center justify-between'>
 											<p className='font-medium capitalize'>{item.name}</p>
