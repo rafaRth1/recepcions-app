@@ -299,6 +299,14 @@ export const Orders = () => {
 															disabled={generateReceipt.isPending}>
 															{generateReceipt.isPending ? '...' : 'Boleta'}
 														</Button>
+
+														<Button
+															color='success'
+															variant='flat'
+															className='flex-1'
+															onPress={() => handleFinishTicket(ticket._id!)}>
+															Finalizar
+														</Button>
 													</div>
 												</div>
 											))
