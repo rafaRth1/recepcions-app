@@ -137,11 +137,8 @@ export const ProductGridQuick = () => {
 				type='text'
 				placeholder='🔍 Buscar productos...'
 				value={searchTerm}
-				onValueChange={setSearchTerm}
-				classNames={{
-					input: 'text-sm',
-					inputWrapper: 'bg-neutral-800 border-neutral-700',
-				}}
+				onChange={(e) => setSearchTerm(e.target.value)}
+				className='text-sm bg-neutral-800 border-neutral-700'
 			/>
 
 			{/* Categorías - Tabs horizontales con scroll */}

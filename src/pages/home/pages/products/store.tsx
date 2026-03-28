@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import {
 	Button,
+	TextField,
+	Label,
 	Input,
+	FieldError,
+	InputGroup,
 	Modal,
-	ModalContent,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
-	useDisclosure,
+	useOverlayState,
 	Select,
-	SelectItem,
-	Textarea,
+	ListBox,
+	TextArea,
 	Chip,
 	Pagination,
-	addToast,
+	toast,
 } from '@heroui/react';
 import { Formik, Form, FormikHelpers } from 'formik';
 import {
@@ -81,7 +81,7 @@ const initialValues: CreateProductRequest = {
 };
 
 export const Store = () => {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const state = useOverlayState();
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedCategory, setSelectedCategory] = useState<CategoryProduct | ''>('');
 	const [selectedStatus, setSelectedStatus] = useState<Status | ''>('');
@@ -137,16 +137,13 @@ export const Store = () => {
 
 	const handleOpenModal = (product?: Product) => {
 		setEditingProduct(product || null);
-		onOpen();
+		state.open();
 	};
 
 	const handleSubmitForm = async (values: Product, helpers: FormikHelpers<Product>) => {
 		if (editingProduct) {
 			if (!editingProduct._id) {
-				addToast({
-					description: 'Error: El producto a editar no tiene ID.',
-					color: 'danger',
-				});
+				toast.danger('Error: El producto a editar no tiene ID.');
 
 				return;
 			}
@@ -159,21 +156,15 @@ export const Store = () => {
 				{
 					onSuccess: (response) => {
 						console.log('response', response);
-						addToast({
-							description: response.message,
-							color: 'success',
-						});
+						toast.success(response.message);
 
 						queryClient.invalidateQueries({ queryKey: ['products'] });
-						onOpenChange();
+						state.close();
 						helpers.resetForm();
 					},
 					onError: (error) => {
 						console.log('error', error);
-						addToast({
-							description: error.message,
-							color: 'danger',
-						});
+						toast.danger(error.message);
 					},
 				}
 			);
@@ -181,21 +172,15 @@ export const Store = () => {
 			createProduct.mutate(values, {
 				onSuccess: (response) => {
 					console.log('response', response);
-					addToast({
-						description: response.message,
-						color: 'success',
-					});
+					toast.success(response.message);
 
 					queryClient.invalidateQueries({ queryKey: ['products'] });
-					onOpenChange();
+					state.close();
 					helpers.resetForm();
 				},
 				onError: (error) => {
 					console.log('error', error);
-					addToast({
-						description: error.message,
-						color: 'danger',
-					});
+					toast.danger(error.message);
 				},
 			});
 		}
@@ -209,18 +194,12 @@ export const Store = () => {
 
 		changeInactiveProduct.mutate(id, {
 			onSuccess: (message) => {
-				addToast({
-					description: message,
-					color: 'success',
-				});
+				toast.success(message);
 
 				queryClient.invalidateQueries({ queryKey: ['products'] });
 			},
 			onError: (error) => {
-				addToast({
-					description: error.message,
-					color: 'danger',
-				});
+				toast.danger(error.message);
 			},
 		});
 	};
@@ -246,7 +225,8 @@ export const Store = () => {
 					className='bg-indigo-700 font-semibold'
 					size='lg'
 					onPress={() => handleOpenModal()}
-					startContent={<IoAdd size={20} />}>
+>
+					<IoAdd size={20} />
 					Nuevo Producto
 				</Button>
 			</div>
@@ -264,9 +244,10 @@ export const Store = () => {
 					{hasActiveFilters && (
 						<Button
 							size='sm'
-							variant='light'
+							variant='ghost'
 							onPress={handleClearFilters}
-							startContent={<IoClose size={16} />}>
+>
+							<IoClose size={16} />
 							Limpiar filtros
 						</Button>
 					)}
@@ -274,72 +255,74 @@ export const Store = () => {
 				<div className='grid grid-cols-1 md:grid-cols-3 gap-3'>
 					{/* Búsqueda con indicador de búsqueda activa */}
 					<div className='relative'>
-						<Input
-							placeholder='Buscar producto...'
-							aria-label='Buscar'
-							value={searchQuery}
-							onValueChange={handleSearchChange}
-							startContent={
-								<IoSearch
-									size={18}
-									className='text-neutral-400'
-								/>
-							}
-							endContent={
+						<InputGroup>
+							<InputGroup.Prefix>
+								<IoSearch size={18} className='text-neutral-400' />
+							</InputGroup.Prefix>
+							<InputGroup.Input
+								placeholder='Buscar producto...'
+								aria-label='Buscar'
+								value={searchQuery}
+								onChange={(e) => handleSearchChange(e.target.value)}
+								className='text-base'
+							/>
+							<InputGroup.Suffix>
 								<>
 									{isFetching && debouncedSearchQuery !== searchQuery && (
 										<div className='animate-spin rounded-full h-4 w-4 border-b-2 border-indigo-600 mr-2'></div>
 									)}
 									{searchQuery && (
 										<button onClick={() => handleSearchChange('')}>
-											<IoClose
-												size={18}
-												className='text-neutral-400 hover:text-neutral-200'
-											/>
+											<IoClose size={18} className='text-neutral-400 hover:text-neutral-200' />
 										</button>
 									)}
 								</>
-							}
-							classNames={{
-								input: 'text-base',
-							}}
-						/>
+							</InputGroup.Suffix>
+						</InputGroup>
 					</div>
 
 					{/* Categoría */}
 					<Select
+						value={selectedCategory || null}
+						onChange={(val) => handleCategoryChange(val as string)}
 						placeholder='Todas las categorías'
-						aria-label='Seleccionar una categoria'
-						selectedKeys={selectedCategory ? new Set([selectedCategory]) : new Set()}
-						onChange={(e) => handleCategoryChange(e.target.value)}
-						classNames={{
-							trigger: 'bg-neutral-800',
-						}}>
-						{CATEGORIES.map((cat) => (
-							<SelectItem
-								key={cat.value}
-								startContent={<cat.icon size={18} />}>
-								{cat.label}
-							</SelectItem>
-						))}
+						aria-label='Seleccionar una categoria'>
+						<Select.Trigger className='bg-neutral-800'>
+							<Select.Value />
+							<Select.Indicator />
+						</Select.Trigger>
+						<Select.Popover>
+							<ListBox>
+								{CATEGORIES.map((cat) => (
+									<ListBox.Item key={cat.value} id={cat.value} textValue={cat.label}>
+										<cat.icon size={18} />
+										<Label>{cat.label}</Label>
+									</ListBox.Item>
+								))}
+							</ListBox>
+						</Select.Popover>
 					</Select>
 
 					{/* Estado */}
 					<Select
+						value={selectedStatus || null}
+						onChange={(val) => handleStatusChange(val as string)}
 						placeholder='Todos los estados'
-						aria-label='Seleccionar una estado'
-						selectedKeys={selectedStatus ? new Set([selectedStatus]) : new Set()}
-						onChange={(e) => handleStatusChange(e.target.value)}
-						classNames={{
-							trigger: 'bg-neutral-800',
-						}}>
-						{STATUS_OPTIONS.map((status) => (
-							<SelectItem
-								key={status.value}
-								startContent={status.value === 'ACTIVE' ? <IoCheckmarkCircle size={18} /> : <IoCloseCircle size={18} />}>
-								{status.label}
-							</SelectItem>
-						))}
+						aria-label='Seleccionar una estado'>
+						<Select.Trigger className='bg-neutral-800'>
+							<Select.Value />
+							<Select.Indicator />
+						</Select.Trigger>
+						<Select.Popover>
+							<ListBox>
+								{STATUS_OPTIONS.map((status) => (
+									<ListBox.Item key={status.value} id={status.value} textValue={status.label}>
+										{status.value === 'ACTIVE' ? <IoCheckmarkCircle size={18} /> : <IoCloseCircle size={18} />}
+										<Label>{status.label}</Label>
+									</ListBox.Item>
+								))}
+							</ListBox>
+						</Select.Popover>
 					</Select>
 				</div>
 			</div>
@@ -422,23 +405,21 @@ export const Store = () => {
 												<div className='flex gap-2 flex-wrap'>
 													<Chip
 														size='sm'
-														variant='flat'
-														startContent={<CategoryIcon size={14} />}
+														variant='tertiary'
 														className='capitalize bg-neutral-800'>
-														{categoryData?.label}
+															<CategoryIcon size={14} />
+															{categoryData?.label}
 													</Chip>
 													<Chip
 														size='sm'
 														color={product.status === 'ACTIVE' ? 'success' : 'default'}
-														variant='flat'
-														startContent={
-															product.status === 'ACTIVE' ? (
+														variant='tertiary'>
+															{product.status === 'ACTIVE' ? (
 																<IoCheckmarkCircle size={14} />
 															) : (
 																<IoCloseCircle size={14} />
-															)
-														}>
-														{product.status === 'ACTIVE' ? 'Activo' : 'Inactivo'}
+															)}
+															{product.status === 'ACTIVE' ? 'Activo' : 'Inactivo'}
 													</Chip>
 												</div>
 											</div>
@@ -458,15 +439,16 @@ export const Store = () => {
 													size='sm'
 													className='bg-indigo-700 hover:bg-indigo-600 font-medium'
 													onPress={() => handleOpenModal(product)}
-													startContent={<IoCreate size={16} />}>
+>
+													<IoCreate size={16} />
 													Editar
 												</Button>
 												<Button
 													size='sm'
-													color='danger'
-													variant='flat'
+													variant='danger'
 													onPress={() => handleDeleteProduct(product._id!)}
-													startContent={<IoTrash size={16} />}>
+>
+													<IoTrash size={16} />
 													Eliminar
 												</Button>
 											</div>
@@ -479,15 +461,33 @@ export const Store = () => {
 						{/* Paginación */}
 						{totalPages > 1 && (
 							<div className='flex justify-center mt-8'>
-								<Pagination
-									total={totalPages}
-									page={currentPage}
-									onChange={setCurrentPage}
-									showControls
-									classNames={{
-										cursor: 'bg-indigo-600',
-									}}
-								/>
+								<Pagination>
+									<Pagination.Content>
+										<Pagination.Item>
+											<Pagination.Previous
+												onPress={() => setCurrentPage((p) => Math.max(1, p - 1))}
+												isDisabled={currentPage <= 1}>
+												<Pagination.PreviousIcon />
+											</Pagination.Previous>
+										</Pagination.Item>
+										{Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+											<Pagination.Item key={page}>
+												<Pagination.Link
+													isActive={page === currentPage}
+													onPress={() => setCurrentPage(page)}>
+													{page}
+												</Pagination.Link>
+											</Pagination.Item>
+										))}
+										<Pagination.Item>
+											<Pagination.Next
+												onPress={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+												isDisabled={currentPage >= totalPages}>
+												<Pagination.NextIcon />
+											</Pagination.Next>
+										</Pagination.Item>
+									</Pagination.Content>
+								</Pagination>
 							</div>
 						)}
 					</>
@@ -495,90 +495,95 @@ export const Store = () => {
 			)}
 
 			{/* Modal Crear/Editar con Formik */}
-			<Modal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
-				size='2xl'
-				disableAnimation
-				scrollBehavior='inside'>
-				<ModalContent>
-					{(onClose) => (
-						<Formik
+			<Modal state={state}>
+				<Modal.Backdrop>
+					<Modal.Container size='lg' scroll='inside'>
+						<Modal.Dialog>
+							{({close}) => (
+								<Formik
 							initialValues={editingProduct || initialValues}
 							validationSchema={createProductValidation}
 							onSubmit={handleSubmitForm}
 							enableReinitialize>
 							{({ values, errors, touched, setFieldValue }) => (
 								<Form>
-									<ModalHeader>
+									<Modal.Header>
 										<h2 className='text-xl flex items-center gap-2'>
 											<IoFastFood size={24} />
 											{editingProduct ? 'Editar Producto' : 'Nuevo Producto'}
 										</h2>
-									</ModalHeader>
-									<ModalBody>
+									</Modal.Header>
+									<Modal.Body>
 										<div className='space-y-4'>
 											{/* Nombre */}
 											<div>
-												<Input
-													label='Nombre del producto'
-													placeholder='Ej: Pollo a la Brasa'
-													value={values.name}
-													onValueChange={(value) => setFieldValue('name', value)}
-													isRequired
-													isInvalid={touched.name && !!errors.name}
-													classNames={{ label: 'text-sm font-medium' }}
-													errorMessage={errors.name}
-												/>
+												<TextField name='name' isRequired isInvalid={touched.name && !!errors.name}>
+													<Label className='text-sm font-medium'>Nombre del producto</Label>
+													<Input
+														placeholder='Ej: Pollo a la Brasa'
+														value={values.name}
+														onChange={(e) => setFieldValue('name', e.target.value)}
+													/>
+													<FieldError>{errors.name}</FieldError>
+										</TextField>
 											</div>
 
 											{/* Precio y Categoría */}
 											<div className='grid grid-cols-2 gap-3'>
 												<div>
-													<Input
-														type='number'
-														label='Precio (S/)'
-														placeholder='0.00'
-														value={values.price.toString()}
-														onValueChange={(value) => setFieldValue('price', parseFloat(value) || 0)}
-														isRequired
-														isInvalid={touched.price && !!errors.price}
-														startContent={<span className='text-neutral-400'>S/</span>}
-														classNames={{ label: 'text-sm font-medium' }}
-														errorMessage={errors.price}
-													/>
+													<TextField name='price' type='number' isRequired isInvalid={touched.price && !!errors.price}>
+														<Label className='text-sm font-medium'>Precio (S/)</Label>
+														<InputGroup>
+															<InputGroup.Prefix>
+																<span className='text-neutral-400'>S/</span>
+															</InputGroup.Prefix>
+															<InputGroup.Input
+																placeholder='0.00'
+																value={values.price.toString()}
+																onChange={(e) => setFieldValue('price', parseFloat(e.target.value) || 0)}
+															/>
+														</InputGroup>
+														<FieldError>{errors.price}</FieldError>
+													</TextField>
 												</div>
 
 												<div>
 													<Select
-														label='Categoría'
-														selectedKeys={new Set([values.category])}
-														onChange={(e) => setFieldValue('category', e.target.value)}
+														value={values.category}
+														onChange={(val) => setFieldValue('category', val as string)}
 														isRequired
-														isInvalid={touched.category && !!errors.category}
-														classNames={{ label: 'text-sm font-medium' }}
-														errorMessage={errors.category}>
-														{CATEGORIES.map((cat) => (
-															<SelectItem
-																key={cat.value}
-																startContent={<cat.icon size={18} />}>
-																{cat.label}
-															</SelectItem>
-														))}
+														isInvalid={touched.category && !!errors.category}>
+														<Label className='text-sm font-medium'>Categoría</Label>
+														<Select.Trigger>
+															<Select.Value />
+															<Select.Indicator />
+														</Select.Trigger>
+														<Select.Popover>
+															<ListBox>
+																{CATEGORIES.map((cat) => (
+																	<ListBox.Item key={cat.value} id={cat.value} textValue={cat.label}>
+																		<cat.icon size={18} />
+																		<Label>{cat.label}</Label>
+																	</ListBox.Item>
+																))}
+															</ListBox>
+														</Select.Popover>
+														<FieldError>{errors.category}</FieldError>
 													</Select>
 												</div>
 											</div>
 
 											{/* Descripción */}
 											<div>
-												<Textarea
-													label='Descripción'
-													placeholder='Descripción del producto...'
-													value={values.description}
-													onValueChange={(value) => setFieldValue('description', value)}
-													classNames={{ label: 'text-sm font-medium' }}
-													errorMessage={errors.description}
-												/>
+												<TextField name='description'>
+													<Label className='text-sm font-medium'>Descripción</Label>
+													<TextArea
+														placeholder='Descripción del producto...'
+														value={values.description}
+														onChange={(e) => setFieldValue('description', e.target.value)}
+													/>
+													<FieldError>{errors.description}</FieldError>
+												</TextField>
 											</div>
 
 											{/* Calorías y Descuento */}
@@ -625,25 +630,27 @@ export const Store = () => {
 												/>
 											</div> */}
 										</div>
-									</ModalBody>
-									<ModalFooter>
+									</Modal.Body>
+									<Modal.Footer>
 										<Button
-											variant='light'
-											onPress={onClose}>
+											variant='ghost'
+											onPress={close}>
 											Cancelar
 										</Button>
 										<Button
 											type='submit'
 											className='bg-indigo-700'
-											isLoading={createProduct.isPending || updateProduct.isPending}>
+											isPending={createProduct.isPending || updateProduct.isPending}>
 											{editingProduct ? 'Actualizar' : 'Crear'} Producto
 										</Button>
-									</ModalFooter>
+									</Modal.Footer>
 								</Form>
 							)}
 						</Formik>
-					)}
-				</ModalContent>
+							)}
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		</main>
 	);

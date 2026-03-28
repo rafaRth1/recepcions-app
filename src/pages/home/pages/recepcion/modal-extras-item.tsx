@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@heroui/react';
+import { Modal, Button } from '@heroui/react';
 import { useState, useEffect } from 'react';
 import { useRecepcion } from '@/hooks';
 import { Dish } from '@/core/ticket/interfaces';
@@ -92,27 +92,18 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 	if (!dish) return null;
 
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={handleCancel}
-			size='md'
-			scrollBehavior='inside'
-			disableAnimation
-			classNames={{
-				base: 'bg-neutral-900',
-				header: 'border-b border-neutral-800',
-				body: 'py-6',
-				footer: 'border-t border-neutral-800',
-			}}>
-			<ModalContent>
-				<ModalHeader>
+		<Modal>
+			<Modal.Backdrop isOpen={isOpen} onOpenChange={(open) => !open && handleCancel()}>
+				<Modal.Container size='md' scroll='inside'>
+					<Modal.Dialog className='bg-neutral-900'>
+				<Modal.Header className='border-b border-neutral-800'>
 					<div>
 						<p className='text-lg font-semibold'>Editar Extras</p>
 						<p className='text-sm text-neutral-400 font-normal capitalize'>{dish.dishFood}</p>
 					</div>
-				</ModalHeader>
+				</Modal.Header>
 
-				<ModalBody>
+				<Modal.Body className='py-6'>
 					<div>
 						<p className='text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3'>Acompañamientos</p>
 
@@ -197,8 +188,7 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 							<div className='grid grid-cols-2 gap-2'>
 								<Button
 									fullWidth
-									variant='flat'
-									color='primary'
+									variant='primary'
 									className='mt-3'
 									onPress={handleSelectAllCreams}>
 									Todas las cremas
@@ -206,8 +196,7 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 
 								<Button
 									fullWidth
-									variant='flat'
-									color='primary'
+									variant='primary'
 									className='mt-3'
 									onPress={() => setSelectedCreams([])}>
 									Remover cremas
@@ -215,24 +204,26 @@ export const ModalExtrasItem = ({ isOpen, onClose, dish }: Props) => {
 							</div>
 						</div>
 					</div>
-				</ModalBody>
+				</Modal.Body>
 
-				<ModalFooter className='gap-2'>
+				<Modal.Footer className='gap-2 border-t border-neutral-800'>
 					<Button
 						className='flex-1'
-						variant='flat'
+						variant='tertiary'
 						onPress={handleCancel}>
 						Cancelar
 					</Button>
 
 					<Button
 						className='flex-1'
-						color='primary'
+						variant='primary'
 						onPress={handleSaveExtras}>
 						Guardar
 					</Button>
-				</ModalFooter>
-			</ModalContent>
+				</Modal.Footer>
+					</Modal.Dialog>
+				</Modal.Container>
+			</Modal.Backdrop>
 		</Modal>
 	);
 };

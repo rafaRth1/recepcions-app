@@ -1,4 +1,4 @@
-import { HeroUIProvider, ToastProvider } from "@heroui/react";
+import { Toast } from "@heroui/react";
 
 interface Props {
    children: React.ReactNode;
@@ -6,9 +6,9 @@ interface Props {
 
 export function Providers({ children }: Props) {
    return (
-      <HeroUIProvider>
-         <ToastProvider placement="top-center" />
+      <>
+         <Toast.Provider placement="top" />
          {children}
-      </HeroUIProvider>
+      </>
    );
 }

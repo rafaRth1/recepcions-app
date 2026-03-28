@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { useDisclosure, Input, Tabs, Tab, addToast, Button } from '@heroui/react';
+import { useOverlayState, InputGroup, Tabs, toast, Button } from '@heroui/react';
 import { initialValueTicket } from '@/data';
 import { OrdersModal } from './orders-modal';
 import { OrdersItem } from './orders-item';
@@ -13,7 +13,7 @@ import { useCompleteTicket } from '@/modules/ticket/hooks/useCompleteTicket';
 import { useQueryClient } from '@tanstack/react-query';
 
 export const Orders = () => {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const state = useOverlayState();
 	const [selectTicket, setSelectTicket] = useState<Ticket>(initialValueTicket);
 	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedTab, setSelectedTab] = useState('all');
@@ -55,18 +55,12 @@ export const Orders = () => {
 	const handleFinishTicket = useCallback(async (id: string) => {
 		completeTicket.mutate(id, {
 			onSuccess: (response) => {
-				addToast({
-					description: response.message,
-					color: 'success',
-				});
+				toast.success(response.message);
 
 				queryClient.invalidateQueries({ queryKey: ['tickets'] });
 			},
 			onError: (error) => {
-				addToast({
-					description: error.message,
-					color: 'danger',
-				});
+				toast.danger(error.message);
 			},
 		});
 	}, []);
@@ -75,16 +69,10 @@ export const Orders = () => {
 		async (ticket: Ticket) => {
 			generateReceipt.mutate(ticket, {
 				onSuccess: (response) => {
-					addToast({
-						description: response.message,
-						color: 'success',
-					});
+					toast.success(response.message);
 				},
 				onError: (error) => {
-					addToast({
-						description: error.message,
-						color: 'danger',
-					});
+					toast.danger(error.message);
 				},
 			});
 		},
@@ -94,9 +82,9 @@ export const Orders = () => {
 	const handleOnOpenModal = useCallback(
 		(ticket: Ticket) => {
 			setSelectTicket(ticket);
-			onOpen();
+			state.open();
 		},
-		[onOpen]
+		[state]
 	);
 
 	const stats = useMemo(() => {
@@ -166,42 +154,39 @@ export const Orders = () => {
 				<Tabs
 					selectedKey={selectedTab}
 					onSelectionChange={(key) => setSelectedTab(key as string)}
-					variant='underlined'
-					classNames={{
-						tabList: 'gap-6 w-full relative rounded-none p-0 border-b border-neutral-800',
-						cursor: 'w-full bg-indigo-500',
-						tab: 'max-w-fit px-0 h-12',
-						tabContent: 'group-data-[selected=true]:text-indigo-500',
-					}}>
-					<Tab
-						key='all'
-						title={`Todas (${stats.total})`}
-					/>
-					<Tab
-						key='TABLE'
-						title={`Mesa (${stats.table})`}
-					/>
-					<Tab
-						key='DELIVERY'
-						title={`Delivery (${stats.delivery})`}
-					/>
-					<Tab
-						key='PICKUP'
-						title={`Recojo (${stats.pickup})`}
-					/>
+	>
+					<Tabs.ListContainer>
+						<Tabs.List className='gap-6 w-full relative rounded-none p-0 border-b border-neutral-800'>
+							<Tabs.Tab id='all' className='max-w-fit px-0 h-12 data-[selected=true]:text-indigo-500'>
+								{`Todas (${stats.total})`}
+								<Tabs.Indicator className='w-full bg-indigo-500' />
+							</Tabs.Tab>
+							<Tabs.Tab id='TABLE' className='max-w-fit px-0 h-12 data-[selected=true]:text-indigo-500'>
+								{`Mesa (${stats.table})`}
+								<Tabs.Indicator className='w-full bg-indigo-500' />
+							</Tabs.Tab>
+							<Tabs.Tab id='DELIVERY' className='max-w-fit px-0 h-12 data-[selected=true]:text-indigo-500'>
+								{`Delivery (${stats.delivery})`}
+								<Tabs.Indicator className='w-full bg-indigo-500' />
+							</Tabs.Tab>
+							<Tabs.Tab id='PICKUP' className='max-w-fit px-0 h-12 data-[selected=true]:text-indigo-500'>
+								{`Recojo (${stats.pickup})`}
+								<Tabs.Indicator className='w-full bg-indigo-500' />
+							</Tabs.Tab>
+						</Tabs.List>
+					</Tabs.ListContainer>
 				</Tabs>
 
 				{/* Búsqueda */}
-				<Input
-					placeholder='Buscar por número, mesa o cliente...'
-					value={searchQuery}
-					onValueChange={setSearchQuery}
-					startContent={<IoSearch className='text-neutral-400' />}
-					classNames={{
-						input: 'text-sm',
-						inputWrapper: 'bg-neutral-900 border border-neutral-800',
-					}}
-				/>
+				<InputGroup>
+					<InputGroup.Prefix><IoSearch className='text-neutral-400' /></InputGroup.Prefix>
+					<InputGroup.Input
+						placeholder='Buscar por número, mesa o cliente...'
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						className='text-sm bg-neutral-900 border border-neutral-800'
+					/>
+				</InputGroup>
 			</div>
 
 			{/* Lista de órdenes */}
@@ -286,23 +271,21 @@ export const Orders = () => {
 													{/* Botones */}
 													<div className='flex gap-2'>
 														<Button
-															color='primary'
+															variant='primary'
 															onPress={() => handleOnOpenModal(ticket)}
 															className='flex-1'>
 															Detalle
 														</Button>
 														<Button
 															onPress={() => handlePrintReceipt(ticket)}
-															color='primary'
 															className='flex-1'
-															variant='flat'
-															disabled={generateReceipt.isPending}>
+															variant='tertiary'
+															isDisabled={generateReceipt.isPending}>
 															{generateReceipt.isPending ? '...' : 'Boleta'}
 														</Button>
 
 														<Button
-															color='success'
-															variant='flat'
+															variant='tertiary'
 															className='flex-1'
 															onPress={() => handleFinishTicket(ticket._id!)}>
 															Finalizar
@@ -320,8 +303,8 @@ export const Orders = () => {
 			</section>
 
 			<OrdersModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
+				isOpen={state.isOpen}
+				onOpenChange={state.setOpen}
 				selectTicket={selectTicket}
 			/>
 		</main>

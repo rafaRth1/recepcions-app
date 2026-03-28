@@ -111,13 +111,12 @@ export const OrdersItem = memo(({ list, handleFinishTicket, handleOnOpenModal }:
 								{/* Botones de acción */}
 								<div className='grid grid-cols-2 gap-2'>
 									<Button
-										color='primary'
+										variant='primary'
 										onPress={() => handleOnOpenModal(ticket)}>
 										Ver detalle
 									</Button>
 									<Button
-										color='success'
-										variant='flat'
+										variant='tertiary'
 										onPress={() => handleFinishTicket(ticket._id!)}>
 										Finalizar
 									</Button>

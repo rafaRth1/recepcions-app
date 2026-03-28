@@ -5,9 +5,7 @@ import { IoMenuOutline } from "react-icons/io5";
 import {
    Avatar,
    Dropdown,
-   DropdownItem,
-   DropdownMenu,
-   DropdownTrigger,
+   Label,
 } from "@heroui/react";
 import { useAuthProvider } from "@/hooks";
 
@@ -68,26 +66,22 @@ export const Header = () => {
             <Logo />
          </div>
 
-         {/* <div className='flex items-center'>
-				<span className='text-neutral-100'>Rafael</span>
-				<figure className='w-[30px] h-[30px] rounded-full bg-neutral-700 ml-3'></figure>
-			</div> */}
-
-         <Dropdown className="bg-[#0d0d0d]">
-            <DropdownTrigger>
-               <Avatar
-                  name={auth.nick_name}
-                  className="cursor-pointer bg-[#0d0d0d]"
-               />
-            </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-               <DropdownItem key="settings" href="/settings">
-                  Configuración
-               </DropdownItem>
-               <DropdownItem key="logout" color="danger" onClick={handleLogout}>
-                  Cerrar Sesión
-               </DropdownItem>
-            </DropdownMenu>
+         <Dropdown>
+            <Avatar className="cursor-pointer bg-[#0d0d0d]">
+               <Avatar.Fallback>
+                  {auth.nick_name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2)}
+               </Avatar.Fallback>
+            </Avatar>
+            <Dropdown.Popover className="bg-[#0d0d0d]">
+               <Dropdown.Menu aria-label="Profile Actions">
+                  <Dropdown.Item id="settings" textValue="Configuración" href="/settings">
+                     <Label>Configuración</Label>
+                  </Dropdown.Item>
+                  <Dropdown.Item id="logout" textValue="Cerrar Sesión" variant="danger" onPress={handleLogout}>
+                     <Label>Cerrar Sesión</Label>
+                  </Dropdown.Item>
+               </Dropdown.Menu>
+            </Dropdown.Popover>
          </Dropdown>
 
          <div

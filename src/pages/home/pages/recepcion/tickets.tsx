@@ -1,5 +1,5 @@
 // import { io } from 'socket.io-client';
-import { addToast, Button, Spinner } from '@heroui/react';
+import { toast, Button, Spinner } from '@heroui/react';
 import { useRecepcion } from '@/hooks';
 import { IoPrint, IoCreate, IoCheckmarkCircle, IoTrash, IoRestaurant, IoCar, IoBagHandle, IoAlertCircle } from 'react-icons/io5';
 import { useGeneratePrintTicket } from '@/modules/printer/hooks/useGeneratePrintTicket';
@@ -45,10 +45,7 @@ export const Tickets = ({ setActiveTab }: Props) => {
 
 		createTicket.mutate(ticket, {
 			onSuccess: (response) => {
-				addToast({
-					description: response.message,
-					color: 'success',
-				});
+				toast.success(response.message);
 
 				queryClient.invalidateQueries({ queryKey: ['tickets'] });
 				const ticketsUpdate = tickets.filter((ticket) => ticket.key !== ticketSelected.key);
@@ -56,10 +53,7 @@ export const Tickets = ({ setActiveTab }: Props) => {
 			},
 			onError: (error) => {
 				console.log('Error al crear ticket:', error);
-				addToast({
-					description: error.message || 'Error al crear el ticket',
-					color: 'danger',
-				});
+				toast.danger(error.message || 'Error al crear el ticket');
 			},
 		});
 	};
@@ -80,17 +74,11 @@ export const Tickets = ({ setActiveTab }: Props) => {
 			{ ...ticket, momentaryTime: formatMomentaryTime() },
 			{
 				onSuccess: () => {
-					addToast({
-						description: 'Ticket generado',
-						color: 'success',
-					});
+					toast.success('Ticket generado');
 				},
 				onError: (error) => {
 					console.error('Error al imprimir el ticket:', error);
-					addToast({
-						description: 'Error al enviar el ticket a la impresora',
-						color: 'danger',
-					});
+					toast.danger('Error al enviar el ticket a la impresora');
 				},
 			}
 		);
@@ -219,25 +207,26 @@ export const Tickets = ({ setActiveTab }: Props) => {
 								className='bg-indigo-700 w-full'
 								isDisabled={createTicket.isPending || generateTicket.isPending}
 								onPress={() => handlePrinterTicket(ticket)}
-								startContent={<IoPrint size={18} />}>
+>
+								<IoPrint size={18} />
 								Imprimir
 							</Button>
 
 							<Button
 								className='w-full'
-								color='warning'
 								isDisabled={createTicket.isPending || generateTicket.isPending}
 								onPress={() =>handleEditTicket(ticket)}
-								startContent={<IoCreate size={18} />}>
+>
+								<IoCreate size={18} />
 								Editar
 							</Button>
 
 							<Button
 								className='w-full'
-								color='success'
 								isDisabled={createTicket.isPending || generateTicket.isPending}
 								onPress={() => handleFinishTicket(ticket)}
-								startContent={<IoCheckmarkCircle size={18} />}>
+>
+								<IoCheckmarkCircle size={18} />
 								Terminar
 							</Button>
 
@@ -245,7 +234,8 @@ export const Tickets = ({ setActiveTab }: Props) => {
 								className='w-full bg-red-800'
 								isDisabled={createTicket.isPending || generateTicket.isPending}
 								onPress={() => handleDeleteTicketTemporal(ticket)}
-								startContent={<IoTrash size={18} />}>
+>
+								<IoTrash size={18} />
 								Eliminar
 							</Button>
 						</div>

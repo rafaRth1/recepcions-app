@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Input } from "@heroui/react";
+import { TextField, Label, Input, FieldError } from "@heroui/react";
 import { Link, useNavigate } from 'react-router-dom';
 import clientAxios from '@/utils/client-axios';
 
@@ -48,29 +48,32 @@ export const Register = () => {
 					onSubmit={(e) => handleSubmit(e)}>
 					<h1 className='text-3xl text-neutral-200 font-semibold mb-5'>Registro de usuario</h1>
 
-					<Input
-						type='text'
-						label='Escriba su sobre nombre'
-						className='my-4'
-						value={dataForm.nick_name}
-						onChange={(e) => setDataForm({ ...dataForm, nick_name: e.target.value })}
-					/>
+					<TextField name='nick_name' type='text' className='my-4'>
+						<Label>Escriba su sobre nombre</Label>
+						<Input
+							value={dataForm.nick_name}
+							onChange={(e) => setDataForm({ ...dataForm, nick_name: e.target.value })}
+						/>
+						<FieldError />
+					</TextField>
 
-					<Input
-						type='email'
-						label='Escriba su email'
-						className='my-4'
-						value={dataForm.email}
-						onChange={(e) => setDataForm({ ...dataForm, email: e.target.value })}
-					/>
+					<TextField name='email' type='email' className='my-4'>
+						<Label>Escriba su email</Label>
+						<Input
+							value={dataForm.email}
+							onChange={(e) => setDataForm({ ...dataForm, email: e.target.value })}
+						/>
+						<FieldError />
+					</TextField>
 
-					<Input
-						type='password'
-						label='Escriba su contraseña'
-						className='my-4'
-						value={dataForm.password}
-						onChange={(e) => setDataForm({ ...dataForm, password: e.target.value })}
-					/>
+					<TextField name='password' type='password' className='my-4'>
+						<Label>Escriba su contraseña</Label>
+						<Input
+							value={dataForm.password}
+							onChange={(e) => setDataForm({ ...dataForm, password: e.target.value })}
+						/>
+						<FieldError />
+					</TextField>
 
 					<p className='text-neutral-100 text-sm mb-5'>
 						¿Te olvidaste tus credenciales?,{' '}
@@ -89,7 +92,6 @@ export const Register = () => {
 					{error.type && <span className='text-rose-600 p-3 mb-5 border-rose-600 border-2 rounded-lg'>{msg}</span>}
 
 					{loading ? (
-						// <Spinner className="mt-5" />
 						(<div>Cargando...</div>)
 					) : (
 						<button

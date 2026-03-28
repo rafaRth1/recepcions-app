@@ -3,7 +3,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Ticket } from '@/core/ticket/interfaces';
 import { useUpdateTicket } from '@/modules/ticket/hooks/useUpdateTicket';
 import { formatDateTime } from '@/utils/format-date-time';
-import { Modal, ModalBody, ModalContent, ModalHeader, ModalFooter, Button, Chip, addToast } from '@heroui/react';
+import { Modal, Button, Chip, toast } from '@heroui/react';
 import {
 	IoCloseCircle,
 	IoCreateOutline,
@@ -17,7 +17,7 @@ import { useNavigate } from 'react-router-dom';
 
 interface Props {
 	isOpen: boolean;
-	onOpenChange: () => void;
+	onOpenChange: (isOpen: boolean) => void;
 	selectTicket: Ticket;
 }
 
@@ -44,56 +44,42 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 				onSuccess: () => {
 					queryClient.invalidateQueries({ queryKey: ['tickets'] });
 					setShowConfirmCancel(false);
-					onOpenChange();
-					addToast({
-						description: 'Pedido cancelado correctamente',
-						color: 'success',
-					});
+					onOpenChange(false);
+					toast.success('Pedido cancelado correctamente');
 				},
 				onError: (error) => {
-					addToast({
-						description: error.message || 'Error al cancelar el pedido',
-						color: 'danger',
-					});
+					toast.danger(error.message || 'Error al cancelar el pedido');
 				},
 			}
 		);
 	};
 
 	return (
-		<Modal
-			isOpen={isOpen}
-			onOpenChange={onOpenChange}
-			size='xl'
-			scrollBehavior='inside'
-			disableAnimation
-			classNames={{
-				base: 'bg-white dark:bg-neutral-900',
-				backdrop: 'bg-black/50',
-			}}>
-			<ModalContent>
-				{() => (
-					<>
+		<Modal>
+			<Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} className='bg-black/50'>
+				<Modal.Container size='lg' scroll='inside'>
+					<Modal.Dialog className='bg-white dark:bg-neutral-900'>
 						{/* Header */}
-						<ModalHeader className='border-b border-neutral-200 dark:border-neutral-800 px-4 py-3'>
+						<Modal.Header className='border-b border-neutral-200 dark:border-neutral-800 px-4 py-3'>
 							<div className='flex items-center justify-between w-full'>
 								<h2 className='text-lg font-semibold'>Orden #{selectTicket._id?.slice(-4)}</h2>
 							</div>
-						</ModalHeader>
+						</Modal.Header>
 
-						<ModalBody className='px-4 py-3 space-y-3'>
+						<Modal.Body className='px-4 py-3 space-y-3'>
 							{/* Badges */}
 							<div className='flex items-center gap-2'>
 								<Chip
 									size='sm'
-									variant='flat'
+									variant='tertiary'
 									className='bg-orange-100 text-orange-600 dark:bg-orange-500/20 dark:text-orange-400'
-									startContent={<IoTimerOutline size={14} />}>
+>
+									<IoTimerOutline size={14} />
 									Pendiente
 								</Chip>
 								<Chip
 									size='sm'
-									variant='flat'
+									variant='tertiary'
 									className='bg-neutral-100 dark:bg-neutral-800'>
 									Mesa
 								</Chip>
@@ -193,7 +179,7 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 												<Chip
 													key={`${item._id}-${idx}`}
 													size='sm'
-													variant='flat'
+													variant='tertiary'
 													className='capitalize'>
 													{cream}
 												</Chip>
@@ -219,7 +205,7 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 								<div className='flex items-center justify-between'>
 									<span className='text-sm font-semibold'>Método de pago:</span>
 									<Chip
-										variant='flat'
+										variant='tertiary'
 										size='sm'
 										className={`${
 											selectTicket.paymentType === 'YAPE'
@@ -228,32 +214,33 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 												? 'bg-cyan-100 text-cyan-600 dark:bg-cyan-600/20 dark:text-cyan-400'
 												: 'bg-green-100 text-green-600 dark:bg-green-600/20 dark:text-green-400'
 										} font-semibold`}
-										startContent={<IoCashOutline size={14} />}>
+>
+										<IoCashOutline size={14} />
 										{selectTicket.paymentType}
 									</Chip>
 								</div>
 							)}
-						</ModalBody>
+						</Modal.Body>
 
 						{/* Footer */}
-						<ModalFooter className='border-t border-neutral-200 dark:border-neutral-800 px-4 py-3 flex-col gap-2'>
+						<Modal.Footer className='border-t border-neutral-200 dark:border-neutral-800 px-4 py-3 flex-col gap-2'>
 							<div className='grid gap-2 w-full'>
 								<Button
 									onPress={() => handleEditTicket(selectTicket)}
-									color='primary'
-									startContent={<IoCreateOutline size={16} />}>
+									variant='primary'
+>
+									<IoCreateOutline size={16} />
 									Editar
 								</Button>
 							</div>
 							<Button
-								variant='light'
-								color='danger'
+								variant='danger-soft'
 								className='w-full'
-								startContent={<IoCloseCircle size={18} />}
 								onPress={() => setShowConfirmCancel(true)}>
+								<IoCloseCircle size={18} />
 								Cancelar orden
 							</Button>
-						</ModalFooter>
+						</Modal.Footer>
 
 						{/* Modal de confirmación */}
 						{showConfirmCancel && (
@@ -265,15 +252,15 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 									</p>
 									<div className='flex gap-2'>
 										<Button
-											variant='flat'
+											variant='tertiary'
 											className='flex-1'
 											onPress={() => setShowConfirmCancel(false)}>
 											No, volver
 										</Button>
 										<Button
-											color='danger'
+											variant='danger'
 											className='flex-1'
-											isLoading={updateTicket.isPending}
+											isPending={updateTicket.isPending}
 											onPress={handleCancelOrder}>
 											Sí, cancelar
 										</Button>
@@ -281,9 +268,9 @@ export const OrdersModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 								</div>
 							</div>
 						)}
-					</>
-				)}
-			</ModalContent>
+					</Modal.Dialog>
+				</Modal.Container>
+			</Modal.Backdrop>
 		</Modal>
 	);
 };

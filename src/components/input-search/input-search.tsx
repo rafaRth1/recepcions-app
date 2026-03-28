@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { Input } from '@heroui/react';
+import { TextField, Label, Input, FieldError } from '@heroui/react';
 
 interface Props {
 	children: JSX.Element;
@@ -29,17 +29,16 @@ export const InputSearch = (props: Props) => {
 		<div className='relative mb-4'>
 			<div ref={wrapperElement}>
 				<div className='flex gap-2'>
-					<Input
-						type='text'
-						label={label}
-						className=''
-						classNames={{
-							input: '',
-						}}
-						value={value}
-						onFocus={() => setActive(true)}
-						onChange={(e) => handleOnchange(e.target.value)}
-					/>
+					<TextField name='search'>
+						{label && <Label>{label}</Label>}
+						<Input
+							type='text'
+							value={value}
+							onFocus={() => setActive(true)}
+							onChange={(e) => handleOnchange(e.target.value)}
+						/>
+						<FieldError />
+					</TextField>
 				</div>
 
 				{active && (

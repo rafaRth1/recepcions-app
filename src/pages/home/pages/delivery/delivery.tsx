@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useDisclosure } from '@heroui/react';
+import { useOverlayState } from '@heroui/react';
 import { clientAxios } from '@/utils';
 import { DeliveryItem } from './delivery-item';
 import { DeliveryModal } from './delivery-modal';
@@ -7,7 +7,7 @@ import { initialValueTicket } from '@/data';
 import { Ticket } from '@/core/ticket/interfaces';
 
 export const Delivery = () => {
-	const { isOpen, onOpen, onOpenChange } = useDisclosure();
+	const state = useOverlayState();
 	const [ticketsUser, setTickestUser] = useState<Ticket[]>([]);
 	const [selectTicket, setSelectTicket] = useState<Ticket>(initialValueTicket);
 
@@ -31,7 +31,7 @@ export const Delivery = () => {
 
 	const handleOnOpenModal = useCallback((ticket: Ticket) => {
 		setSelectTicket(ticket);
-		onOpen();
+		state.open();
 	}, []);
 
 	useEffect(() => {
@@ -61,8 +61,8 @@ export const Delivery = () => {
 			</section>
 
 			<DeliveryModal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
+				isOpen={state.isOpen}
+				onOpenChange={state.setOpen}
 				selectTicket={selectTicket}
 			/>
 		</main>

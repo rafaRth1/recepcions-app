@@ -2,9 +2,6 @@ import { Ticket } from '@/core/ticket/interfaces';
 import { columnCream, columnDrink, columnFood } from '@/data/columns';
 import {
 	Modal,
-	ModalBody,
-	ModalContent,
-	ModalHeader,
 	Table,
 	TableBody,
 	TableCell,
@@ -15,24 +12,19 @@ import {
 
 interface Props {
 	isOpen: boolean;
-	onOpenChange: () => void;
+	onOpenChange: (isOpen: boolean) => void;
 	selectTicket: Ticket;
 }
 
 export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => {
 	return (
 		<>
-			<Modal
-				isOpen={isOpen}
-				onOpenChange={onOpenChange}
-				isDismissable={false}
-				disableAnimation
-				isKeyboardDismissDisabled={true}>
-				<ModalContent>
-					{() => (
-						<>
-							<ModalHeader className='flex flex-col gap-1'>{`Detalles pedido "${selectTicket.nameTicket}"`}</ModalHeader>
-							<ModalBody>
+			<Modal>
+				<Modal.Backdrop isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+					<Modal.Container>
+						<Modal.Dialog>
+							<Modal.Header className='flex flex-col gap-1'>{`Detalles pedido "${selectTicket.nameTicket}"`}</Modal.Header>
+							<Modal.Body>
 								<Table
 									aria-label='Tabla ticket'
 									className='mb-3'>
@@ -95,10 +87,10 @@ export const DeliveryModal = ({ isOpen, onOpenChange, selectTicket }: Props) => 
 										Tipo de pago: {selectTicket.paymentType}
 									</p>
 								)}
-							</ModalBody>
-						</>
-					)}
-				</ModalContent>
+							</Modal.Body>
+						</Modal.Dialog>
+					</Modal.Container>
+				</Modal.Backdrop>
 			</Modal>
 		</>
 	);

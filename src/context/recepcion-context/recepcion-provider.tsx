@@ -4,7 +4,7 @@ import { RecepcionContext } from './recepcion-context';
 import { useAuthProvider, useDate, useLocalStorage } from '@/hooks';
 import { initialValueTicket } from '@/data';
 import { Dish, Ticket } from '@/core/ticket/interfaces';
-import { addToast } from '@heroui/react';
+import { toast } from '@heroui/react';
 
 interface Props {
 	children: JSX.Element | JSX.Element[];
@@ -29,10 +29,7 @@ export const RecepcionProvider = (props: Props): JSX.Element => {
 
 	const handleSubmitTicket = () => {
 		if (ticket.nameTicket.length === 0) {
-			addToast({
-				description: 'El ticket debe tener un nombre',
-				color: 'danger',
-			});
+			toast.danger('El ticket debe tener un nombre');
 			return;
 		}
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useDisclosure, Input, Tabs, Tab } from '@heroui/react';
+import { useOverlayState, TextField, Label, Input, FieldError, Tabs } from '@heroui/react';
 import { RecepcionProvider } from '@/context/recepcion-context/recepcion-provider';
 import { useRecepcion } from '@/hooks';
 import { Dish } from '@/core/ticket/interfaces';
@@ -23,8 +23,8 @@ const RecepcionContent = () => {
 	const editingTicket = location.state?.editingTicket;
 
 	// Estados para los modales
-	const { isOpen: isOpenDetalle, onOpen: onOpenDetalle, onClose: onCloseDetalle } = useDisclosure();
-	const { isOpen: isOpenExtras, onOpen: onOpenExtras, onClose: onCloseExtras } = useDisclosure();
+	const stateDetalle = useOverlayState();
+	const stateExtras = useOverlayState();
 	const [selectedDish, setSelectedDish] = useState<Dish | null>(null);
 
 	// Estado para tabs
@@ -33,7 +33,7 @@ const RecepcionContent = () => {
 	// Función para abrir modal de extras de un platillo
 	const handleOpenExtras = (dish: Dish) => {
 		setSelectedDish(dish);
-		onOpenExtras();
+		stateExtras.open();
 	};
 
 	useEffect(() => {
@@ -59,36 +59,30 @@ const RecepcionContent = () => {
 						<Tabs
 							selectedKey={activeTab}
 							onSelectionChange={(key) => setActiveTab(key as 'nuevo' | 'pendientes')}
-							classNames={{
-								base: 'w-full',
-								tabList: 'bg-neutral-900 p-1 rounded-xl',
-								tab: 'px-6 py-3',
-								cursor: 'bg-indigo-700',
-								tabContent: 'group-data-[selected=true]:text-white',
-							}}>
-							<Tab
-								key='nuevo'
-								title={
-									<div className='flex items-center gap-2'>
-										<IoAddCircle size={18} />
-										<span>Nuevo Pedido</span>
-									</div>
-								}
-							/>
-							<Tab
-								key='pendientes'
-								title={
-									<div className='flex items-center gap-2 relative'>
-										<IoReceipt size={18} />
-										<span>Pendientes</span>
-										{tickets.length > 0 && (
-											<span className='ml-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full'>
-												{tickets.length}
-											</span>
-										)}
-									</div>
-								}
-							/>
+							className='w-full'>
+							<Tabs.ListContainer>
+								<Tabs.List className='bg-neutral-900 p-1 rounded-xl'>
+									<Tabs.Tab id='nuevo' className='px-6 py-3'>
+										<div className='flex items-center gap-2'>
+											<IoAddCircle size={18} />
+											<span>Nuevo Pedido</span>
+										</div>
+										<Tabs.Indicator className='bg-indigo-700' />
+									</Tabs.Tab>
+									<Tabs.Tab id='pendientes' className='px-6 py-3'>
+										<div className='flex items-center gap-2 relative'>
+											<IoReceipt size={18} />
+											<span>Pendientes</span>
+											{tickets.length > 0 && (
+												<span className='ml-1 bg-red-600 text-white text-xs font-bold px-2 py-0.5 rounded-full'>
+													{tickets.length}
+												</span>
+											)}
+										</div>
+										<Tabs.Indicator className='bg-indigo-700' />
+									</Tabs.Tab>
+								</Tabs.List>
+							</Tabs.ListContainer>
 						</Tabs>
 					</div>
 
@@ -96,20 +90,19 @@ const RecepcionContent = () => {
 					{activeTab === 'nuevo' ? (
 						<>
 							{/* Banner Sticky con Resumen */}
-							<PedidoResumenSticky onOpenDetalle={onOpenDetalle} />
+							<PedidoResumenSticky onOpenDetalle={stateDetalle.open} />
 
 							<div className='px-4 space-y-6'>
 								{/* Input nombre/mesa */}
-								<Input
-									type='text'
-									label='Nombre del cliente o mesa'
-									placeholder='Ej: Mesa 5 o Juan Pérez'
-									classNames={{
-										label: 'text-sm font-medium',
-									}}
-									value={ticket.nameTicket}
-									onValueChange={(e) => setTicket({ ...ticket, nameTicket: e })}
-								/>
+								<TextField name='nameTicket' type='text'>
+									<Label className='text-sm font-medium'>Nombre del cliente o mesa</Label>
+									<Input
+										placeholder='Ej: Mesa 5 o Juan Pérez'
+										value={ticket.nameTicket}
+										onChange={(e) => setTicket({ ...ticket, nameTicket: e.target.value })}
+									/>
+									<FieldError />
+								</TextField>
 
 								{/* Grid de productos para agregar rápido */}
 								<div>
@@ -131,15 +124,15 @@ const RecepcionContent = () => {
 
 			{/* Modal Detalle del Pedido */}
 			<ModalDetallePedido
-				isOpen={isOpenDetalle}
-				onClose={onCloseDetalle}
+				isOpen={stateDetalle.isOpen}
+				onClose={stateDetalle.close}
 				onOpenExtras={handleOpenExtras}
 			/>
 
 			{/* Modal Extras de Item */}
 			<ModalExtrasItem
-				isOpen={isOpenExtras}
-				onClose={onCloseExtras}
+				isOpen={stateExtras.isOpen}
+				onClose={stateExtras.close}
 				dish={selectedDish}
 			/>
 		</>

@@ -1,4 +1,4 @@
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Textarea, addToast } from '@heroui/react';
+import { Modal, Button, TextField, Label, TextArea, FieldError, toast } from '@heroui/react';
 import { useRecepcion } from '@/hooks';
 import { IoTrash, IoCheckmarkCircle, IoAlertCircle } from 'react-icons/io5';
 import { Creams, Dish, Drinks } from '@/core/ticket/interfaces';
@@ -63,17 +63,11 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 				{
 					onSuccess: (response) => {
 						queryClient.invalidateQueries({ queryKey: ['tickets'] });
-						addToast({
-							description: response.message || 'Pedido actualizado correctamente',
-							color: 'success',
-						});
+						toast.success(response.message || 'Pedido actualizado correctamente');
 						setTicket(initialValueTicket);
 					},
 					onError: (error) => {
-						addToast({
-							description: error.message,
-							color: 'danger',
-						});
+						toast.danger(error.message);
 					},
 				}
 			);
@@ -92,27 +86,18 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 	const showPaymentType = ticket.type === 'DELIVERY' || ticket.type === 'PICKUP';
 
 	return (
-		<Modal
-			isOpen={isOpen}
-			onClose={onClose}
-			size='2xl'
-			scrollBehavior='inside'
-			disableAnimation
-			classNames={{
-				base: 'bg-neutral-900',
-				header: 'border-b border-neutral-800',
-				body: 'py-4',
-				footer: 'border-t border-neutral-800',
-			}}>
-			<ModalContent>
-				<ModalHeader>
+		<Modal>
+			<Modal.Backdrop isOpen={isOpen} onOpenChange={(open) => !open && onClose()}>
+				<Modal.Container size='lg' scroll='inside'>
+					<Modal.Dialog className='bg-neutral-900'>
+				<Modal.Header className='border-b border-neutral-800'>
 					<div className='flex items-center gap-2'>
 						<span className='text-xl'>📋</span>
 						<span>Detalle del Pedido</span>
 					</div>
-				</ModalHeader>
+				</Modal.Header>
 
-				<ModalBody>
+				<Modal.Body className='py-4'>
 					{!hasItems ? (
 						<div className='text-center py-8'>
 							<div className='text-6xl mb-3'>🛒</div>
@@ -209,21 +194,21 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 							{/* Observaciones */}
 							<div>
 								<p className='text-xs font-semibold text-neutral-400 uppercase tracking-wide mb-3'>Observación</p>
-								<Textarea
-									label='Observaciones especiales'
-									placeholder='Ej: Sin cebolla, extra picante...'
-									classNames={{
-										label: 'text-sm',
-									}}
-									value={ticket.exception}
-									onValueChange={(e) => setTicket({ ...ticket, exception: e })}
-								/>
+								<TextField name='exception'>
+									<Label className='text-sm'>Observaciones especiales</Label>
+									<TextArea
+										placeholder='Ej: Sin cebolla, extra picante...'
+										value={ticket.exception}
+										onChange={(e) => setTicket({ ...ticket, exception: e.target.value })}
+									/>
+									<FieldError />
+								</TextField>
 							</div>
 						</div>
 					)}
-				</ModalBody>
+				</Modal.Body>
 
-				<ModalFooter className='flex-col gap-3'>
+				<Modal.Footer className='flex-col gap-3 border-t border-neutral-800'>
 					{/* Tipo de Pago - Solo si es Delivery o Llevar */}
 					{showPaymentType && hasItems && (
 						<div className='w-full'>
@@ -305,11 +290,12 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 					{/* Botón Generar Ticket */}
 					<Button
 						className='w-full'
-						color={'primary'}
+						variant='primary'
 						isDisabled={!hasItems}
-						isLoading={updateTicket.isPending}
+						isPending={updateTicket.isPending}
 						onPress={handleGenerarTicket}
-						startContent={<IoCheckmarkCircle size={20} />}>
+>
+						<IoCheckmarkCircle size={20} />
 						{ticket._id ? 'Actualizar Pedido' : 'Generar Pedido'}
 					</Button>
 
@@ -324,8 +310,10 @@ export const ModalDetallePedido = ({ isOpen, onClose, onOpenExtras }: Props) => 
 							Dejar de editar
 						</Button>
 					)}
-				</ModalFooter>
-			</ModalContent>
+				</Modal.Footer>
+					</Modal.Dialog>
+				</Modal.Container>
+			</Modal.Backdrop>
 		</Modal>
 	);
 };

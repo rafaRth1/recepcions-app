@@ -114,7 +114,7 @@ export const Tabs = () => {
 						</div>
 
 						<Button
-							color='danger'
+							variant='danger'
 							className='mt-3'
 							fullWidth
 							onPress={() => setActiveMore(false)}>
